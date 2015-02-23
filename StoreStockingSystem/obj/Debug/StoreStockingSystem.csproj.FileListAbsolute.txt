@@ -1,0 +1,8 @@
+c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\bin\StoreStockingSystem.dll.config
+c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\bin\StoreStockingSystem.dll
+c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\bin\StoreStockingSystem.pdb
+c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\bin\nunit.framework.dll
+c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\bin\nunit.framework.xml
+c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\obj\Debug\StoreStockingSystem.csprojResolveAssemblyReference.cache
+c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\obj\Debug\StoreStockingSystem.dll
+c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\obj\Debug\StoreStockingSystem.pdb
