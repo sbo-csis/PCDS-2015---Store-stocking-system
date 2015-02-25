@@ -6,3 +6,5 @@ c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreSt
 c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\obj\Debug\StoreStockingSystem.csprojResolveAssemblyReference.cache
 c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\obj\Debug\StoreStockingSystem.dll
 c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\obj\Debug\StoreStockingSystem.pdb
+C:\dg\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.dll
+C:\dg\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.pdb
