@@ -8,3 +8,11 @@ c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreSt
 c:\users\filip\documents\visual studio 2013\Projects\StoreStockingSystem\StoreStockingSystem\obj\Debug\StoreStockingSystem.pdb
 C:\dg\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.dll
 C:\dg\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.pdb
+C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.dll
+C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.pdb
+C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\StoreStockingSystem.dll.config
+C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\StoreStockingSystem.dll
+C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\StoreStockingSystem.pdb
+C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\nunit.framework.dll
+C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\nunit.framework.xml
+C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.csprojResolveAssemblyReference.cache
