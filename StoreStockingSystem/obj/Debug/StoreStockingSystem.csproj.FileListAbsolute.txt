@@ -16,3 +16,11 @@ C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\StoreStocki
 C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\nunit.framework.dll
 C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\nunit.framework.xml
 C:\Develop\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.csprojResolveAssemblyReference.cache
+C:\Users\sbo.CSIS\Documents\GitHub\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\StoreStockingSystem.dll.config
+C:\Users\sbo.CSIS\Documents\GitHub\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\StoreStockingSystem.dll
+C:\Users\sbo.CSIS\Documents\GitHub\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\StoreStockingSystem.pdb
+C:\Users\sbo.CSIS\Documents\GitHub\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\nunit.framework.dll
+C:\Users\sbo.CSIS\Documents\GitHub\PCDS-2015---Store-stocking-system\StoreStockingSystem\bin\nunit.framework.xml
+C:\Users\sbo.CSIS\Documents\GitHub\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.csprojResolveAssemblyReference.cache
+C:\Users\sbo.CSIS\Documents\GitHub\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.dll
+C:\Users\sbo.CSIS\Documents\GitHub\PCDS-2015---Store-stocking-system\StoreStockingSystem\obj\Debug\StoreStockingSystem.pdb
