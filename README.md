@@ -2,6 +2,5 @@ PCDS 2015
 
 GO DREAM Store stocking system
 
-Current build status: ![Build status](https://ci.appveyor.com/api/projects/status/qo5yo78wfn8ai0uy?svg=true)
-
-See build history: [See build status](https://ci.appveyor.com/project/fboja/pcds-2015-store-stocking-system/history)
+Newest build status: ![Build status](https://ci.appveyor.com/api/projects/status/qo5yo78wfn8ai0uy?svg=true)
+See our build history: [Build History](https://ci.appveyor.com/project/fboja/pcds-2015-store-stocking-system/history)
