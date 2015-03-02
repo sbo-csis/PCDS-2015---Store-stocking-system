@@ -1,27 +1,22 @@
 ﻿@model dynamic
 
+
 @{
-    Layout = null;
+    ViewBag.Title = "Kunder";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>Kunder</title>
-<style>
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    }
-th, td {
-    padding: 5px;
-    }
-</style>
+    <title>ViewBag.Title</title>
+
 </head>
-<body>
-<div>
-    @section scripts
+<h2>Options</h2>
+
+
+<h2>Stores</h2>
+@section scripts
 {
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
@@ -32,27 +27,83 @@ th, td {
     <!-- DataTables -->
     <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
 
-    <div class="table-responsive">
-        <table class="table">
-            <tr>
-                <th>Kunde id</th>
-                <th>kundenavn</th>
-                <th>By</th>
-                <th>Post nr</th>
-                <th>Adresse</th>
-                <th>Lagerstatus</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Bog og ide</td>
-                <td>Vordingborg</td>
-                <td>4760</td>
-                <td>Algade 74</td>
-                <td>Green status</td>
-            </tr>
-        </table>
-    </div>
-</div>
-</div>
-</body>
-</html>
+    <script>
+        $(document).ready(function () {
+            $('#stores-table').DataTable();
+        });
+
+    </script>
+}
+
+<table id="stores-table" class="display" width="100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Zip code</th>
+            <th>Adresse</th>
+            <th>Store Status</th>
+            <th></th>
+            <th>Checkbox</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Fona Amager</td>
+            <td>København S</td>
+            <td>2300</td>
+            <td>Amager Centret 136</td>
+            <td style="background-color: greenyellow">Ok (105% of expected)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
+            <td style="text-align:center;"><input type="checkbox"/></td>
+</tr>
+        
+        <tr>
+            <td>2</td>
+            <td>Fona Rosengårdscentret</td>
+            <td>Odense</td>
+            <td>5220</td>
+            <td>Rosengårdcentret 84</td>
+            <td style="background-color: greenyellow">Ok (102% of expected)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
+            <td style="text-align:center;"><input type="checkbox"/></td>
+        </tr>
+        
+        <tr>
+            <td>3</td>
+            <td>Fona Svendborg</td>
+            <td>Svendborg</td>
+            <td>5700</td>
+            <td>Kattesundet 2</td>
+            <td style="background-color: greenyellow">Ok (97% of expected)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
+            <td style="text-align:center;"><input type="checkbox"/></td>
+        </tr>
+
+        <tr>
+            <td>4</td>
+            <td>Føtex Frederiksberg</td>
+            <td>Frederiksberg</td>
+            <td>2000</td>
+            <td>Falkoner Alle 21</td>
+            <td style="background-color: yellow">Ok (95% of expected)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
+            <td style="text-align:center;"><input type="checkbox"/></td>
+        </tr>
+
+        <tr>
+            <td>5</td>
+            <td>Bog & Idé Vordingborg</td>
+            <td>Vordingborg</td>
+            <td>4760</td>
+            <td>Algade 84</td>
+            <td style="background-color: red">Bad Out of stock (0 days left)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
+            <td style="text-align:center;"><input type="checkbox"/></td>
+        </tr>
+    </tbody>
+</table>
+
