@@ -164,6 +164,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StoreDataController.cs" />
+    <Compile Include="Controllers\StorePerformanceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -182,6 +183,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\customRadioCheck.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\DataTables-1.10.5\bower.json" />
@@ -564,6 +566,7 @@
     <Content Include="Views\Home\Kritisk.cshtml" />
     <Content Include="Views\StoreData\StoreDataList.cshtml" />
     <Content Include="Views\StoreData\StoreDetails.cshtml" />
+    <Content Include="Views\StorePerformance\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
