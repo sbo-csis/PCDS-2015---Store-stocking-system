@@ -1,18 +1,53 @@
 ﻿@model dynamic
 
 @{
-    Layout = null;
+    ViewBag.Title = "Kritisk";
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>Kritisk</title>
+    <title>ViewBag.Title</title>
+    <style>
+        critical {color: red}
+        warning {color: yellow}
+        none {color: green}
+    </style>
 </head>
 <body>
-<div>
-      
-</div>
+    <div>
+        <h1>Kritisk lagerstatus</h1>
+        <table style="width:100%">
+            <tr style="font: bold 15px">
+                <th>Customer name</th>
+                <th>Stock status</th>
+                <th>Product name</th>
+                <th>Expected sold out date</th>
+                <th>Estimated sales loss</th>
+            </tr>
+            <tr>
+                <td>Irma Nørreport</td>
+                <td><critical>Sold out</critical></td>
+                <td>Faldskærmsspring</td>
+                <td>01/03-2015</td>
+                <td>1000</td>
+            </tr>
+            <tr>
+                <td>Føtex Nyk. F.</td>
+                <td><warning>Low stock</warning></td>
+                <td>Romantisk middag</td>
+                <td>05/03-2015</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Bilka Næstved</td>
+                <td><none>On stock</none></td>
+                <td>Romantisk middag for 3</td>
+                <td>01/04-2015</td>
+                <td>0</td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
