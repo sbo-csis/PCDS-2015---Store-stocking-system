@@ -10,9 +10,5 @@ namespace PCDSWebsite.Controllers
             return View("StoreDataList");
         }
 
-        public static DataTable MakeMockTable()
-        {
-            
-        }
     }
 }
