@@ -9,45 +9,85 @@
 <html>
 <head>
     <title>ViewBag.Title</title>
-    <style>
-        critical {color: red}
-        warning {color: yellow}
-        none {color: green}
-    </style>
 </head>
 <body>
-    <div>
-        <h1>Kritisk lagerstatus</h1>
-        <table style="width:100%">
-            <tr style="font: bold 15px">
-                <th>Customer name</th>
-                <th>Stock status</th>
-                <th>Product name</th>
-                <th>Expected sold out date</th>
-                <th>Estimated sales loss</th>
-            </tr>
-            <tr>
-                <td>Irma Nørreport</td>
-                <td><critical>Sold out</critical></td>
-                <td>Faldskærmsspring</td>
-                <td>01/03-2015</td>
-                <td>1000</td>
-            </tr>
-            <tr>
-                <td>Føtex Nyk. F.</td>
-                <td><warning>Low stock</warning></td>
-                <td>Romantisk middag</td>
-                <td>05/03-2015</td>
-                <td>0</td>
-            </tr>
-            <tr>
-                <td>Bilka Næstved</td>
-                <td><none>On stock</none></td>
-                <td>Romantisk middag for 3</td>
-                <td>01/04-2015</td>
-                <td>0</td>
-            </tr>
-        </table>
-    </div>
+    <style>
+        .critical {
+            background-color: red;
+        }
+
+        .warning {
+            background-color: yellow;
+        }
+
+        .normal {
+            background-color: greenyellow;
+        }
+    </style>
+
+<div>
+
+
+    @section scripts
+    {
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
+
+        <!-- jQuery -->
+        <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+
+        <!-- DataTables -->
+        <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#criticalCustomers').DataTable();
+            });
+
+        </script>
+    }
+    <h1>Critical stock status</h1>
+    <table id="criticalCustomers" style="width: 100%;">
+        <tr>
+            <th>Customer name</th>
+            <th>Stock status</th>
+            <th>Product name</th>
+            <th>Expected sold out date</th>
+            <th>Estimated sales loss</th>
+            <th>Responsibility</th>
+            <th>Select store</th>
+        </tr>
+        <!--Note that DataTable overwrites css class styles-->
+        <tr class="critical" style="background-color: red">
+            <td id="custID">Irma Nørreport</td>
+            <td>Sold out</td>
+            <td>Faldskærmsspring</td>
+            <td>01/03-2015</td>
+            <td>1000</td>
+            <td>Karsten</td>
+            <td><input type="checkbox" name="custID"/></td>
+        </tr>
+        <tr class="warning" style="background-color: yellow">
+            <td>Føtex Nyk. F.</td>
+            <td>Low stock</td>
+            <td>Romantisk middag</td>
+            <td>05/03-2015</td>
+            <td>0</td>
+        </tr>
+        <tr class="normal" style="background-color: greenyellow">
+            <td>Bilka Næstved</td>
+            <td>On stock</td>
+            <td>Romantisk middag for 3</td>
+            <td>01/04-2015</td>
+            <td>0</td>
+        </tr>
+    </table>
+</div>
+
+<h3>Store locations</h3>
+<iframe width="450"
+        height="250"
+        frameborder="0" style="border: 0"
+        src="https://www.google.com/maps/embed/v1/search?key=AIzaSyDFZQo4FYhLzLW9FIwKmbO235mRDg6n2kM&q=record+stores+in+Seattle"></iframe>
 </body>
 </html>
