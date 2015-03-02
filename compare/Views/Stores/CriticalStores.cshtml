@@ -1,7 +1,7 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Kritisk";
+    ViewBag.Title = "Critial Stores";
 }
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@
             background-color: yellow;
         }
 
-        .normal {
+        .okay {
             background-color: greenyellow;
         }
     </style>
@@ -134,7 +134,7 @@
                     </td>
                     <td><input type="checkbox" name="custID" /></td>
                 </tr>
-                <tr class="normal" style="background-color: greenyellow">
+                <tr class="okay" style="background-color: greenyellow">
                     <td>Bilka Næstved</td>
                     <td>On stock</td>
                     <td>Romantisk middag for 3</td>
@@ -155,7 +155,65 @@
     </div>
 
     <h3>Store locations</h3>
-    <div id="map" style="width: 500px; height: 400px;"></div>
+    <table>
+        <tr>
+            <td>
+                <div id="map" style="width: 500px; height: 400px; float: left;"></div>
+            </td>
+            <!--Right side of map area-->
+            <td style="vertical-align: top">
+                <table>
+                    <tr>
+                        <td>
+                            <!--<div id=" mapoptions" style="width: 200px; height: 400px; float: left; margin-left: 20px;">
+                            -->
+                            <h4>Start location</h4>
+                        </td>
+                        <td>
+                            <select name="startLocation">
+                                <option value="odense">Odense</option>
+                                <option value="københavn">København</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4>End location</h4>
+                        </td>
+                        <td>
+                            <select name="startLocation">
+                                <option value="odense">Odense</option>
+                                <option value="københavn">København</option>
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h4>Selected locations</h4>
+                            <ul style="height:100px; width:100%; overflow:hidden; overflow-y:scroll; list-style-type: none;">
+                                <li>Bilka Næstved</li>
+                                <li>Bilka Næstved</li>
+                                <li>Bilka Næstved</li>
+                                <li>Bilka Næstved</li>
+                                <li>Bilka Næstved</li>
+                                <li>Bilka Næstved</li>
+                                <li>Bilka Næstved</li>
+                                <li>Bilka Næstved</li>
+                                <li>Bilka Næstved</li>
+                            </ul>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button">Calculate route</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 
 
 </body>
