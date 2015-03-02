@@ -9,10 +9,50 @@
 <html>
 <head>
     <title>Kunder</title>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    }
+th, td {
+    padding: 5px;
+    }
+</style>
 </head>
 <body>
 <div>
-      
+    @section scripts
+{
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>Kunde id</th>
+                <th>kundenavn</th>
+                <th>By</th>
+                <th>Post nr</th>
+                <th>Adresse</th>
+                <th>Lagerstatus</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Bog og ide</td>
+                <td>Vordingborg</td>
+                <td>4760</td>
+                <td>Algade 74</td>
+                <td>Green status</td>
+            </tr>
+        </table>
+    </div>
+</div>
 </div>
 </body>
 </html>
