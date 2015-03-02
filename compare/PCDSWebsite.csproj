@@ -508,6 +508,12 @@
     <Content Include="Scripts\DataTables-1.10.5\media\js\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables-1.10.5\media\js\jquery.dataTables.min.js" />
     <Content Include="Scripts\DataTables-1.10.5\media\js\jquery.js" />
+    <Content Include="Scripts\highcharts-3d.js" />
+    <Content Include="Scripts\highcharts-3d.src.js" />
+    <Content Include="Scripts\highcharts-more.js" />
+    <Content Include="Scripts\highcharts-more.src.js" />
+    <Content Include="Scripts\highcharts.js" />
+    <Content Include="Scripts\highcharts.src.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
