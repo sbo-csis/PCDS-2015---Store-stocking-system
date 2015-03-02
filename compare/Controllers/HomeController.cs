@@ -22,19 +22,5 @@ namespace PCDSWebsite.Controllers
 
             return View();
         }
-
-        public ActionResult Kunder()
-        {
-            ViewBag.Message = "Oversigt over kunder";
-
-            return View();
-        }
-
-        public ActionResult Kritisk()
-        {
-            ViewBag.Message = "Kunder som mangler varer";
-
-            return View();
-        }
     }
 }
