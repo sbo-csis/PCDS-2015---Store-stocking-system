@@ -10,16 +10,24 @@
 <head>
     <title>ViewBag.Title</title>
     <style>
-        critical {color: red}
-        warning {color: yellow}
-        none {color: green}
+        critical {
+            color: red;
+        }
+
+        warning {
+            color: yellow;
+        }
+
+        none {
+            color: green;
+        }
     </style>
 </head>
 <body>
     <div>
         <h1>Kritisk lagerstatus</h1>
         <table style="width:100%">
-            <tr style="font: bold 15px">
+            <tr>
                 <th>Customer name</th>
                 <th>Stock status</th>
                 <th>Product name</th>
@@ -49,5 +57,11 @@
             </tr>
         </table>
     </div>
+
+    <h3>Store locations</h3>
+    <iframe width="450"
+            height="250"
+            frameborder="0" style="border:0"
+            src="https://www.google.com/maps/embed/v1/search?key=AIzaSyDFZQo4FYhLzLW9FIwKmbO235mRDg6n2kM&q=record+stores+in+Seattle"></iframe>
 </body>
 </html>
