@@ -25,69 +25,138 @@
         }
     </style>
 
-<div>
+    <div>
 
 
-    @section scripts
+        @section scripts
     {
-        <!-- DataTables CSS -->
-        <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
+            <!-- DataTables CSS -->
+            <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
 
-        <!-- jQuery -->
-        <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+            <!-- jQuery -->
+            <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
 
-        <!-- DataTables -->
-        <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+            <!-- DataTables -->
+            <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
 
-        <script>
-            $(document).ready(function() {
-                $('#criticalCustomers').DataTable();
-            });
+            <script>
+                $(document).ready(function () {
+                    $('#criticalCustomers').DataTable();
+                });
 
-        </script>
-    }
-    <h1>Critical stock status</h1>
-    <table id="criticalCustomers" style="width: 100%;">
-        <tr>
-            <th>Customer name</th>
-            <th>Stock status</th>
-            <th>Product name</th>
-            <th>Expected sold out date</th>
-            <th>Estimated sales loss</th>
-            <th>Responsibility</th>
-            <th>Select store</th>
-        </tr>
-        <!--Note that DataTable overwrites css class styles-->
-        <tr class="critical" style="background-color: red">
-            <td id="custID">Irma Nørreport</td>
-            <td>Sold out</td>
-            <td>Faldskærmsspring</td>
-            <td>01/03-2015</td>
-            <td>1000</td>
-            <td>Karsten</td>
-            <td><input type="checkbox" name="custID"/></td>
-        </tr>
-        <tr class="warning" style="background-color: yellow">
-            <td>Føtex Nyk. F.</td>
-            <td>Low stock</td>
-            <td>Romantisk middag</td>
-            <td>05/03-2015</td>
-            <td>0</td>
-        </tr>
-        <tr class="normal" style="background-color: greenyellow">
-            <td>Bilka Næstved</td>
-            <td>On stock</td>
-            <td>Romantisk middag for 3</td>
-            <td>01/04-2015</td>
-            <td>0</td>
-        </tr>
-    </table>
-</div>
+            </script>
 
-<h3>Store locations</h3>
-<iframe width="450"
-        height="250"
-        frameborder="0" style="border: 0"
-        src="https://www.google.com/maps/embed/v1/search?key=AIzaSyDFZQo4FYhLzLW9FIwKmbO235mRDg6n2kM&q=record+stores+in+Seattle"></iframe>
+            <!--Static Google Maps example-->
+            <script type="text/javascript"
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFZQo4FYhLzLW9FIwKmbO235mRDg6n2kM">
+
+            </script>
+            <!--Google Maps stuff-->
+            <script type="text/javascript">
+                var locations = [
+                    ['Bondi Beach', -33.890542, 151.274856, 4],
+                    ['Coogee Beach', -33.923036, 151.259052, 5],
+                    ['Cronulla Beach', -34.028249, 151.157507, 3],
+                    ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+                    ['Maroubra Beach', -33.950198, 151.259302, 1]
+                ];
+
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 10,
+                    center: new google.maps.LatLng(-33.92, 151.25),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                var infowindow = new google.maps.InfoWindow();
+
+                var marker, i;
+
+                for (i = 0; i < locations.length; i++) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                        map: map
+                    });
+
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            infowindow.setContent(locations[i][0]);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+            </script>
+
+        }
+        <h1>Critical stock status</h1>
+        <table id="criticalCustomers" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Customer name</th>
+                    <th>Stock status</th>
+                    <th>Product name</th>
+                    <th>Expected sold out date</th>
+                    <th>Estimated sales loss</th>
+                    <th>Responsibility</th>
+                    <th>Select store</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--Note that DataTable overwrites css class styles-->
+                <tr class="critical" style="background-color: red">
+                    <td id="custID">Irma Nørreport</td>
+                    <td>Sold out</td>
+                    <td>Faldskærmsspring</td>
+                    <td>01/03-2015</td>
+                    <td>1000</td>
+                    <td>
+                        <select>
+                            <option value="karsten">Karsten</option>
+                            <option value="kirsten">Kirsten</option>
+                            <option value="ole">Ole</option>
+                            <option value="else">Else</option>
+                        </select>
+                    </td>
+                    <td><input type="checkbox" name="custID" /></td>
+                </tr>
+                <tr class="warning" style="background-color: yellow">
+                    <td>Føtex Nyk. F.</td>
+                    <td>Low stock</td>
+                    <td>Romantisk middag</td>
+                    <td>05/03-2015</td>
+                    <td>0</td>
+                    <td>
+                        <select>
+                            <option value="karsten">Karsten</option>
+                            <option value="kirsten">Kirsten</option>
+                            <option value="ole">Ole</option>
+                            <option value="else">Else</option>
+                        </select>
+                    </td>
+                    <td><input type="checkbox" name="custID" /></td>
+                </tr>
+                <tr class="normal" style="background-color: greenyellow">
+                    <td>Bilka Næstved</td>
+                    <td>On stock</td>
+                    <td>Romantisk middag for 3</td>
+                    <td>01/04-2015</td>
+                    <td>0</td>
+                    <td>
+                        <select>
+                            <option value="karsten">Karsten</option>
+                            <option value="kirsten">Kirsten</option>
+                            <option value="ole">Ole</option>
+                            <option value="else">Else</option>
+                        </select>
+                    </td>
+                    <td><input type="checkbox" name="custID" /></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Store locations</h3>
+    <div id="map" style="width: 500px; height: 400px;"></div>
+
+
 </body>
 </html>
