@@ -38,11 +38,12 @@
 <table id="stores-table" class="display" width="100%">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Name</th>
-            <th>Sales Status</th>
-            <th>Stock Status</th>
-            <th>Sales tendency</th>
-            <th>Expected sales reached this year</th>
+            <th>City</th>
+            <th>Zip code</th>
+            <th>Adresse</th>
+            <th>Store Status</th>
             <th></th>
             <th>Checkbox</th>
         </tr>
@@ -50,52 +51,57 @@
 
     <tbody>
         <tr>
-            <td style="background-color:greenyellow">Fona Amager</td>
-            <td style="background-color:greenyellow">Ok (102% of expected)</td>
-            <td style="background-color:greenyellow">Ok (20 days left)</td>
-            <td style="background-color:greenyellow">Rising</td>
-            <td style="background-color:greenyellow">120%</td>
-            <td style="background-color: greenyellow">@Html.ActionLink("Details", "StoreDetails")</td>
+            <td>1</td>
+            <td>Fona Amager</td>
+            <td>København S</td>
+            <td>2300</td>
+            <td>Amager Centret 136</td>
+            <td style="background-color: greenyellow">Ok (105% of expected)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
             <td style="text-align:center;"><input type="checkbox"/></td>
 </tr>
         
         <tr>
-            <td style="background-color:greenyellow">Fona Odense</td>
-            <td style="background-color:greenyellow">Ok (105% of expected)</td>
-            <td style="background-color:greenyellow">Ok (15 days left)</td>
-            <td style="background-color:greenyellow">Steady</td>
-            <td style="background-color:greenyellow">106%</td>
-            <td style="background-color: greenyellow">@Html.ActionLink("Details", "StoreDetails")</td>
+            <td>2</td>
+            <td>Fona Rosengårdscentret</td>
+            <td>Odense</td>
+            <td>5220</td>
+            <td>Rosengårdcentret 84</td>
+            <td style="background-color: greenyellow">Ok (102% of expected)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
             <td style="text-align:center;"><input type="checkbox"/></td>
         </tr>
         
         <tr>
-            <td style="background-color:greenyellow">Fona Svendborg</td>
-            <td style="background-color:greenyellow">Ok (97% of expected)</td>
-            <td style="background-color:greenyellow">Ok (27 days left)</td>
-            <td style="background-color:greenyellow">Rising</td>
-            <td style="background-color:greenyellow">98%</td>
-            <td style="background-color: greenyellow">@Html.ActionLink("Details", "StoreDetails")</td>
+            <td>3</td>
+            <td>Fona Svendborg</td>
+            <td>Svendborg</td>
+            <td>5700</td>
+            <td>Kattesundet 2</td>
+            <td style="background-color: greenyellow">Ok (97% of expected)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
             <td style="text-align:center;"><input type="checkbox"/></td>
         </tr>
 
         <tr>
-            <td style="background-color:yellow">Føtex Frederiksberg</td>
-            <td style="background-color:yellow">Ok (95% of expected)</td>
-            <td style="background-color:yellow">Running out (4 days left)</td>
-            <td style="background-color:yellow">Rising</td>
-            <td style="background-color:yellow">97%</td>
-            <td style="background-color: yellow">@Html.ActionLink("Details", "StoreDetails")</td>
+            <td>4</td>
+            <td>Føtex Frederiksberg</td>
+            <td>Frederiksberg</td>
+            <td>2000</td>
+            <td>Falkoner Alle 21</td>
+            <td style="background-color: yellow">Ok (95% of expected)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
             <td style="text-align:center;"><input type="checkbox"/></td>
         </tr>
 
         <tr>
-            <td style="background-color:red">Bog & Idé Holbæk</td>
-            <td style="background-color:red">Bad (62% of expected)</td>
-            <td style="background-color:red">Out of stock (0 days left)</td>
-            <td style="background-color:red">Falling</td>
-            <td style="background-color:red">60%</td>
-            <td style="background-color: red">@Html.ActionLink("Details", "StoreDetails")</td>
+            <td>5</td>
+            <td>Bog & Idé Vordingborg</td>
+            <td>Vordingborg</td>
+            <td>4760</td>
+            <td>Algade 84</td>
+            <td style="background-color: red">Bad Out of stock (0 days left)</td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
             <td style="text-align:center;"><input type="checkbox"/></td>
         </tr>
     </tbody>
