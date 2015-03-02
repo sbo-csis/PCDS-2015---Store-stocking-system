@@ -1,5 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using System.Data;
+using PCDSWebsite.Models;
 
 namespace PCDSWebsite.Controllers
 {
@@ -7,7 +10,12 @@ namespace PCDSWebsite.Controllers
     {
         public ActionResult Index()
         {
-            return View("StoreDataList");
+           return View("StoreDataList");
+        }
+
+        public ActionResult StoreDetails()
+        {
+            return View("StoreDetails");
         }
 
     }

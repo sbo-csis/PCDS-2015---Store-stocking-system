@@ -1,7 +1,84 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "StoreDataList";
 }
+@section scripts
+{
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
 
-<h2>StoreDataList</h2>
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#stores-table').DataTable();
+        });
+
+    </script>
+}
+
+<h2>Stores</h2>
+
+<table id="stores-table" class="display" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Sales Status</th>
+            <th>Stock Status</th>
+            <th>Sales tendency</th>
+            <th>Expected sales reached this year</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td style="background-color:greenyellow">Fona Amager</td>
+            <td style="background-color:greenyellow">Ok (102% of expected)</td>
+            <td style="background-color:greenyellow">Ok (20 days left)</td>
+            <td style="background-color:greenyellow">Rising</td>
+            <td style="background-color:greenyellow">120%</td>
+            <td style="background-color:greenyellow">@Html.ActionLink("Details", "StoreDetails")</td>
+</tr>
+        
+        <tr>
+            <td style="background-color:greenyellow">Fona Odense</td>
+            <td style="background-color:greenyellow">Ok (105% of expected)</td>
+            <td style="background-color:greenyellow">Ok (15 days left)</td>
+            <td style="background-color:greenyellow">Steady</td>
+            <td style="background-color:greenyellow">106%</td>
+            <td style="background-color:greenyellow">@Html.ActionLink("Details", "StoreDetails")</td>
+        </tr>
+        
+        <tr>
+            <td style="background-color:greenyellow">Fona Svendborg</td>
+            <td style="background-color:greenyellow">Ok (97% of expected)</td>
+            <td style="background-color:greenyellow">Ok (27 days left)</td>
+            <td style="background-color:greenyellow">Rising</td>
+            <td style="background-color:greenyellow">98%</td>
+            <td style="background-color:greenyellow">@Html.ActionLink("Details", "StoreDetails")</td>
+        </tr>
+
+        <tr>
+            <td style="background-color:yellow">Føtex Frederiksberg</td>
+            <td style="background-color:yellow">Ok (95% of expected)</td>
+            <td style="background-color:yellow">Running out (4 days left)</td>
+            <td style="background-color:yellow">Rising</td>
+            <td style="background-color:yellow">97%</td>
+            <td style="background-color:yellow">@Html.ActionLink("Details", "StoreDetails")</td>
+        </tr>
+
+        <tr>
+            <td style="background-color:red">Bog & Idé Holbæk</td>
+            <td style="background-color:red">Bad (62% of expected)</td>
+            <td style="background-color:red">Out of stock (0 days left)</td>
+            <td style="background-color:red">Falling</td>
+            <td style="background-color:red">60%</td>
+            <td style="background-color:red">@Html.ActionLink("Details", "StoreDetails")</td>
+        </tr>
+    </tbody>
+</table>
 
