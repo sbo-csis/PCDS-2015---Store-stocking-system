@@ -2,30 +2,132 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+@section scripts
+{
+    <script src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/highcharts.js"></script>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+    @*<script>
+        $(function() {
+            $('#container1').highcharts({
+                title: {
+                    text: 'Current sales compared to predicted sales'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: {
+                        month: '%e. %b',
+                    },
+                    title: {
+                        text: 'Time'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Sales'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Current sales',
+                        data: [[3, 7], [5, 9][7, 12][9, 20][13, 7][15, 7][17, 7][20, 7]]
+                    },
+                    {
+                        name: 'Predicted sales',
+                        data: [[5, 10], [7, 3], [10, 40], [12, 4], [15, 55], [20, 23]]
+                        //pointStart: Date.UTC(2015, 1, 1),
+                        //pointInterval: 3600 * 1000 // one day
+                    }
+                ]
+            });
+        });
+    </script>*@
+
+    <script>
+        $(function () {
+            $('#container').highcharts({
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'Current sales compared to predicted sales'
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: { // don't display the dummy year
+                        month: '%e. %b',
+                        year: '%b'
+                    },
+                    title: {
+                        text: 'Date'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Sales in usd (million)'
+                    },
+                    min: 0
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+                },
+
+                plotOptions: {
+                    spline: {
+                        marker: {
+                            enabled: true
+                        }
+                    }
+                },
+
+                series: [{
+                    name: 'Current sales',
+                    // Define the data points. All series have a dummy year
+                    // of 1970/71 in order to be compared on the same x axis. Note
+                    // that in JavaScript, months start at 0 for January, 1 for February etc.
+                    data: [
+                        [Date.UTC(1970, 9, 27), 0],
+                        [Date.UTC(1970, 10, 10), 0.6],
+                        [Date.UTC(1970, 10, 18), 0.7],
+                        [Date.UTC(1970, 11, 2), 0.8],
+                        [Date.UTC(1970, 11, 9), 0.6],
+                        [Date.UTC(1970, 11, 16), 0.6],
+                        [Date.UTC(1970, 11, 28), 0.67],
+                        [Date.UTC(1971, 0, 1), 0.81],
+                        [Date.UTC(1971, 0, 8), 0.78],
+                        [Date.UTC(1971, 0, 12), 0.98],
+                        [Date.UTC(1971, 0, 27), 1.84],
+                        [Date.UTC(1971, 1, 10), 1.80],
+                    ]
+                }, {
+                    name: 'Predicted sales',
+                    data: [
+                        [Date.UTC(1970, 9, 18), 0],
+                        [Date.UTC(1970, 9, 26), 0.2],
+                        [Date.UTC(1970, 11, 1), 0.47],
+                        [Date.UTC(1970, 11, 11), 0.55],
+                        [Date.UTC(1970, 11, 25), 1.38],
+                        [Date.UTC(1971, 0, 8), 1.38],
+                        [Date.UTC(1971, 0, 15), 1.38],
+                        [Date.UTC(1971, 1, 1), 1.38],
+                        [Date.UTC(1971, 1, 8), 1.48],
+                        [Date.UTC(1971, 1, 21), 1.5],
+                        [Date.UTC(1971, 2, 12), 1.89],
+                        [Date.UTC(1971, 2, 25), 2.0],
+                        [Date.UTC(1971, 3, 4), 1.94],
+                        [Date.UTC(1971, 3, 9), 1.91],
+                        [Date.UTC(1971, 3, 13), 1.75],
+                        [Date.UTC(1971, 3, 19), 1.6],
+                        [Date.UTC(1971, 4, 25), 0.6],
+                        [Date.UTC(1971, 4, 31), 0.35],
+                        [Date.UTC(1971, 5, 7), 0]
+                    ]
+                }]
+            });
+        });
+    </script>
+}
+
+<div id="container1" style="height: 400px; min-width: 310px"></div>
+<div id="container" style="height: 400px; min-width: 310px"></div>
