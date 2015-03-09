@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using StoreStockingSystem.Models;
 
-namespace StoreStockingSystem.Tests
+namespace StoreStockingSystem.Test
 {
     [TestFixture]
-    public class RandomTest2
+    public class BuildMockData
     {
         
         [Test]
-        [Ignore]
-        public void AlwaysFails()
+        [Ignore] // Ignoring to avoid running on CI.
+        public void InsertData()
         {
             using (var context = new StoreStockingContext())
             {
@@ -27,7 +23,7 @@ namespace StoreStockingSystem.Tests
             }
 
 
-            Assert.IsTrue(1 == 2);
+            Assert.IsTrue(1 == 1);
         }
     }
 }

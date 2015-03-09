@@ -7,12 +7,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1A7C1656-D7EF-4120-AE3C-2C9B076CF361}</ProjectGuid>
+    <ProjectGuid>{E007EE57-4B2D-4A91-AD56-35C4D8DF8705}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StoreStockingSystem</RootNamespace>
-    <AssemblyName>StoreStockingSystem</AssemblyName>
+    <RootNamespace>StoreStockingSystem.Test</RootNamespace>
+    <AssemblyName>StoreStockingSystem.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -50,8 +50,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -82,21 +80,15 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\DisplayType.cs" />
-    <Compile Include="Models\ProductStock.cs" />
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Models\Sale.cs" />
-    <Compile Include="Models\SalesPerson.cs" />
-    <Compile Include="Models\Stock.cs" />
-    <Compile Include="Models\Store.cs" />
-    <Compile Include="Models\StoreStockingContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\RandomTest.cs" />
+    <Compile Include="BuildMockData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\StoreStockingSystem\StoreStockingSystem.csproj">
+      <Project>{1A7C1656-D7EF-4120-AE3C-2C9B076CF361}</Project>
+      <Name>StoreStockingSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -111,9 +103,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51143</DevelopmentServerPort>
+          <DevelopmentServerPort>53491</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51143/</IISUrl>
+          <IISUrl>http://localhost:53491/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

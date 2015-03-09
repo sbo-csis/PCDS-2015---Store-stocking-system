@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
-using StoreStockingSystem.Models;
 
-namespace StoreStockingSystem.Tests
+namespace StoreStockingSystem.Test.Tests
 {
     [TestFixture]
     public class RandomTest
