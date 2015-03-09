@@ -6,9 +6,9 @@ using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
 {
-    public class SalesService
+    public static class SalesService
     {
-        public void RegisterSale(Sale newSale)
+        public static void RegisterSale(Sale newSale)
         {
             using (var context = new StoreStockingContext())
             {
@@ -19,7 +19,7 @@ namespace StoreStockingSystem.Services
             // TODO: Should we update stock in the salesservice or make a job that does it with x minute intervals?
         }
 
-        public void RegisterSale(int storeId, int productId, int salesPrice, int displayTypeId, DateTime salesDate)
+        public static void RegisterSale(int storeId, int productId, int salesPrice, int displayTypeId, DateTime salesDate)
         {
             RegisterSale(new Sale
             {
@@ -31,7 +31,7 @@ namespace StoreStockingSystem.Services
             });
         }
         
-        public List<Sale> GetSales(int storeId, DateTime fromDate, DateTime toDate)
+        public static List<Sale> GetSales(int storeId, DateTime fromDate, DateTime toDate)
         {
             using (var context = new StoreStockingContext())
             {
@@ -44,7 +44,7 @@ namespace StoreStockingSystem.Services
             }
         }
 
-        public void RemoveSale(Sale newSale)
+        public static void RemoveSale(Sale newSale)
         {
             using (var context = new StoreStockingContext())
             {
@@ -53,7 +53,7 @@ namespace StoreStockingSystem.Services
             }
         }
 
-        public void RemoveSale(int storeId, int productId, int salesPrice, int displayTypeId, DateTime salesDate)
+        public static void RemoveSale(int storeId, int productId, int salesPrice, int displayTypeId, DateTime salesDate)
         {
             RemoveSale(new Sale
             {
