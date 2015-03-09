@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace compare.Models
+namespace PCDSWebsite.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
