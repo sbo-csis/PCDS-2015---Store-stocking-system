@@ -11,8 +11,9 @@ namespace StoreStockingSystem.Controller
         public static void GetStoreData(string storeName)
         {
             using (StoreStockingContext ssc = new StoreStockingContext())
-                var x = ssc.ProductStocks.SelectMany(y => y.Stock).Where(z => z.Store.Name == storeName);
-        }
+            {
+                var x = ssc.ProductStocks.Select(y => y.Stock).Where(z => z.Store.Name == storeName);
+            }
         }
     }
 }
