@@ -82,8 +82,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\DisplayTypeService.cs" />
+    <Compile Include="Services\SalesService.cs" />
+    <Compile Include="Services\StockService.cs" />
     <Compile Include="Services\StoreService.cs" />
-    <Compile Include="Services\SetStoreData.cs" />
     <Compile Include="Models\DisplayType.cs" />
     <Compile Include="Models\ProductStock.cs" />
     <Compile Include="Models\Product.cs" />
