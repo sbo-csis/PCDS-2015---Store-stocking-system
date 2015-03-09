@@ -566,6 +566,7 @@
     <Content Include="Views\Stores\StorePerformance.cshtml" />
     <Content Include="Views\Stores\StorePerformanceDetails.cshtml" />
     <Content Include="Views\Stores\ChannelsPerformance.cshtml" />
+    <Content Include="Views\Stores\StockUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,70 @@
+﻿@model dynamic
+
+
+@{
+    ViewBag.Title = "Stock Update";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>ViewBag.Title</title>
+
+</head>
+
+
+<h2>Stock Update</h2>
+@section scripts
+{
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#stores-table').DataTable();
+        });
+
+    </script>
+}
+
+<!-- Select which store to update stock on-->
+
+<!-- Add a display type to the store-->
+<div>
+    <h3>Add display</h3>
+    <select>
+        <option>Kasse</option>
+        <option>Krog</option>
+        <option>Papir</option>
+    </select>
+
+    <input type="text" name="Capacity" id="displayCapacity"/>
+
+    <input type="submit"/>
+</div>
+
+<!-- Add products to the store-->
+<div>
+    <h3>Add product</h3>
+    <select name="Display" id="selectedDisplay">
+        <option>Kasse</option>
+        <option>Krog</option>
+    </select>
+    <select name="Product types" id="productTypes">
+        <option>Romantisk middag</option>
+        <option>Rumrejse</option>
+        <option>Ferrari tur</option>
+    </select>
+
+    <input type="text" name="amount" id="productAmount" />
+
+    <input type="submit" />
+</div>
+

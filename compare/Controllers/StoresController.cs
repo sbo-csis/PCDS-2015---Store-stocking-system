@@ -32,5 +32,10 @@ namespace PCDSWebsite.Controllers
         {
             return View();
         }
+
+        public ActionResult StockUpdate()
+        {
+            return View();
+        }
     }
 }
