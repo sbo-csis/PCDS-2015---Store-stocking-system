@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using StoreStockingSystem.Models;
 
-namespace StoreStockingSystem.Controller
+namespace StoreStockingSystem.Services
 {
     public static class StoreService
     {
