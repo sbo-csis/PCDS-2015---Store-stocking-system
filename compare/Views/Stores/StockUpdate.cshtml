@@ -13,58 +13,135 @@
 
 </head>
 
-
-<h2>Stock Update</h2>
-@section scripts
+<body>
+    <h2>Stock Update</h2>
+    @section scripts
 {
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
 
-    <!-- jQuery -->
-    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+        <!-- jQuery -->
+        <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
 
-    <!-- DataTables -->
-    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+        <!-- DataTables -->
+        <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#stores-table').DataTable();
-        });
+        <script>
+            $(document).ready(function () {
+                $('#selectedStore').DataTable();
+                $('#storeDisplays').DataTable();
+                $('#storeProducts').DataTable();
+            });
 
-    </script>
-}
+        </script>
+    }
 
-<!-- Select which store to update stock on-->
+    <!-- Select which store to update stock on-->
+    <div>
+        <h3>Selected store</h3>
+        <table id="selectedStore" class="display" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>ABC</th>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Zip code</th>
+                    <th>Adresse</th>
+                    <th>Store Status</th>
+                </tr>
+            </thead>
 
-<!-- Add a display type to the store-->
-<div>
-    <h3>Add display</h3>
-    <select>
-        <option>Kasse</option>
-        <option>Krog</option>
-        <option>Papir</option>
-    </select>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>A</td>
+                    <td>Fona Amager</td>
+                    <td>København S</td>
+                    <td>2300</td>
+                    <td>Amager Centret 136</td>
+                    <td style="background-color: greenyellow">Ok (105% of expected)</td>
+                    <td>@Html.ActionLink("Details", "StoreDetails")</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Current store stock status-->
+    <div>
+        <h3>Store stock status</h3>
+        <h4>Displays</h4>
+        <table id="storeDisplays" class="display" style="width: 500px;">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Capacity</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Kasse</td>
+                <td>80</td>
+            </tr>
+            </tbody>
+        </table>
 
-    <input type="text" name="Capacity" id="displayCapacity"/>
+        <h4>Products</h4>
+        <table id="storeProducts" class="display" style="width: 500px;">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Romantisk middag</td>
+                    <td>30</td>
+                </tr>
 
-    <input type="submit"/>
-</div>
+                <tr>
+                    <td>Rumrejse</td>
+                    <td>2</td>
+                </tr>
 
-<!-- Add products to the store-->
-<div>
-    <h3>Add product</h3>
-    <select name="Display" id="selectedDisplay">
-        <option>Kasse</option>
-        <option>Krog</option>
-    </select>
-    <select name="Product types" id="productTypes">
-        <option>Romantisk middag</option>
-        <option>Rumrejse</option>
-        <option>Ferrari tur</option>
-    </select>
+                <tr>
+                    <td>Ferrari tur</td>
+                    <td>10</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Add a display type to the store-->
+    <div>
+        <h3>Add display</h3>
+        <select>
+            <option>Kasse</option>
+            <option>Krog</option>
+            <option>Papir</option>
+        </select>
 
-    <input type="text" name="amount" id="productAmount" />
+        <input type="text" name="Capacity" id="displayCapacity" />
 
-    <input type="submit" />
-</div>
+        <input type="submit" />
+    </div>
 
+    <!-- Add products to the store-->
+    <div>
+        <h3>Add product</h3>
+        <select name="Display" id="selectedDisplay">
+            <option>Kasse</option>
+            <option>Krog</option>
+        </select>
+        <select name="Product types" id="productTypes">
+            <option>Romantisk middag</option>
+            <option>Rumrejse</option>
+            <option>Ferrari tur</option>
+        </select>
+
+        <input type="text" name="amount" id="productAmount" />
+
+        <input type="submit" />
+    </div>
+  
+</body>
+</html>
