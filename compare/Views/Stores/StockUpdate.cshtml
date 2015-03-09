@@ -33,115 +33,116 @@
                 $('#storeProducts').DataTable();
             });
 
+
         </script>
+
     }
-
+    <hr />
     <!-- Select which store to update stock on-->
-    <div>
-        <h3>Selected store</h3>
-        <table id="selectedStore" class="display" style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>ABC</th>
-                    <th>Name</th>
-                    <th>City</th>
-                    <th>Zip code</th>
-                    <th>Adresse</th>
-                    <th>Store Status</th>
-                </tr>
-            </thead>
+    <h3>Selected store</h3>
+    <table id="selectedStore" class="display" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>ABC</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Zip code</th>
+                <th>Adresse</th>
+                <th>Store Status</th>
+            </tr>
+        </thead>
 
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>A</td>
-                    <td>Fona Amager</td>
-                    <td>København S</td>
-                    <td>2300</td>
-                    <td>Amager Centret 136</td>
-                    <td style="background-color: greenyellow">Ok (105% of expected)</td>
-                    <td>@Html.ActionLink("Details", "StoreDetails")</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>A</td>
+                <td>Fona Amager</td>
+                <td>København S</td>
+                <td>2300</td>
+                <td>Amager Centret 136</td>
+                <td style="background-color: greenyellow">Ok (105% of expected)</td>
+                <td>@Html.ActionLink("Details", "StoreDetails")</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+
     <!-- Current store stock status-->
-    <div>
-        <h3>Store stock status</h3>
-        <h4>Displays</h4>
-        <table id="storeDisplays" class="display" style="width: 500px;">
-            <thead>
+    <h3>Store stock status</h3>
+    <h4>Displays</h4>
+    <table id="storeDisplays" class="display" style="width: 50%;">
+        <thead>
             <tr>
                 <th>Type</th>
                 <th>Capacity</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             <tr>
                 <td>Kasse</td>
                 <td>80</td>
             </tr>
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <h4>Products</h4>
-        <table id="storeProducts" class="display" style="width: 500px;">
-            <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Romantisk middag</td>
-                    <td>30</td>
-                </tr>
+    <h4>Products</h4>
+    <table id="storeProducts" class="display" style="width: 50%;">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Romantisk middag</td>
+                <td>30</td>
+            </tr>
 
-                <tr>
-                    <td>Rumrejse</td>
-                    <td>2</td>
-                </tr>
+            <tr>
+                <td>Rumrejse</td>
+                <td>2</td>
+            </tr>
 
-                <tr>
-                    <td>Ferrari tur</td>
-                    <td>10</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            <tr>
+                <td>Ferrari tur</td>
+                <td>10</td>
+            </tr>
+        </tbody>
+    </table>
+
     <!-- Add a display type to the store-->
-    <div>
-        <h3>Add display</h3>
-        <select>
-            <option>Kasse</option>
-            <option>Krog</option>
-            <option>Papir</option>
-        </select>
+    <hr />
+    <h3>Add display</h3>
+    <select>
+        <option>Kasse</option>
+        <option>Krog</option>
+        <option>Papir</option>
+    </select>
 
-        <input type="text" name="Capacity" id="displayCapacity" />
+    <input type="text" name="Capacity" id="displayCapacity" />
 
-        <input type="submit" />
-    </div>
+    <input type="submit" />
+
 
     <!-- Add products to the store-->
-    <div>
-        <h3>Add product</h3>
-        <select name="Display" id="selectedDisplay">
-            <option>Kasse</option>
-            <option>Krog</option>
-        </select>
-        <select name="Product types" id="productTypes">
-            <option>Romantisk middag</option>
-            <option>Rumrejse</option>
-            <option>Ferrari tur</option>
-        </select>
+    <hr />
+    <h3>Add product</h3>
 
-        <input type="text" name="amount" id="productAmount" />
+    <select name="Product types" id="productTypes">
+        <option>Romantisk middag</option>
+        <option>Rumrejse</option>
+        <option>Ferrari tur</option>
+    </select>
+    <select name="Display" id="selectedDisplay">
+        <option>Kasse</option>
+        <option>Krog</option>
+    </select>
+    <input type="text" name="amount" id="productAmount" />
 
-        <input type="submit" />
-    </div>
-  
+    <input type="submit" />
+
+
 </body>
 </html>
