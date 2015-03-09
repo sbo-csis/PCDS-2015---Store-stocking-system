@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Tests
 {
