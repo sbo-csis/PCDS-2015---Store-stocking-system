@@ -35,16 +35,32 @@ namespace StoreStockingSystem.Services
             });
         }
 
-        public static Stock GetStock(int storeid)
+        public static Stock GetStock(Store store, int displayTypeId)
         {
             using (var context = new StoreStockingContext())
             {
-                var stock = context.Stocks.Find(storeid);
+                var stock = (from t in context.Stocks
+                             where t.Store.Id == store.Id
+                                && t.DisplayType.Id == displayTypeId
+                             select t).FirstOrDefault();
+
+                if (stock == null)
+                    throw new ArgumentException("Could not find stock for store id: " + store.Id + " and display-type id" + displayTypeId);
+                
                 return stock;
             }
         }
 
-        public static void UpdateProductStock(Stock stock, int productId, int amount)
+        public static Stock GetStock(int storeId, int productId)
+        {
+            using (var context = new StoreStockingContext())
+            {
+                var store = context.Stores.Find(storeId);
+                return GetStock(store, productId);
+            }
+        }
+
+        public static void AddStock(Stock stock, int productId, int amount)
         {
             using (var context = new StoreStockingContext())
             {
@@ -61,16 +77,11 @@ namespace StoreStockingSystem.Services
             }
         }
 
-        public static void AddStock(int storeId, int productId, int amount)
-        {
-            throw new NotImplementedException();
-        }
-
         public static void ModifyStockBasedOnSale(Sale sale)
         {
-            var stock = GetStock(sale.StoreId);
+            var stock = GetStock(sale.StoreId, sale.DisplayTypeId);
             var amount = (sale.IsReturn ? -1 : 1);
-            UpdateProductStock(stock, sale.ProductId, amount);
+            AddStock(stock, sale.ProductId, amount);
         }
 
     }
