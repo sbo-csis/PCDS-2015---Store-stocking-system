@@ -19,6 +19,7 @@ namespace StoreStockingSystem.Models
         [Key, ForeignKey("DisplayType")]
         [Column(Order = 3)] 
         public int DisplayTypeId { get; set; }
+        public bool IsReturn { get; set; }
         public DisplayType DisplayType { get; set; }
         public DateTime SalesDate { get; set; }
     }

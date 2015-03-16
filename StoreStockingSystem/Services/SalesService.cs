@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
 {
     public static class SalesService
     {
+        public delegate void SaleOccuredEventHandler(Sale sale);
+        public static event SaleOccuredEventHandler SalesEvent;
+
+
         public static void RegisterSale(Sale newSale)
         {
             using (var context = new StoreStockingContext())
             {
                 context.Sales.Add(newSale);
                 context.SaveChanges();
+                SalesEvent(newSale); // Make sales event. StockService subscribes to this, which in turn updates the stock for the given store.
             }
-
-            // TODO: Should we update stock in the salesservice or make a job that does it with x minute intervals?
         }
 
-        public static void RegisterSale(int storeId, int productId, int salesPrice, int displayTypeId, DateTime salesDate)
+        public static void RegisterSale(int storeId, int productId, int salesPrice, int displayTypeId, bool isreturn, DateTime salesDate)
         {
             RegisterSale(new Sale
             {
@@ -27,6 +29,7 @@ namespace StoreStockingSystem.Services
                 ProductId = productId,
                 SalesPrice = salesPrice,
                 DisplayTypeId = displayTypeId,
+                IsReturn = isreturn,
                 SalesDate = salesDate
             });
         }
@@ -42,27 +45,6 @@ namespace StoreStockingSystem.Services
 
                 return sales;
             }
-        }
-
-        public static void RemoveSale(Sale newSale)
-        {
-            using (var context = new StoreStockingContext())
-            {
-                context.Sales.Remove(newSale);
-                context.SaveChanges();
-            }
-        }
-
-        public static void RemoveSale(int storeId, int productId, int salesPrice, int displayTypeId, DateTime salesDate)
-        {
-            RemoveSale(new Sale
-            {
-                StoreId = storeId,
-                ProductId = productId,
-                SalesPrice = salesPrice,
-                DisplayTypeId = displayTypeId,
-                SalesDate = salesDate
-            });
         }
     }
 }
