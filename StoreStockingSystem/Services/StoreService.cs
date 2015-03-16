@@ -20,5 +20,57 @@ namespace StoreStockingSystem.Services
                 return store;
             }
         }
+
+        // Returns new store id.
+        public static int AddStore(Store store) 
+        {
+            using (var context = new StoreStockingContext())
+            {
+                context.Stores.Add(store);
+                context.SaveChanges();
+                return store.Id;
+            }
+        }
+
+        public static void AddStore(string storeName)
+        {
+            AddStore(new Store{Name = storeName});
+        }
+
+        public static void RenameStore(Store store, string newName)
+        {
+            using (var context = new StoreStockingContext())
+            {
+                try
+                {
+                    context.Stores.Find(store.Id).Name = newName;
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Could not rename store id: " + store.Id, ex);
+                }
+            }
+        }
+
+        public static void RenameStore(int storeId, string newName)
+        {
+            using (var context = new StoreStockingContext())
+            {
+                var store = context.Stores.Find(storeId);
+
+                if(store == null)
+                    throw new Exception("Could not find store with id " + storeId);
+
+                RenameStore(store, newName);
+            }
+        }
+
+        public static void AssignNewPersonToStore(Store store, int personId) 
+        {
+            //TODO: add person class and then replace personId with person class as argument.
+            //TODO: create person table and create foreign keys, then do logic here.
+            throw new NotImplementedException();
+        }
     }
 }

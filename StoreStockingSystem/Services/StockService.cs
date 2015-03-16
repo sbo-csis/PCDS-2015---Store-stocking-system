@@ -11,7 +11,6 @@ namespace StoreStockingSystem.Services
             SalesService.SalesEvent += ModifyStockBasedOnSale;
         }
 
-        
         public static void NewStock(Stock newStock)
         {
             using (var context = new StoreStockingContext())
