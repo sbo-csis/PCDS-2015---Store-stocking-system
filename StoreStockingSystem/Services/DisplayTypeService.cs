@@ -19,5 +19,20 @@ namespace StoreStockingSystem.Services
                 return displayType;
             }
         }
+
+        public static DisplayType AddDisplayType(string name, int capacity)
+        {
+            using (var context = new StoreStockingContext())
+            {
+                var displayType = (new DisplayType
+                {
+                    Name = name,
+                    Capacity = capacity
+                });
+                context.DisplayTypes.Add(displayType);
+                context.SaveChanges();
+                return displayType;
+            }
+        }
     }
 }
