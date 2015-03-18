@@ -11,5 +11,10 @@ namespace StoreStockingSystem.Models
         public DbSet<DisplayType> DisplayTypes { get; set; }
         public DbSet<SalesPerson> SalesPersons { get; set; }
         public DbSet<ProductStock> ProductStocks { get; set; }
+
+        static StoreStockingContext()
+        {
+            Database.SetInitializer<StoreStockingContext>(null);
+        }
     }
 }
