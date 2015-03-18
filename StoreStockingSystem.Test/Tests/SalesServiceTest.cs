@@ -22,9 +22,7 @@ namespace StoreStockingSystem.Test.Tests
                 Name = "Pap-display (Unit Test)"
             });
 
-            
-
-            StockService.AddStock();
+            //StockService.AddStock();
 
             // TODO: Make sales test as soon as store, product and displaytype is up and running.
         }

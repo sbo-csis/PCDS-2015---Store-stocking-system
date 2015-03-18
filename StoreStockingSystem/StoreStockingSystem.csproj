@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Services\DisplayTypeService.cs" />
+    <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\SalesService.cs" />
     <Compile Include="Services\StockService.cs" />
     <Compile Include="Services\StoreService.cs" />
