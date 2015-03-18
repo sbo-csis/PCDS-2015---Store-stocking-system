@@ -1,5 +1,9 @@
 ﻿@model dynamic
 
+@using PCDSWebsite.Models
+@using StoreStockingSystem.Services;
+@using Stock = StoreStockingSystem.Models.Stock
+@using Store = StoreStockingSystem.Models.Store
 
 @{
     ViewBag.Title = "Kunder";
@@ -50,65 +54,87 @@
     </thead>
 
     <tbody>
-        <tr>
-            <td>1</td>
-            <td>A</td>
-            <td>Fona Amager</td>
-            <td>København S</td>
-            <td>2300</td>
-            <td>Amager Centret 136</td>
-            <td style="background-color: greenyellow">Ok (105% of expected)</td>
-            <td>@Html.ActionLink("Details", "StoreDetails")</td>
-            <td style="text-align:center;"><input type="checkbox"/></td>
-</tr>
-        
-        <tr>
-            <td>2</td>
-            <td>A</td>
-            <td>Fona Rosengårdscentret</td>
-            <td>Odense</td>
-            <td>5220</td>
-            <td>Rosengårdcentret 84</td>
-            <td style="background-color: greenyellow">Ok (102% of expected)</td>
-            <td>@Html.ActionLink("Details", "StoreDetails")</td>
-            <td style="text-align:center;"><input type="checkbox"/></td>
-        </tr>
-        
-        <tr>
-            <td>3</td>
-            <td>B</td>
-            <td>Fona Svendborg</td>
-            <td>Svendborg</td>
-            <td>5700</td>
-            <td>Kattesundet 2</td>
-            <td style="background-color: greenyellow">Ok (97% of expected)</td>
-            <td>@Html.ActionLink("Details", "StoreDetails")</td>
-            <td style="text-align:center;"><input type="checkbox"/></td>
-        </tr>
 
-        <tr>
-            <td>4</td>
-            <td>A</td>
-            <td>Føtex Frederiksberg</td>
-            <td>Frederiksberg</td>
-            <td>2000</td>
-            <td>Falkoner Alle 21</td>
-            <td style="background-color: yellow">Ok (95% of expected)</td>
-            <td>@Html.ActionLink("Details", "StoreDetails")</td>
-            <td style="text-align:center;"><input type="checkbox"/></td>
-        </tr>
+        @foreach (Stock stock in StockService.GetStocks())
+        {
+            <tr>
+                <td>@stock.Store.Id</td>
+                <td>ABC</td>
+                <td>@stock.Store.Name</td>
+                <td>SomeCity</td>
+                <td>SomeZipCode</td>
+                <td>SomeAddress</td>
+                <td>@stock.WarningPercentageStockLeft</td>
+                <td>
+                    <select>
+                        @foreach (var product in StoreService.GetStoreProducts(stock.Store.Id))
+                        {
+                            <option> value=@product.Product.Name</option>
+                        }
+                    </select>
+                </td>
+                <td style="text-align: center;"><input type="checkbox" /></td>
+            </tr>
+        }
+<tr>
+        <td>1</td>
+        <td>A</td>
+        <td>Fona Amager</td>
+        <td>København S</td>
+        <td>2300</td>
+        <td>Amager Centret 136</td>
+        <td style="background-color: greenyellow">Ok (105% of expected)</td>
+        <td>@Html.ActionLink("Details", "StoreDetails")</td>
+        <td style="text-align: center;"><input type="checkbox"/></td>
+    </tr>
 
-        <tr>
-            <td>5</td>
-            <td>C</td>
-            <td>Bog & Idé Vordingborg</td>
-            <td>Vordingborg</td>
-            <td>4760</td>
-            <td>Algade 84</td>
-            <td style="background-color: red">Bad Out of stock (0 days left)</td>
-            <td>@Html.ActionLink("Details", "StoreDetails")</td>
-            <td style="text-align:center;"><input type="checkbox"/></td>
-        </tr>
+    <tr>
+        <td>2</td>
+        <td>A</td>
+        <td>Fona Rosengårdscentret</td>
+        <td>Odense</td>
+        <td>5220</td>
+        <td>Rosengårdcentret 84</td>
+        <td style="background-color: greenyellow">Ok (102% of expected)</td>
+        <td>@Html.ActionLink("Details", "StoreDetails")</td>
+        <td style="text-align: center;"><input type="checkbox"/></td>
+    </tr>
+
+    <tr>
+        <td>3</td>
+        <td>B</td>
+        <td>Fona Svendborg</td>
+        <td>Svendborg</td>
+        <td>5700</td>
+        <td>Kattesundet 2</td>
+        <td style="background-color: greenyellow">Ok (97% of expected)</td>
+        <td>@Html.ActionLink("Details", "StoreDetails")</td>
+        <td style="text-align: center;"><input type="checkbox"/></td>
+    </tr>
+
+    <tr>
+        <td>4</td>
+        <td>A</td>
+        <td>Føtex Frederiksberg</td>
+        <td>Frederiksberg</td>
+        <td>2000</td>
+        <td>Falkoner Alle 21</td>
+        <td style="background-color: yellow">Ok (95% of expected)</td>
+        <td>@Html.ActionLink("Details", "StoreDetails")</td>
+        <td style="text-align: center;"><input type="checkbox"/></td>
+    </tr>
+
+    <tr>
+        <td>5</td>
+        <td>C</td>
+        <td>Bog & Idé Vordingborg</td>
+        <td>Vordingborg</td>
+        <td>4760</td>
+        <td>Algade 84</td>
+        <td style="background-color: red">Bad Out of stock (0 days left)</td>
+        <td>@Html.ActionLink("Details", "StoreDetails")</td>
+        <td style="text-align: center;"><input type="checkbox"/></td>
+    </tr>
     </tbody>
 </table>
 

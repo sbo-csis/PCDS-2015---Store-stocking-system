@@ -21,6 +21,8 @@ namespace StoreStockingSystem.Services
             }
         }
 
+        
+
         public static List<ProductStock> GetStoreProducts(int storeId)
         {
             using (var context = new StoreStockingContext())
@@ -28,7 +30,6 @@ namespace StoreStockingSystem.Services
                 List<ProductStock> productList = (from t in context.ProductStocks
                              where t.Stock.Store.Id == storeId
                              select t).ToList();
-
                 return productList;
             }
         }
