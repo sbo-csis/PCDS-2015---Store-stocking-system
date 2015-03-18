@@ -20,19 +20,23 @@ namespace StoreStockingSystem.Services
             }
         }
 
-        public static DisplayType AddDisplayType(string name, int capacity)
+        public static int AddDisplayType(DisplayType display)
         {
             using (var context = new StoreStockingContext())
             {
-                var displayType = (new DisplayType
-                {
-                    Name = name,
-                    Capacity = capacity
-                });
-                context.DisplayTypes.Add(displayType);
+                context.DisplayTypes.Add(display);
                 context.SaveChanges();
-                return displayType;
+                return display.Id;
             }
+        }
+
+        public static int AddDisplayType(string name, int capacity)
+        {
+            return AddDisplayType(new DisplayType
+            {
+                Name = name,
+                Capacity = capacity
+            });
         }
     }
 }

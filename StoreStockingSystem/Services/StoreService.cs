@@ -44,9 +44,9 @@ namespace StoreStockingSystem.Services
             }
         }
 
-        public static void AddStore(string storeName)
+        public static int AddStore(string storeName)
         {
-            AddStore(new Store{Name = storeName});
+            return AddStore(new Store{Name = storeName});
         }
 
         public static void RenameStore(Store store, string newName)
