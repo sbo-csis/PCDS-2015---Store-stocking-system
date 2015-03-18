@@ -37,5 +37,9 @@ namespace PCDSWebsite.Controllers
         {
             return View();
         }
+        public ActionResult SalesStockUpdate()
+        {
+            return View();
+        }
     }
 }
