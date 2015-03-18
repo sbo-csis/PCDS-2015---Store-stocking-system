@@ -28,6 +28,7 @@
 
         <script>
             $(document).ready(function () {
+                $('#selectedChain').DataTable();
                 $('#selectedStore').DataTable();
                 $('#storeDisplays').DataTable();
                 $('#storeProducts').DataTable();
@@ -37,7 +38,79 @@
         </script>
 
     }
-    <hr />
+<hr/>
+
+    <form>
+        <table>
+            <tr>
+                <td>Select Chain</td>
+                <td>Select Store</td>
+            </tr>
+            <tr>
+                <td>
+                    <select id="ddl1" onchange="changeDropdown(this,document.getElementById('ddl2'))">
+                        <option value=""><!---------></option>
+                        <option value="Fona">Fona</option>
+                        <option value="Dagrofa">Dagrofa</option>
+                        <option value="Bog og Ide">Bog Og Ide</option>
+                    </select>
+                </td>
+                <td>
+                    <select id="ddl2">
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+<script>
+    function changeDropdown(ddl1, ddl2) {
+        var fona = new Array('København Ø', 'Nykøbing F', 'Næstved');
+        var dagrofa = new Array('Super best', 'Kiwi', '...');
+        var bogogide = new Array('Vordingborg', 'København C');
+
+        switch (ddl1.value) {
+            case 'Fona':
+                for (i = 0; i < fona.length; i++) {
+                    createOptions(ddl2, fona[i], fona[i]);
+                }
+                break;
+            case 'Dagrofa':
+                for (i = 0; i < dagrofa.length; i++) {
+                    createOptions(ddl2, dagrofa[i], dagrofa[i]);
+                }
+                break;
+            case 'Bog Og Ide':
+                for (i = 0; i < bogogide.length; i++) {
+                    createOptions(ddl2, bogogide[i], bogogide[i]);
+                }
+                break;
+            default:
+                ddl2.options.length = 0;
+                break;
+        }
+    }
+    function createOptions(ddl, text, value) {
+        var opt = document.createElement('option');
+        opt.setAttribute("value", value);
+        opt.innerHTML = text;
+        ddl.appendChild(opt);
+    }
+</script>
+
+
+<!-- Select which chain to update stock on-->
+    <h3>Selected Chain</h3>
+    <table id="selectedChain" class="display" style="width: 100%;">
+    <select>
+        <option>Fona</option>
+        <option>Bog og Ide</option>
+        <option>Føtex</option>
+        <option>...</option>
+    </select>
+
+<hr/>
+
     <!-- Select which store to update stock on-->
     <h3>Selected store</h3>
     <table id="selectedStore" class="display" style="width: 100%;">
