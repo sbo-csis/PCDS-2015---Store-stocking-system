@@ -21,6 +21,18 @@ namespace StoreStockingSystem.Services
             }
         }
 
+        public static List<ProductStock> GetStoreProducts(int storeId)
+        {
+            using (var context = new StoreStockingContext())
+            {
+                List<ProductStock> productList = (from t in context.ProductStocks
+                             where t.Stock.Store.Id == storeId
+                             select t).ToList();
+
+                return productList;
+            }
+        }
+
         // Returns new store id.
         public static int AddStore(Store store) 
         {
