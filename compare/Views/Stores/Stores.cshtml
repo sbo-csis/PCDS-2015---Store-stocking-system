@@ -55,7 +55,7 @@
 
     <tbody>
 
-        @foreach (Stock stock in StockService.GetStocks())
+        @foreach (Stock stock in StockService.GetAllStocks())
         {
             <tr>
                 <td>@stock.Store.Id</td>

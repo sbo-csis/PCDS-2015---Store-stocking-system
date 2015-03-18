@@ -9,11 +9,13 @@ namespace StoreStockingSystem.Models
 {
     public class ProductStock
     {
-        [Key, ForeignKey("Stock")]
+        [Key]
+        public int Id { get; set; }
+        [ForeignKey("Stock")]
         [Column(Order = 1)] 
         public int StockId { get; set; }
         public virtual Stock Stock { get; set; }
-        [Key, ForeignKey("Product")]
+        [ForeignKey("Product")]
         [Column(Order = 2)] 
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }

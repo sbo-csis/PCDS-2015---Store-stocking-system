@@ -14,7 +14,8 @@ namespace StoreStockingSystem.Models
 
         static StoreStockingContext()
         {
-            Database.SetInitializer<StoreStockingContext>(null);
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<StoreStockingContext>()); //TODO: MUST NOT run in production. Enable check for environment, and disable if production.
         }
     }
+
 }

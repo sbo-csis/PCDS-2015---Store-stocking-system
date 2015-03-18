@@ -14,17 +14,17 @@ namespace StoreStockingSystem.Services
             }
         }
 
-        public static int NewProduct(Product product)
+        public static Product NewProduct(Product product)
         {
             using (var context = new StoreStockingContext())
             {
                 context.Products.Add(product);
                 context.SaveChanges();
-                return product.Id;
+                return product;
             }
         }
 
-        public static int NewProduct(string name, int price)
+        public static Product NewProduct(string name, int price)
         {
             return NewProduct(new Product() {Name = name, Price = price});
         }

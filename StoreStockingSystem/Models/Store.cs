@@ -1,9 +1,15 @@
-﻿namespace StoreStockingSystem.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace StoreStockingSystem.Models
 {
     public class Store
     {
+        [Key]
         public int Id { get; set; }
         public virtual string Name { get; set; }
-        public SalesPerson SalesPerson { get; set; }
+        [ForeignKey("SalesPerson")]
+        public int SalesPersonId { get; set; }
+        public virtual SalesPerson SalesPerson { get; set; }
     }
 }

@@ -35,17 +35,17 @@ namespace StoreStockingSystem.Services
         }
 
         // Returns new store id.
-        public static int AddStore(Store store) 
+        public static Store AddStore(Store store) 
         {
             using (var context = new StoreStockingContext())
             {
                 context.Stores.Add(store);
                 context.SaveChanges();
-                return store.Id;
+                return store;
             }
         }
 
-        public static int AddStore(string storeName)
+        public static Store AddStore(string storeName)
         {
             return AddStore(new Store{Name = storeName});
         }

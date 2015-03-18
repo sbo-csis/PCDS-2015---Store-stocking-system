@@ -15,6 +15,13 @@ namespace StoreStockingSystem.Services
         {
             using (var context = new StoreStockingContext())
             {
+                if (newSale.Store != null)
+                    context.Stores.Attach(newSale.Store);
+                if (newSale.DisplayType != null)
+                    context.DisplayTypes.Attach(newSale.DisplayType);
+                if (newSale.Product != null)
+                    context.Products.Attach(newSale.Product);
+
                 context.Sales.Add(newSale);
                 context.SaveChanges();
                 SalesEvent(newSale); // Make sales event. StockService subscribes to this, which in turn updates the stock for the given store.
@@ -25,10 +32,10 @@ namespace StoreStockingSystem.Services
         {
             RegisterSale(new Sale
             {
-                StoreId = storeId,
-                ProductId = productId,
+                Store = StoreService.GetStore(storeId),
+                Product = ProductService.GetProduct(productId),
                 SalesPrice = salesPrice,
-                DisplayTypeId = displayTypeId,
+                DisplayType = DisplayTypeService.GetDisplayType(displayTypeId),
                 IsReturn = isreturn,
                 SalesDate = salesDate
             });
@@ -39,7 +46,7 @@ namespace StoreStockingSystem.Services
             using (var context = new StoreStockingContext())
             {
                 var sales = (from  t in context.Sales
-                             where  t.StoreId == storeId
+                             where  t.Store.Id == storeId
                              &&    (t.SalesDate > fromDate && t.SalesDate < toDate)
                              select t).ToList();
 
