@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StoreStockingSystem.Models;
 
@@ -56,6 +57,16 @@ namespace StoreStockingSystem.Services
             {
                 var store = context.Stores.Find(storeId);
                 return GetStock(store, productId);
+            }
+        }
+
+        public static List<Stock> GetStocks()
+        {
+            using (var context = new StoreStockingContext())
+            {
+                List<Stock> stocks = (from t in context.Stocks
+                             select t).ToList();
+                return stocks;
             }
         }
 
