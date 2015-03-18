@@ -63,9 +63,9 @@ namespace StoreStockingSystem.Services
         {
             using (var context = new StoreStockingContext())
             {
-                var productStock = (from t in stock.ProductStock
+                var productStock = (from t in stock.ProductStock //TODO: handle case where productstock doesnt exist yet!
                                     where t.ProductId == productId
-                                    select t).FirstOrDefault();
+                                    select t).FirstOrDefault(); //TODO: Store can have multiple productStocks. Its based on displaytype, so this line can return a list!
 
                 if (productStock == null)
                     throw new ArgumentException("Could not find productid: " + stock.Id + " in stockid " + productId);
