@@ -1,4 +1,6 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Runtime.Remoting.Proxies;
 
 namespace StoreStockingSystem.Models
 {
@@ -12,8 +14,9 @@ namespace StoreStockingSystem.Models
         public DbSet<SalesPerson> SalesPersons { get; set; }
         public DbSet<ProductStock> ProductStocks { get; set; }
 
-        static StoreStockingContext()
+        public StoreStockingContext()
         {
+            Configuration.ProxyCreationEnabled = false;          
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<StoreStockingContext>()); //TODO: MUST NOT run in production. Enable check for environment, and disable if production.
         }
     }

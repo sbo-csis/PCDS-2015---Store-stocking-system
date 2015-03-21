@@ -9,7 +9,7 @@ namespace StoreStockingSystem.Models
         public int Id { get; set; }
         public virtual string Name { get; set; }
         [ForeignKey("SalesPerson")]
-        public int SalesPersonId { get; set; }
+        public int? SalesPersonId { get; set; }
         public virtual SalesPerson SalesPerson { get; set; }
     }
 }

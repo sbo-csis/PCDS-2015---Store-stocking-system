@@ -1,5 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Drawing.Printing;
+using NUnit.Framework;
 using StoreStockingSystem.Models;
+using StoreStockingSystem.Services;
 
 namespace StoreStockingSystem.Test.Tests
 {
@@ -7,40 +10,47 @@ namespace StoreStockingSystem.Test.Tests
     public class StoreServiceTest
     {
         [Test]
-        [Ignore]
-        public void make_and_delete_store()
+        [ExpectedException(typeof(ArgumentException))]
+        public void can_make_store_add_stock_to_it_and_delete_store()
         {
             using (var context = new StoreStockingContext())
             {
-                // Dummy salesperson
-                var salesPerson = new SalesPerson { Name = "Ole Jensen", Id = 1 };
-                // Add salesPerson if it does not exist
-                if (context.SalesPersons.Find(salesPerson.Id) != null)
+                var store = StoreService.AddStore(new Store()
                 {
-                    context.SalesPersons.Add(salesPerson);
-                }
-                // Dummy store
-                var store = new Store
-                {
-                    Id = 1,
-                    Name = "Fona Amager",
-                    SalesPerson = salesPerson
-                };
-                // Add store if it does not exist
-                if (context.Stores.Find(store.Id) != null)
-                {
-                    context.Stores.Add(store);
-                }
-                context.SaveChanges();
+                    Name = "Bilka (Unit Test)"
+                }, context);
 
-                // Test that the store is added 
-                Assert.NotNull(context.Stores.Find(store.Id));
+                var foundStore = StoreService.GetStore(store.Id, context);
 
-                // Delete the store from the context
-                context.Stores.Remove(store);
-                context.SaveChanges();
-                // Test that it has been deleted 
-                Assert.Null(context.Stores.Find(store.Id));
+                Assert.AreEqual(store, foundStore);
+
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType()
+                                                                    {
+                                                                        Capacity = 123,
+                                                                        Name = "Jern display (Unit Test)"
+                                                                    }, context);
+
+                var stock = StockService.NewStock(new Stock()
+                                                    {
+                                                        Capacity = 100,
+                                                        DisplayTypeId = displayType.Id,
+                                                        StoreId = store.Id,
+                                                        WarningPercentageStockLeft = 10
+                                                    }, context);
+
+                var stockAfterInsert = StockService.GetStock(store, displayType.Id);
+                Assert.AreEqual(stockAfterInsert.Id, stock.Id);
+
+                StoreService.RemoveStore(store.Id, context);
+
+                var storeAfterDeletion = StoreService.GetStore(store.Id, context);
+                Assert.AreEqual(storeAfterDeletion,null);
+
+                var displayTypeAfterDeletion = DisplayTypeService.GetDisplayType(displayType.Id, context);
+
+                Assert.AreEqual(displayType.Id, displayTypeAfterDeletion.Id);
+
+                StockService.GetStock(store, displayType.Id, context); //Exception happens here
             }
         }
     }

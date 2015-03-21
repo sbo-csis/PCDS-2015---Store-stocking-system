@@ -7,51 +7,46 @@ namespace StoreStockingSystem.Services
 {
     public static class SalesService
     {
-        public delegate void SaleOccuredEventHandler(Sale sale);
+        public delegate void SaleOccuredEventHandler(Sale sale, StoreStockingContext context);
         public static event SaleOccuredEventHandler SalesEvent;
 
 
-        public static void RegisterSale(Sale newSale)
+        public static void RegisterSale(Sale newSale, StoreStockingContext context = null)
         {
-            using (var context = new StoreStockingContext())
-            {
-                if (newSale.Store != null)
-                    context.Stores.Attach(newSale.Store);
-                if (newSale.DisplayType != null)
-                    context.DisplayTypes.Attach(newSale.DisplayType);
-                if (newSale.Product != null)
-                    context.Products.Attach(newSale.Product);
+            if (context == null)
+                context = new StoreStockingContext();
 
-                context.Sales.Add(newSale);
-                context.SaveChanges();
-                SalesEvent(newSale); // Make sales event. StockService subscribes to this, which in turn updates the stock for the given store.
-            }
+            context.Sales.Add(newSale);
+            context.SaveChanges();
+            
+            SalesEvent(newSale, context); // Make sales event. StockService subscribes to this, which in turn updates the stock for the given store.
         }
 
-        public static void RegisterSale(int storeId, int productId, int salesPrice, int displayTypeId, bool isreturn, DateTime salesDate)
+        public static void RegisterSale(int storeId, int productId, int salesPrice, int displayTypeId, bool isreturn, DateTime salesDate, StoreStockingContext context = null)
         {
+            if (context == null)
+                context = new StoreStockingContext();
+
             RegisterSale(new Sale
             {
-                Store = StoreService.GetStore(storeId),
-                Product = ProductService.GetProduct(productId),
+                Store = StoreService.GetStore(storeId, context),
+                Product = ProductService.GetProduct(productId, context),
                 SalesPrice = salesPrice,
-                DisplayType = DisplayTypeService.GetDisplayType(displayTypeId),
+                DisplayType = DisplayTypeService.GetDisplayType(displayTypeId, context),
                 IsReturn = isreturn,
                 SalesDate = salesDate
-            });
+            }, context);
         }
         
-        public static List<Sale> GetSales(int storeId, DateTime fromDate, DateTime toDate)
+        public static List<Sale> GetSales(int storeId, DateTime fromDate, DateTime toDate, StoreStockingContext context = null)
         {
-            using (var context = new StoreStockingContext())
-            {
-                var sales = (from  t in context.Sales
-                             where  t.Store.Id == storeId
-                             &&    (t.SalesDate > fromDate && t.SalesDate < toDate)
-                             select t).ToList();
+            if (context == null)
+                context = new StoreStockingContext();
 
-                return sales;
-            }
+                return (from  t in context.Sales
+                        where  t.Store.Id == storeId
+                        &&    (t.SalesDate > fromDate && t.SalesDate < toDate)
+                        select t).ToList();
         }
     }
 }

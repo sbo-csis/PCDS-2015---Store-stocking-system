@@ -9,74 +9,91 @@ namespace StoreStockingSystem.Services
 {
     public static class StoreService
     {
-        public static Store GetStore(int storeId)
+        public static Store GetStore(int storeId, StoreStockingContext context = null)
         {
-            using (var context = new StoreStockingContext())
-            {
-                var store = (from t in context.Stores
-                             where t.Id == storeId
-                             select t).FirstOrDefault();
+            if (context == null)
+                context = new StoreStockingContext();
+            
+            var store = (from t in context.Stores
+                            where t.Id == storeId
+                            select t).FirstOrDefault();
 
-                return store;
-            }
+            return store;
         }
 
-        
-
-        public static List<ProductStock> GetStoreProducts(int storeId)
+        public static List<ProductStock> GetStoreProducts(int storeId, StoreStockingContext context = null)
         {
-            using (var context = new StoreStockingContext())
-            {
-                List<ProductStock> productList = (from t in context.ProductStocks
-                             where t.Stock.Store.Id == storeId
-                             select t).ToList();
-                return productList;
-            }
+            if (context == null)
+                context = new StoreStockingContext();
+
+            return (from t in context.ProductStocks
+                    where t.Stock.Store.Id == storeId
+                    select t).ToList();
         }
 
         // Returns new store id.
-        public static Store AddStore(Store store) 
+        public static Store AddStore(Store store, StoreStockingContext context = null) 
         {
-            using (var context = new StoreStockingContext())
+            if (context == null)
+                context = new StoreStockingContext();
+
+            context.Stores.Add(store);
+            context.SaveChanges();
+            return store;
+        }
+
+        public static Store AddStore(string storeName, StoreStockingContext context = null)
+        {
+            return AddStore(new Store {Name = storeName}, context);
+        }
+
+        public static void RenameStore(Store store, string newName, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            try
             {
-                context.Stores.Add(store);
+                context.Stores.Find(store.Id).Name = newName;
                 context.SaveChanges();
-                return store;
             }
-        }
-
-        public static Store AddStore(string storeName)
-        {
-            return AddStore(new Store{Name = storeName});
-        }
-
-        public static void RenameStore(Store store, string newName)
-        {
-            using (var context = new StoreStockingContext())
+            catch (Exception ex)
             {
-                try
-                {
-                    context.Stores.Find(store.Id).Name = newName;
-                    context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Could not rename store id: " + store.Id, ex);
-                }
+                throw new Exception("Could not rename store id: " + store.Id, ex);
             }
+
         }
 
-        public static void RenameStore(int storeId, string newName)
+        public static void RenameStore(int storeId, string newName, StoreStockingContext context = null)
         {
-            using (var context = new StoreStockingContext())
-            {
-                var store = context.Stores.Find(storeId);
+            if (context == null)
+                context = new StoreStockingContext();
 
-                if(store == null)
-                    throw new Exception("Could not find store with id " + storeId);
+            var store = context.Stores.Find(storeId);
 
-                RenameStore(store, newName);
-            }
+            if(store == null)
+                throw new Exception("Could not find store with id " + storeId);
+
+            RenameStore(store, newName, context);
+        }
+
+        public static void RemoveStore(int storeid, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var store = StoreService.GetStore(storeid, context);
+
+            RemoveStore(store, context);
+        }
+
+        public static void RemoveStore(Store store, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            context.Stores.Remove(store);
+            context.SaveChanges();
         }
 
         public static void AssignNewPersonToStore(Store store, int personId) 

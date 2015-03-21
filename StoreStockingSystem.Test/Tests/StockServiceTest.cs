@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Web;
 using NUnit.Framework;
 using StoreStockingSystem.Models;
@@ -11,80 +12,86 @@ namespace StoreStockingSystem.Test.Tests
     [TestFixture]
     public class StockServiceTest
     {
-        [Ignore]
-        [TestAttribute]
+        [Test]
         public void can_add_product_to_stock()
         {
-            var storeId = StoreService.AddStore(new Store()
+            using (var context = new StoreStockingContext())
             {
-                Name = "Bilka Skagen (Unit Test)"
-            });
 
-            var displayId = DisplayTypeService.AddDisplayType(new DisplayType()
-            {
-                Capacity = 10,
-                Name = "Pap-display (Unit Test)"
-            });
+                var store = StoreService.AddStore(new Store()
+                {
+                    Name = "Bilka Skagen (Unit Test)"
+                }, context);
 
-            var productId = ProductService.NewProduct(new Product()
-            {
-                Name = "Pølsevogns massakre (Unit Test)",
-                Price = 299
-            });
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType()
+                {
+                    Capacity = 10,
+                    Name = "Pap-display (Unit Test)"
+                }, context);
 
-            var stockId = StockService.NewStock(storeId, displayId, null, 25);
+                var product = ProductService.NewProduct(new Product()
+                {
+                    Name = "Pølsevogns massakre (Unit Test)",
+                    Price = 299
+                }, context);
 
-            StockService.AddProductToStock(stockId, productId, 3);
+                var stock = StockService.NewStock(store, displayType, null, 25, context);
 
-            var productstock = StockService.GetProductStock(stockId, productId);
+                StockService.AddProductToStock(stock, product, 3, context);
 
-            if(productstock == null)
-                throw new Exception("No product stock found.");
+                var productstock = StockService.GetProductStock(stock, product, context);
 
-            Assert.AreEqual(productstock.Amount, 3);
-            Assert.AreEqual(productstock.ProductId, productId);
-            Assert.AreEqual(productstock.StockId, stockId);
+                if(productstock == null)
+                    throw new Exception("No product stock found.");
+
+                Assert.AreEqual(productstock.Amount, 3);
+                Assert.AreEqual(productstock.ProductId, product.Id);
+                Assert.AreEqual(productstock.StockId, stock.Id);
+            }
+           
         }
 
-        [Ignore]
-        [TestAttribute]
-        public void can_remove_product_to_stock()
+        [Test]
+        public void can_remove_product_from_stock()
         {
-            var storeId = StoreService.AddStore(new Store()
+            using (var context = new StoreStockingContext())
             {
-                Name = "Bilka Skagen (Unit Test)"
-            });
+                var store = StoreService.AddStore(new Store()
+                {
+                    Name = "Bilka Skagen (Unit Test)"
+                }, context);
 
-            var displayId = DisplayTypeService.AddDisplayType(new DisplayType()
-            {
-                Capacity = 10,
-                Name = "Pap-display (Unit Test)"
-            });
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType()
+                {
+                    Capacity = 10,
+                    Name = "Pap-display (Unit Test)"
+                }, context);
 
-            var productId = ProductService.NewProduct(new Product()
-            {
-                Name = "Pølsevogns massakre (Unit Test)",
-                Price = 299
-            });
+                var product = ProductService.NewProduct(new Product()
+                {
+                    Name = "Pølsevogns massakre (Unit Test)",
+                    Price = 299
+                }, context);
 
-            var stockId = StockService.NewStock(storeId, displayId, null, 25);
+                var stock = StockService.NewStock(store, displayType, null, 25, context);
 
-            StockService.AddProductToStock(stockId, productId, 3);
+                StockService.AddProductToStock(stock, product, 3, context);
             
-            var productstock = StockService.GetProductStock(stockId, productId);
+                var productstock = StockService.GetProductStock(stock, product, context);
 
-            if (productstock == null)
-                throw new Exception("No product stock found.");
+                if (productstock == null)
+                    throw new Exception("Could not create product stock.");
 
-            Assert.AreEqual(productstock.Amount, 3);
-            Assert.AreEqual(productstock.ProductId, productId);
-            Assert.AreEqual(productstock.StockId, stockId);
+                Assert.AreEqual(productstock.Amount, 3);
+                Assert.AreEqual(productstock.ProductId, product.Id);
+                Assert.AreEqual(productstock.StockId, stock.Id);
 
-            StockService.RemoveProductFromStock(stockId, productId);
+                StockService.RemoveProductFromStock(stock, product, context);
 
-            productstock = StockService.GetProductStock(stockId, productId);
+                productstock = StockService.GetProductStock(stock, product, context);
 
-            Assert.AreSame(productstock, null);
+                Assert.AreSame(productstock, null);
+            }
         }
     }
 }
