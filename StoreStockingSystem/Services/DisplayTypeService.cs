@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Web;
+﻿using System.Linq;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services

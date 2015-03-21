@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Web;
 using NUnit.Framework;
 using StoreStockingSystem.Models;
 using StoreStockingSystem.Services;
 
-namespace StoreStockingSystem.Test.Tests
+namespace StoreStockingSystem.Test.Services
 {
     [TestFixture]
     public class StockServiceTest

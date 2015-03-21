@@ -3,7 +3,7 @@ using NUnit.Framework;
 using StoreStockingSystem.Models;
 using StoreStockingSystem.Services;
 
-namespace StoreStockingSystem.Test.Tests
+namespace StoreStockingSystem.Test.Services
 {
     [TestFixture]
     public class SalesServiceTest

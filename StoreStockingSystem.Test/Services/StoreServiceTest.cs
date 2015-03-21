@@ -3,7 +3,7 @@ using NUnit.Framework;
 using StoreStockingSystem.Models;
 using StoreStockingSystem.Services;
 
-namespace StoreStockingSystem.Test.Tests
+namespace StoreStockingSystem.Test.Services
 {
     [TestFixture]
     public class StoreServiceTest
@@ -14,7 +14,7 @@ namespace StoreStockingSystem.Test.Tests
         {
             using (var context = new StoreStockingContext())
             {
-                var store = StoreService.AddStore(new Store()
+                var store = StoreService.AddStore(new Store
                 {
                     Name = "Bilka (Unit Test)"
                 }, context);
@@ -23,13 +23,13 @@ namespace StoreStockingSystem.Test.Tests
 
                 Assert.AreEqual(store, foundStore);
 
-                var displayType = DisplayTypeService.AddDisplayType(new DisplayType()
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType
                                                                     {
                                                                         Capacity = 123,
                                                                         Name = "Jern display (Unit Test)"
                                                                     }, context);
 
-                var stock = StockService.NewStock(new Stock()
+                var stock = StockService.NewStock(new Stock
                                                     {
                                                         Capacity = 100,
                                                         DisplayTypeId = displayType.Id,
