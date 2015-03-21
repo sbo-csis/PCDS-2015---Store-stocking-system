@@ -18,18 +18,18 @@ namespace StoreStockingSystem.Test.Tests
             using (var context = new StoreStockingContext())
             {
 
-                var store = StoreService.AddStore(new Store()
+                var store = StoreService.AddStore(new Store
                 {
                     Name = "Bilka Skagen (Unit Test)"
                 }, context);
 
-                var displayType = DisplayTypeService.AddDisplayType(new DisplayType()
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType
                 {
                     Capacity = 10,
                     Name = "Pap-display (Unit Test)"
                 }, context);
 
-                var product = ProductService.NewProduct(new Product()
+                var product = ProductService.NewProduct(new Product
                 {
                     Name = "Pølsevogns massakre (Unit Test)",
                     Price = 299
@@ -56,18 +56,18 @@ namespace StoreStockingSystem.Test.Tests
         {
             using (var context = new StoreStockingContext())
             {
-                var store = StoreService.AddStore(new Store()
+                var store = StoreService.AddStore(new Store
                 {
                     Name = "Bilka Skagen (Unit Test)"
                 }, context);
 
-                var displayType = DisplayTypeService.AddDisplayType(new DisplayType()
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType
                 {
                     Capacity = 10,
                     Name = "Pap-display (Unit Test)"
                 }, context);
 
-                var product = ProductService.NewProduct(new Product()
+                var product = ProductService.NewProduct(new Product
                 {
                     Name = "Pølsevogns massakre (Unit Test)",
                     Price = 299

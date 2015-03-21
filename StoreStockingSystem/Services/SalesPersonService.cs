@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using StoreStockingSystem.Models;
+﻿using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
 {
@@ -20,7 +16,7 @@ namespace StoreStockingSystem.Services
 
         public static SalesPerson AddSalesPerson(string name, StoreStockingContext context = null)
         {
-            return AddSalesPerson(new SalesPerson() {Name = name}, context);
+            return AddSalesPerson(new SalesPerson {Name = name}, context);
         }
     }
 }

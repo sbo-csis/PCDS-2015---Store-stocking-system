@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
@@ -93,7 +92,7 @@ namespace StoreStockingSystem.Services
 
         public static ProductStock GetProductStock(int stockId, int productId, StoreStockingContext context = null)
         {
-            return GetProductStock(StockService.GetStock(stockId), ProductService.GetProduct(productId), context);
+            return GetProductStock(GetStock(stockId), ProductService.GetProduct(productId), context);
         }
 
         public static List<ProductStock> GetAllProductStocks(int stockId, StoreStockingContext context = null)
@@ -127,7 +126,7 @@ namespace StoreStockingSystem.Services
 
             if (productStock == null) //Adding new product to stock
             {
-                context.ProductStocks.Add((new ProductStock()
+                context.ProductStocks.Add((new ProductStock
                 {
                     Amount = amount,
                     ProductId = product.Id,
@@ -200,7 +199,7 @@ namespace StoreStockingSystem.Services
 
         public static void RemoveProductFromStock(int stockId, int productId, StoreStockingContext context = null)
         {
-            RemoveProductFromStock(StockService.GetStock(stockId, context), ProductService.GetProduct(productId, context), context);
+            RemoveProductFromStock(GetStock(stockId, context), ProductService.GetProduct(productId, context), context);
         }
     }
 }

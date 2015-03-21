@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Net.Sockets;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
@@ -82,7 +80,7 @@ namespace StoreStockingSystem.Services
             if (context == null)
                 context = new StoreStockingContext();
 
-            var store = StoreService.GetStore(storeid, context);
+            var store = GetStore(storeid, context);
 
             RemoveStore(store, context);
         }

@@ -1,6 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Runtime.Remoting.Proxies;
 
 namespace StoreStockingSystem.Models
 {

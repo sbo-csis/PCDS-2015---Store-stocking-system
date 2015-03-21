@@ -13,18 +13,18 @@ namespace StoreStockingSystem.Test.Tests
         {
             using (var context = new StoreStockingContext())
             {
-                var store = StoreService.AddStore(new Store()
+                var store = StoreService.AddStore(new Store
                 {
                     Name = "Bilka Skagen (Unit Test)"
                 }, context);
 
-                var displayType = DisplayTypeService.AddDisplayType(new DisplayType()
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType
                 {
                     Capacity = 10,
                     Name = "Plastik display (Unit Test)"
                 }, context);
 
-                var product = ProductService.NewProduct(new Product()
+                var product = ProductService.NewProduct(new Product
                 {
                     Name = "Kør sportsvogn (Unit Test)",
                     Price = 199
@@ -34,7 +34,7 @@ namespace StoreStockingSystem.Test.Tests
 
                 StockService.AddProductToStock(stock.Id, product.Id, 3, context);
 
-                SalesService.RegisterSale(new Sale()
+                SalesService.RegisterSale(new Sale
                 {
                     Store = store,
                     Product = product,
@@ -57,18 +57,18 @@ namespace StoreStockingSystem.Test.Tests
         {
             using (var context = new StoreStockingContext())
             {
-                var store = StoreService.AddStore(new Store()
+                var store = StoreService.AddStore(new Store
                 {
                     Name = "Bilka Skagen (Unit Test)"
                 }, context);
 
-                var displayType = DisplayTypeService.AddDisplayType(new DisplayType()
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType
                 {
                     Capacity = 10,
                     Name = "Plastik display (Unit Test)"
                 }, context);
 
-                var product = ProductService.NewProduct(new Product()
+                var product = ProductService.NewProduct(new Product
                 {
                     Name = "Kør sportsvogn (Unit Test)",
                     Price = 199
@@ -78,7 +78,7 @@ namespace StoreStockingSystem.Test.Tests
 
                 StockService.AddProductToStock(stock.Id, product.Id, 3, context);
 
-                SalesService.RegisterSale(new Sale()
+                SalesService.RegisterSale(new Sale
                 {
                     Store = store,
                     Product = product,

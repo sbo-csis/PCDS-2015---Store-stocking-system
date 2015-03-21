@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
@@ -28,7 +27,7 @@ namespace StoreStockingSystem.Services
 
         public static Product NewProduct(string name, int price, StoreStockingContext context = null)
         {
-            return NewProduct(new Product() {Name = name, Price = price}, context);
+            return NewProduct(new Product {Name = name, Price = price}, context);
         }
 
         public static void UpdateProduct(Product changedProduct, StoreStockingContext context = null)
