@@ -36,7 +36,7 @@ namespace StoreStockingSystem.Services
                 Capacity = capacity ?? displayType.Capacity, // Default capacity equal to displaytypes standard capacity
                 DisplayTypeId = displayType.Id,
                 StoreId = store.Id,
-                WarningPercentageStockLeft = warningPercentage ?? 10 // Default warning at 10%
+                WarningMaountLeft = warningPercentage ?? 10 // Default warning at 10%
             }, context);
         }
 
@@ -50,7 +50,7 @@ namespace StoreStockingSystem.Services
                 Capacity = capacity ?? displayType.Capacity, // Default capacity equal to displaytypes standard capacity
                 DisplayType = displayType,
                 Store = store,
-                WarningPercentageStockLeft = warningPercentage ?? 10 // Default warning at 10%
+                WarningMaountLeft = warningPercentage ?? 10 // Default warning at 10%
             }, context);
         }
 
@@ -200,6 +200,13 @@ namespace StoreStockingSystem.Services
         public static void RemoveProductFromStock(int stockId, int productId, StoreStockingContext context = null)
         {
             RemoveProductFromStock(GetStock(stockId, context), ProductService.GetProduct(productId, context), context);
+        }
+
+        public static List<Stock> GetLowStocks(StoreStockingContext context = null)
+        {
+            throw new NotImplementedException("Warning percentage not done yet!");
+            if (context == null)
+                context = new StoreStockingContext(); 
         }
     }
 }

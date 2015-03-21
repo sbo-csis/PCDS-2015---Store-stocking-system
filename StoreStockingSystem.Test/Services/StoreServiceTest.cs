@@ -34,7 +34,7 @@ namespace StoreStockingSystem.Test.Services
                                                         Capacity = 100,
                                                         DisplayTypeId = displayType.Id,
                                                         StoreId = store.Id,
-                                                        WarningPercentageStockLeft = 10
+                                                        WarningMaountLeft = 10
                                                     }, context);
 
                 var stockAfterInsert = StockService.GetStock(store, displayType.Id);
