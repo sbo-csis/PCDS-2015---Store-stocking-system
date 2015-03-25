@@ -19,14 +19,25 @@ namespace StoreStockingSystem.Services
             return store;
         }
 
-        public static List<ProductStock> GetStoreProducts(int storeId, StoreStockingContext context = null)
+        public static IEnumerable<Store> GetStores(StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var stores = (from t in context.Stores
+                         select t);
+
+            return stores;
+        }
+
+        public static IEnumerable<ProductStock> GetStoreProducts(int storeId, StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
             return (from t in context.ProductStocks
                     where t.Stock.Store.Id == storeId
-                    select t).ToList();
+                    select t);
         }
 
         // Returns new store id.
@@ -99,6 +110,30 @@ namespace StoreStockingSystem.Services
             //TODO: add person class and then replace personId with person class as argument.
             //TODO: create person table and create foreign keys, then do logic here.
             throw new NotImplementedException();
+        }
+
+        public static IEnumerable<DisplayType> GetStoreDisplays(int storeId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var displayTypes = (from t in context.Stocks
+                         where t.Id == storeId
+                         select t.DisplayType);
+
+            return displayTypes;
+        }
+
+        public static int GetStoreCapacity(int storeId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var capacity = (from t in context.Stocks
+                                where t.Id == storeId
+                                select t.Capacity).FirstOrDefault();
+
+            return capacity;
         }
     }
 }
