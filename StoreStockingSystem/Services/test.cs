@@ -14,12 +14,14 @@ namespace StoreStockingSystem.Services
             DisplayType dt = new DisplayType() {Name = "display1" };
             Store store1 = new Store() { Name = "Store1", SalesPerson = sp};
             Stock stock1 = new Stock() { Store = store1, Capacity = 20, DisplayType = dt };
-            for (int i = 0; i < 20; i++)
+            for (int i= 0,j = 50, k = 100; i < 20; i++, j++, k++)
             {
-                Product p = new Product() { Name = String.Format("{0}", "Product" + i), Price = i};
-                ProductStock productStock1 = new ProductStock() {Stock = stock1, Amount = 10, WarningAmount = 10, Product = p};
-                ProductStock productStock2 = new ProductStock() { Stock = stock1, Amount = 15, WarningAmount = 10, Product = p };
-                ProductStock productStock3 = new ProductStock() { Stock = stock1, Amount = 20, WarningAmount = 10, Product = p };
+                Product p1 = new Product() { Name = String.Format("{0}", "Product" + i), Price = i};
+                Product p2 = new Product() { Name = String.Format("{0}", "Product" + j), Price = i };
+                Product p3 = new Product() { Name = String.Format("{0}", "Product" + k), Price = i };
+                ProductStock productStock1 = new ProductStock() {Stock = stock1, Amount = 10, WarningAmount = 10, Product = p1};
+                ProductStock productStock2 = new ProductStock() { Stock = stock1, Amount = 15, WarningAmount = 10, Product = p2 };
+                ProductStock productStock3 = new ProductStock() { Stock = stock1, Amount = 20, WarningAmount = 10, Product = p3 };
                 stock1.ProductStock.Add(productStock1);
                 stock1.ProductStock.Add(productStock2);
                 stock1.ProductStock.Add(productStock3);
