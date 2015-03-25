@@ -14,7 +14,8 @@ namespace StoreStockingSystem.Models
 
         public StoreStockingContext()
         {
-            Configuration.ProxyCreationEnabled = false;          
+            //TODO: Play with this a bit, does it ruin shit? This disables lazy loading, so not good per definition
+            //Configuration.ProxyCreationEnabled = false;          
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<StoreStockingContext>()); //TODO: MUST NOT run in production. Enable check for environment, and disable if production.
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using StoreStockingSystem.Models;
 
@@ -105,13 +106,13 @@ namespace StoreStockingSystem.Services
                     select t).ToList();
         }
 
-        public static List<Stock> GetAllStocks(StoreStockingContext context = null)
+        public static IEnumerable<Stock> GetAllStocks(StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
             
             return (from t in context.Stocks
-                          select t).ToList();
+                          select t);
         }
 
         public static void AddProductToStock(Stock stock, Product product, int amount, StoreStockingContext context = null)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using StoreStockingSystem.Models;
 
 [assembly: OwinStartupAttribute(typeof(compare.Startup))]
 namespace compare
@@ -8,6 +9,7 @@ namespace compare
     {
         public void Configuration(IAppBuilder app)
         {
+            StoreStockingSystem.Services.Test.Seed(new StoreStockingContext());
             ConfigureAuth(app);
         }
     }

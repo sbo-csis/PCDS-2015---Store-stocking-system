@@ -49,6 +49,8 @@
             <th>Zip code</th>
             <th>Adresse</th>
             <th>Store Status</th>
+            <th>Store Products</th>
+            <th>Store Details</th>
             <th>Checkbox</th>
         </tr>
     </thead>
@@ -69,10 +71,11 @@
                     <select>
                         @foreach (var product in StoreService.GetStoreProducts(stock.Store.Id))
                         {
-                            <option> value=@product.Product.Name</option>
+                            <option> @product.Product.Name</option>
                         }
                     </select>
                 </td>
+                <td>@Html.ActionLink("Details", "StoreDetails")</td>
                 <td style="text-align: center;"><input type="checkbox" /></td>
             </tr>
         }
