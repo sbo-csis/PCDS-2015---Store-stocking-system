@@ -66,15 +66,7 @@
             <td>SomeCity</td>
             <td>SomeZipCode</td>
             <td>SomeAddress</td>
-            @*We need to do something meaningful with this, this is only for vision*@
-            @if (@stock.WarningAmountLeft > 15)
-            {
-                <td style="background-color: greenyellow">@stock.WarningAmountLeft</td>
-            }
-            else
-            {
-                <td style="background-color: red">@stock.WarningAmountLeft</td>
-            }
+            <td>@stock.WarningAmountLeft</td>
             <td>
                 <select>
                     <option selected="selected">Product List</option>
