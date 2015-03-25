@@ -68,9 +68,9 @@
             <td>SomeAddress</td>
             @if (@stock.WarningAmountLeft > 15)
             {
-                <td style ="background-color: greenyellow">@stock.WarningAmountLeft</td>
+                <td style="background-color: greenyellow">@stock.WarningAmountLeft</td>
             }
-            @if (@stock.WarningAmountLeft < 15)
+            else
             {
                 <td style="background-color: red">@stock.WarningAmountLeft</td>
             }
@@ -83,9 +83,10 @@
                         {
                             <option disabled style="background-color: red">@product.Product.Name</option>
                         }
-                        if (stock.ProductStock.Exists(prod => prod.Id == product.Id && prod.Amount > prod.WarningAmount))
+                        else
                         {
                             <option disabled style="background-color: greenyellow">@product.Product.Name</option>
+
                         }
                     }
                 </select>
