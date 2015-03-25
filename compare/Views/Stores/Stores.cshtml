@@ -84,6 +84,10 @@
                         {
                             <option disabled style="background-color: red">@product.Product.Name</option>
                         }
+                        else if (stock.ProductStock.Exists(prod => prod.Id == product.Id && prod.Amount <= prod.WarningAmount + 5))
+                        {
+                            <option disabled style="background-color: yellow">@product.Product.Name</option>
+                        }
                         else
                         {
                             <option disabled style="background-color: greenyellow">@product.Product.Name</option>
