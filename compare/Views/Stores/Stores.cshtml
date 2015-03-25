@@ -1,5 +1,6 @@
 ﻿@model dynamic
 
+@using System.Activities.Expressions
 @using PCDSWebsite.Models
 @using StoreStockingSystem.Services;
 @using Stock = StoreStockingSystem.Models.Stock
@@ -56,30 +57,44 @@
     </thead>
 
     <tbody>
-
-        @foreach (Stock stock in StockService.GetAllStocks())
-        {
-            <tr>
-                <td>@stock.Store.Id</td>
-                <td>ABC</td>
-                <td>@stock.Store.Name</td>
-                <td>SomeCity</td>
-                <td>SomeZipCode</td>
-                <td>SomeAddress</td>
-                <td>@stock.WarningMaountLeft</td>
-                <td>
-                    <select>
-                        @foreach (var product in StoreService.GetStoreProducts(stock.Store.Id))
+    @foreach (Stock stock in StockService.GetAllStocks())
+    {
+        <tr>
+            <td>@stock.Store.Id</td>
+            <td>ABC</td>
+            <td>@stock.Store.Name</td>
+            <td>SomeCity</td>
+            <td>SomeZipCode</td>
+            <td>SomeAddress</td>
+            @if (@stock.WarningAmountLeft > 15)
+            {
+                <td style ="background-color: greenyellow">@stock.WarningAmountLeft</td>
+            }
+            @if (@stock.WarningAmountLeft < 15)
+            {
+                <td style="background-color: red">@stock.WarningAmountLeft</td>
+            }
+            <td>
+                <select>
+                    <option selected="selected">Product List</option>
+                    @foreach (var product in StoreService.GetStoreProducts(stock.Store.Id))
+                    {
+                        if (stock.ProductStock.Exists(prod => prod.Id == product.Id && prod.Amount <= prod.WarningAmount))
                         {
-                            <option> @product.Product.Name</option>
+                            <option disabled style="background-color: red">@product.Product.Name</option>
                         }
-                    </select>
-                </td>
-                <td>@Html.ActionLink("Details", "StoreDetails")</td>
-                <td style="text-align: center;"><input type="checkbox" /></td>
-            </tr>
-        }
-<tr>
+                        if (stock.ProductStock.Exists(prod => prod.Id == product.Id && prod.Amount > prod.WarningAmount))
+                        {
+                            <option disabled style="background-color: greenyellow">@product.Product.Name</option>
+                        }
+                    }
+                </select>
+            </td>
+            <td>@Html.ActionLink("Details", "StoreDetails")</td>
+            <td style="text-align: center;"><input type="checkbox"/></td>
+        </tr>
+    }
+    <tr>
         <td>1</td>
         <td>A</td>
         <td>Fona Amager</td>

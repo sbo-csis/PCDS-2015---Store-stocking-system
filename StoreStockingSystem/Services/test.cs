@@ -16,7 +16,7 @@ namespace StoreStockingSystem.Services
             Stock stock = new Stock() { Store = store, Capacity = 20, DisplayType = dt };
             for (int i = 0; i < 100; i++)
             {
-                Product p = new Product() { Name = String.Format("{0}", i), Price = i};
+                Product p = new Product() { Name = String.Format("{0}", "Product" + i), Price = i};
                 ProductStock productStock = new ProductStock() {Stock = stock, Amount = 10, WarningAmount = 10, Product = p};
                 stock.ProductStock.Add(productStock);
             }

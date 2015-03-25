@@ -28,7 +28,7 @@ namespace StoreStockingSystem.Models
 
         public int Capacity { get; set; } // Used in case of a store having 2 displays of the same type. Otherwise defaults to DisplayType capacity.
 
-        public int WarningMaountLeft { get; set; }
+        public int WarningAmountLeft { get; set; }
 
         public virtual List<ProductStock> ProductStock { get; set; }
     }

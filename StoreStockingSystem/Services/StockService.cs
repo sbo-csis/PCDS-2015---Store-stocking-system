@@ -37,7 +37,7 @@ namespace StoreStockingSystem.Services
                 Capacity = capacity ?? displayType.Capacity, // Default capacity equal to displaytypes standard capacity
                 DisplayTypeId = displayType.Id,
                 StoreId = store.Id,
-                WarningMaountLeft = warningPercentage ?? 10 // Default warning at 10%
+                WarningAmountLeft = warningPercentage ?? 10 // Default warning at 10%
             }, context);
         }
 
@@ -51,7 +51,7 @@ namespace StoreStockingSystem.Services
                 Capacity = capacity ?? displayType.Capacity, // Default capacity equal to displaytypes standard capacity
                 DisplayType = displayType,
                 Store = store,
-                WarningMaountLeft = warningPercentage ?? 10 // Default warning at 10%
+                WarningAmountLeft = warningPercentage ?? 10 // Default warning at 10%
             }, context);
         }
 
