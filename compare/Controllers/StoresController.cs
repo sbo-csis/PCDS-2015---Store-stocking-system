@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Data;
 using PCDSWebsite.Models;
+using StoreStockingSystem.Services;
 
 namespace PCDSWebsite.Controllers
 {
@@ -25,7 +26,9 @@ namespace PCDSWebsite.Controllers
 
         public ActionResult CriticalStores()
         {
-            return View();
+            var model = StockService.GetLowStocks();
+
+            return View(model);
         }
 
         public ActionResult StorePerformance()

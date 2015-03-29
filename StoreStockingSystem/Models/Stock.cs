@@ -8,7 +8,7 @@ namespace StoreStockingSystem.Models
     {
         public Stock()
         {
-            ProductStock = new List<ProductStock>();
+            ProductStocks = new List<ProductStock>();
         }
 
         [Key]
@@ -30,6 +30,6 @@ namespace StoreStockingSystem.Models
 
         public int WarningAmountLeft { get; set; }
 
-        public virtual List<ProductStock> ProductStock { get; set; }
+        public virtual List<ProductStock> ProductStocks { get; set; }
     }
 }

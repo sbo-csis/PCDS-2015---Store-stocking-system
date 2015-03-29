@@ -120,7 +120,7 @@ namespace StoreStockingSystem.Services
             if (context == null)
                 context = new StoreStockingContext();
 
-            var productStock = (stock.ProductStock != null) ? (from t in stock.ProductStock
+            var productStock = (stock.ProductStocks != null) ? (from t in stock.ProductStocks
                                                                 where t.ProductId == product.Id
                                                                 select t).FirstOrDefault()
                                                             : null;
@@ -177,7 +177,7 @@ namespace StoreStockingSystem.Services
             if (stock == null)
                 throw new ArgumentException("No stock for store \"" + store.Name + "\" with a display type: \"" + displayType.Name + "\"");
 
-            return (from t in stock.ProductStock
+            return (from t in stock.ProductStocks
                     where t.ProductId == product.Id
                     select t).FirstOrDefault();
         }
@@ -205,9 +205,25 @@ namespace StoreStockingSystem.Services
 
         public static List<Stock> GetLowStocks(StoreStockingContext context = null)
         {
-            throw new NotImplementedException("Warning percentage not done yet!");
             if (context == null)
-                context = new StoreStockingContext(); 
+                context = new StoreStockingContext();
+
+            var result = new List<Stock>();
+
+            var stocks = (from t in context.Stocks
+                          select t).ToList();
+
+            foreach (var stock in stocks)
+            {
+                var productStocks = (from t in stock.ProductStocks
+                                     where t.Amount < t.WarningAmount || t.Amount < stock.WarningAmountLeft
+                                     select t).ToList();
+
+                if(productStocks.Count > 0)
+                    result.Add(stock);
+            }
+
+            return result;
         }
     }
 }

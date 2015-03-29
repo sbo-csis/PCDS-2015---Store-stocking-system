@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model List<StoreStockingSystem.Models.Stock>
 
 @{
     ViewBag.Title = "Critial Stores";
@@ -135,7 +135,7 @@
                             summaryPanel.innerHTML = '';
                             // For each route, display summary information.
                             var duration = 0;
-                            var distance = 0; 
+                            var distance = 0;
                             for (var i = 0; i < route.legs.length; i++) {
                                 var routeSegment = i + 1;
                                 // Summarize duration & distance
@@ -150,9 +150,9 @@
                             }
                             // Set total duration and distance fields
                             var totalDur = document.getElementById('totalDuration');
-                            totalDur.innerHTML = '<b>Total duration: ' + duration/60 + ' minutes</b>';
+                            totalDur.innerHTML = '<b>Total duration: ' + duration / 60 + ' minutes</b>';
                             var totalDist = document.getElementById('totalDistance');
-                            totalDist.innerHTML = '<b>Total distance: ' + distance/1000 + ' km</b>';
+                            totalDist.innerHTML = '<b>Total distance: ' + distance / 1000 + ' km</b>';
                         }
 
                     });
@@ -169,145 +169,178 @@
                 ['FONA Amager Centret, Amager Centret 136, 2300 København S, Denmark'],
                 ['FONA, Nørrebro Bycenter, Lygten 2, 2400 København NV']
                 ];*@
-
         }
+
         <h1>Critical stock status</h1>
         <table id="criticalCustomers" style="width: 100%;">
             <thead>
                 <tr>
-                    <th>Customer name</th>
-                    <th>Stock status</th>
+                    <th>Store name</th>
+                    <th>Stock type</th>
                     <th>Product name</th>
-                    <th>Expected sold out date</th>
-                    <th>Estimated sales loss</th>
-                    <th>Responsibility</th>
-                    <th>Select store</th>
+                    <th>Warning level</th>
+                    <th>Current level</th>
                 </tr>
             </thead>
             <tbody>
-                <!--Note that DataTable overwrites css class styles-->
-                <tr class="critical" style="background-color: red">
-                    <td id="custID">Irma Nørreport</td>
-                    <td>Sold out</td>
-                    <td>Faldskærmsspring</td>
-                    <td>01/03-2015</td>
-                    <td>1000</td>
-                    <td>
-                        <select>
-                            <option value="karsten">Karsten</option>
-                            <option value="kirsten">Kirsten</option>
-                            <option value="ole">Ole</option>
-                            <option value="else">Else</option>
-                        </select>
-                    </td>
-                    <td><input type="checkbox" name="custID" /></td>
-                </tr>
-                <tr class="warning" style="background-color: yellow">
-                    <td>Føtex Nyk. F.</td>
-                    <td>Low stock</td>
-                    <td>Romantisk middag</td>
-                    <td>05/03-2015</td>
-                    <td>0</td>
-                    <td>
-                        <select>
-                            <option value="karsten">Karsten</option>
-                            <option value="kirsten">Kirsten</option>
-                            <option value="ole">Ole</option>
-                            <option value="else">Else</option>
-                        </select>
-                    </td>
-                    <td><input type="checkbox" name="custID" /></td>
-                </tr>
-                <tr class="okay" style="background-color: greenyellow">
-                    <td>Bilka Næstved</td>
-                    <td>On stock</td>
-                    <td>Romantisk middag for 3</td>
-                    <td>01/04-2015</td>
-                    <td>0</td>
-                    <td>
-                        <select>
-                            <option value="karsten">Karsten</option>
-                            <option value="kirsten">Kirsten</option>
-                            <option value="ole">Ole</option>
-                            <option value="else">Else</option>
-                        </select>
-                    </td>
-                    <td><input type="checkbox" name="custID" /></td>
-                </tr>
+
+                @foreach (var stock in Model)
+                {
+                    foreach (var productStock in stock.ProductStocks)
+                    {
+                        if (productStock.Amount <= productStock.WarningAmount)
+                        {
+                            <tr class="critical" style="background-color: red">
+                                <td id="custID">@stock.Store.Name</td>
+                                <td>@stock.DisplayType.Name</td>
+                                <td>@productStock.Product.Name</td>
+                                <td>@productStock.WarningAmount</td>
+                                <td>@productStock.Amount</td>
+                            </tr>
+                        }
+                    }
+                }
             </tbody>
         </table>
-    </div>
 
-    <h3>Store locations</h3>
-    <table>
-        <tr>
-            <td>
-                <div id="map" style="width: 500px; height: 400px; vertical-align: top; float: left; "></div>
-            </td>
-            <!--Right side of map area-->
-            <td style="vertical-align: top">
-                <table>
-                    <tr>
-                        <td>
-                            <!--<div id=" mapoptions" style="width: 200px; height: 400px; float: left; margin-left: 20px;">
-                            -->
-                            <h4>Start location</h4>
-                        </td>
-                        <td>
-                            <select id="startLocation">
-                                <option value="Glostrup st.">Glostrup st.</option>
-                                <option value="Sortedam Dossering">Sortedam Dossering</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h4>End location</h4>
-                        </td>
-                        <td>
-                            <select id="endLocation">
-                                <option value="Glostrup st.">Glostrup st.</option>
-                                <option value="Sortedam Dossering">Sortedam Dossering</option>
-                            </select>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <h4>Selected locations</h4>
-                            <select multiple id="waypoints" style="height:100px; width:100%; overflow:hidden; overflow-y:scroll;">
-                                <option value="FONA Trianglen, Østerbrogade 62, 2100 København Ø, Denmark">FONA Triangen</option>
-                                <option value="FONA, Nørre Voldgade 17, 1358 København K, Denmark">
-                                    FONE Nørre Voldgade
-                                </option>
-                                <option value="FONA Strøget, Østergade 47, 1100 København K, Denmark">FONA Strøget</option>
-                                <option value="FONA, Nørrebro Bycenter, Lygten 2, 2400 København NV">FONA Nørrebro by</option>
-                                <option value="FONA Amager Centret, Amager Centret 136, 2300 København S, Denmark">FONA Amager Centret</option>
-                                <option value="FONA, Spinderiet, Valby Torvegade 18, 2500 Valby, Denmark">FONA Valby</option>
-                            </select>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" onclick=" calcRoute(); ">Calculate route</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p id="totalDuration">0</p>
-                            <p id="totalDistance">0</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <div id="directions_panel" style="margin:20px;background-color:#FFEE77;"></div>
-                        </td>
-                    </tr>
+        @*<h1>Critical stock status</h1>
+                <table id="criticalCustomers" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Customer name</th>
+                            <th>Stock status</th>
+                            <th>Product name</th>
+                            <th>Expected sold out date</th>
+                            <th>Estimated sales loss</th>
+                            <th>Responsibility</th>
+                            <th>Select store</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--Note that DataTable overwrites css class styles-->
+                        <tr class="critical" style="background-color: red">
+                            <td id="custID">Irma Nørreport</td>
+                            <td>Sold out</td>
+                            <td>Faldskærmsspring</td>
+                            <td>01/03-2015</td>
+                            <td>1000</td>
+                            <td>
+                                <select>
+                                    <option value="karsten">Karsten</option>
+                                    <option value="kirsten">Kirsten</option>
+                                    <option value="ole">Ole</option>
+                                    <option value="else">Else</option>
+                                </select>
+                            </td>
+                            <td><input type="checkbox" name="custID" /></td>
+                        </tr>
+                        <tr class="warning" style="background-color: yellow">
+                            <td>Føtex Nyk. F.</td>
+                            <td>Low stock</td>
+                            <td>Romantisk middag</td>
+                            <td>05/03-2015</td>
+                            <td>0</td>
+                            <td>
+                                <select>
+                                    <option value="karsten">Karsten</option>
+                                    <option value="kirsten">Kirsten</option>
+                                    <option value="ole">Ole</option>
+                                    <option value="else">Else</option>
+                                </select>
+                            </td>
+                            <td><input type="checkbox" name="custID" /></td>
+                        </tr>
+                        <tr class="okay" style="background-color: greenyellow">
+                            <td>Bilka Næstved</td>
+                            <td>On stock</td>
+                            <td>Romantisk middag for 3</td>
+                            <td>01/04-2015</td>
+                            <td>0</td>
+                            <td>
+                                <select>
+                                    <option value="karsten">Karsten</option>
+                                    <option value="kirsten">Kirsten</option>
+                                    <option value="ole">Ole</option>
+                                    <option value="else">Else</option>
+                                </select>
+                            </td>
+                            <td><input type="checkbox" name="custID" /></td>
+                        </tr>
+                    </tbody>
                 </table>
-            </td>
-        </tr>
-    </table>
+            </div>*@
+
+        <h3>Store locations</h3>
+        <table>
+            <tr>
+                <td>
+                    <div id="map" style="width: 500px; height: 400px; vertical-align: top; float: left; "></div>
+                </td>
+                <!--Right side of map area-->
+                <td style="vertical-align: top">
+                    <table>
+                        <tr>
+                            <td>
+                                <!--<div id=" mapoptions" style="width: 200px; height: 400px; float: left; margin-left: 20px;">
+                                -->
+                                <h4>Start location</h4>
+                            </td>
+                            <td>
+                                <select id="startLocation">
+                                    <option value="Glostrup st.">Glostrup st.</option>
+                                    <option value="Sortedam Dossering">Sortedam Dossering</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4>End location</h4>
+                            </td>
+                            <td>
+                                <select id="endLocation">
+                                    <option value="Glostrup st.">Glostrup st.</option>
+                                    <option value="Sortedam Dossering">Sortedam Dossering</option>
+                                </select>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h4>Selected locations</h4>
+                                <select multiple id="waypoints" style="height:100px; width:100%; overflow:hidden; overflow-y:scroll;">
+                                    <option value="FONA Trianglen, Østerbrogade 62, 2100 København Ø, Denmark">FONA Triangen</option>
+                                    <option value="FONA, Nørre Voldgade 17, 1358 København K, Denmark">
+                                        FONE Nørre Voldgade
+                                    </option>
+                                    <option value="FONA Strøget, Østergade 47, 1100 København K, Denmark">FONA Strøget</option>
+                                    <option value="FONA, Nørrebro Bycenter, Lygten 2, 2400 København NV">FONA Nørrebro by</option>
+                                    <option value="FONA Amager Centret, Amager Centret 136, 2300 København S, Denmark">FONA Amager Centret</option>
+                                    <option value="FONA, Spinderiet, Valby Torvegade 18, 2500 Valby, Denmark">FONA Valby</option>
+                                </select>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="button" onclick=" calcRoute(); ">Calculate route</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p id="totalDuration">0</p>
+                                <p id="totalDistance">0</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div id="directions_panel" style="margin:20px;background-color:#FFEE77;"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
 
 
 </body>

@@ -8,6 +8,7 @@ namespace StoreStockingSystem.Services
 {
     public static class Test
     {
+        //TODO: refactor this class out of here, basis data belongs in context constructor.
         public static void Seed(StoreStockingContext ssc)
         {
             SalesPerson sp = new SalesPerson() {Name = "Person1"};
@@ -22,9 +23,9 @@ namespace StoreStockingSystem.Services
                 ProductStock productStock1 = new ProductStock() {Stock = stock1, Amount = 10, WarningAmount = 10, Product = p1};
                 ProductStock productStock2 = new ProductStock() { Stock = stock1, Amount = 15, WarningAmount = 10, Product = p2 };
                 ProductStock productStock3 = new ProductStock() { Stock = stock1, Amount = 20, WarningAmount = 10, Product = p3 };
-                stock1.ProductStock.Add(productStock1);
-                stock1.ProductStock.Add(productStock2);
-                stock1.ProductStock.Add(productStock3);
+                stock1.ProductStocks.Add(productStock1);
+                stock1.ProductStocks.Add(productStock2);
+                stock1.ProductStocks.Add(productStock3);
             }
             
             ssc.Stocks.Add(stock1);
