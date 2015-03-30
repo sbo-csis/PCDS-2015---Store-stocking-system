@@ -10,7 +10,7 @@ namespace compare
         public void Configuration(IAppBuilder app)
         {
             //TODO: Move this to context constructor
-            StoreStockingSystem.Services.Test.Seed(new StoreStockingContext());
+            //StoreStockingSystem.Services.Test.Seed(new StoreStockingContext());
             ConfigureAuth(app);
         }
     }
