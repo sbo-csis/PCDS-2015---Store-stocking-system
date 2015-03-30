@@ -175,11 +175,12 @@
         <table id="criticalCustomers" style="width: 100%;">
             <thead>
                 <tr>
+                    <th>Store id</th>
                     <th>Store name</th>
                     <th>Stock type</th>
                     <th>Product name</th>
-                    <th>Warning level</th>
-                    <th>Current level</th>
+                    <th>Warning amount</th>
+                    <th>Current amount</th>
                 </tr>
             </thead>
             <tbody>
@@ -188,13 +189,14 @@
                 {
                     foreach (var productStock in stock.ProductStocks)
                     {
-                        if (productStock.Amount <= productStock.WarningAmount)
+                        if (productStock.Amount <= productStock.WarningAmount || productStock.Amount <= stock.WarningAmountLeft)
                         {
-                            <tr class="critical" style="background-color: red">
-                                <td id="custID">@stock.Store.Name</td>
+                            <tr class="critical">
+                                <td>@stock.Store.Id</td>
+                                <td>@stock.Store.Name</td>
                                 <td>@stock.DisplayType.Name</td>
                                 <td>@productStock.Product.Name</td>
-                                <td>@productStock.WarningAmount</td>
+                                <td>@(productStock.WarningAmount ?? stock.WarningAmountLeft)</td>
                                 <td>@productStock.Amount</td>
                             </tr>
                         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using NUnit.Framework;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
@@ -79,6 +80,25 @@ namespace StoreStockingSystem.Services
                 throw new ArgumentException("Could not find stock for store id: " + store.Id + " and display-type id " + displayTypeId);
             
             return stock;
+        }
+
+        public static List<Stock> GetStock(Store store, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+            
+            var stocks = (from t in context.Stocks
+                         where t.Store.Id == store.Id
+                         select t)
+                         .Include(t => t.DisplayType)
+                         .Include(t => t.Store)
+                         .Include(t => t.ProductStocks.Select(s => s.Product))
+                         .ToList();
+
+            if (stocks == null)
+                throw new ArgumentException("Could not find stocks for store id: " + store.Id);
+            
+            return stocks;
         }
 
         public static ProductStock GetProductStock(Stock stock, Product product, StoreStockingContext context = null)
@@ -209,9 +229,14 @@ namespace StoreStockingSystem.Services
                 context = new StoreStockingContext();
 
             var result = new List<Stock>();
-
-            var stocks = (from t in context.Stocks
-                          select t).ToList();
+            
+            var stocks =
+                context.Stocks
+                .Include(t => t.ProductStocks)
+                .Include(t => t.DisplayType)
+                .Include(t => t.ProductStocks.Select(s => s.Product))
+                .Include(t => t.Store)
+                    .ToList();
 
             foreach (var stock in stocks)
             {

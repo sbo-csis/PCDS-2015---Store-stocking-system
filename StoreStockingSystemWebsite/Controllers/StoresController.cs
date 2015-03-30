@@ -16,7 +16,17 @@ namespace PCDSWebsite.Controllers
 
         public ActionResult Stores()
         {
-            return View();
+            var model = StoreService.GetStores();
+
+            return View(model);
+        }
+
+        public ActionResult StoreDetails(int id = 0)
+        {
+            var store = StoreService.GetStore(id);
+            var model = StockService.GetStock(store);
+
+            return View(model);
         }
 
         public ActionResult StorePerformanceDetails()
