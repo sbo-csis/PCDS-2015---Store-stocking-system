@@ -11,5 +11,8 @@ namespace StoreStockingSystem.Models
         [ForeignKey("SalesPerson")]
         public int? SalesPersonId { get; set; }
         public virtual SalesPerson SalesPerson { get; set; }
+        [ForeignKey("Chain")]
+        public int? ChainId { get; set; }
+        public virtual Chain Chain { get; set; }
     }
 }
