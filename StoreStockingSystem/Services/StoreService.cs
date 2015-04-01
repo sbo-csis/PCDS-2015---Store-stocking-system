@@ -17,6 +17,7 @@ namespace StoreStockingSystem.Services
                             where t.Id == storeId
                             select t)
                             .Include(t => t.SalesPerson)
+                            .Include(t => t.Chain)
                             .FirstOrDefault();
 
             return store;
