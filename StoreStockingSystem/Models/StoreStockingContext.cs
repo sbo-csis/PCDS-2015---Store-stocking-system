@@ -4,6 +4,7 @@ namespace StoreStockingSystem.Models
 {
     public class StoreStockingContext : DbContext
     {
+        public DbSet<Chain> Chains { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Sale> Sales { get; set; }
