@@ -82,7 +82,7 @@ namespace StoreStockingSystem.Services
             return stock;
         }
 
-        public static List<Stock> GetStock(Store store, StoreStockingContext context = null)
+        public static List<Stock> GetStocks(Store store, StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();

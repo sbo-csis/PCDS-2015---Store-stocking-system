@@ -22,7 +22,7 @@ namespace StoreStockingSystem.Models
         public int DisplayTypeId { get; set; }
         public virtual DisplayType DisplayType { get; set; }
 
-        public int SalesPrice { get; set; } // The price that a single product was sold for.
+        public decimal SalesPrice { get; set; } // The price that a single product was sold for.
         public bool IsReturn { get; set; }
         public DateTime SalesDate { get; set; }
     }

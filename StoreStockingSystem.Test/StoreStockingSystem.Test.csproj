@@ -84,6 +84,7 @@
     <Compile Include="Services\SalesServiceTest.cs" />
     <Compile Include="Services\StockServiceTest.cs" />
     <Compile Include="Services\StoreServiceTest.cs" />
+    <Compile Include="Spikes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StoreStockingSystem\StoreStockingSystem.csproj">

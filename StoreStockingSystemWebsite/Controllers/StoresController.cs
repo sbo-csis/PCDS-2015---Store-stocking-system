@@ -24,7 +24,7 @@ namespace PCDSWebsite.Controllers
         public ActionResult StoreDetails(int id = 0)
         {
             var store = StoreService.GetStore(id);
-            var model = StockService.GetStock(store);
+            var model = StockService.GetStocks(store);
 
             return View(model);
         }
