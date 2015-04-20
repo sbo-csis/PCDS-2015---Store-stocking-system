@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ChainServiceTest.cs" />
     <Compile Include="Services\SalesServiceTest.cs" />
     <Compile Include="Services\StockServiceTest.cs" />
     <Compile Include="Services\StoreServiceTest.cs" />
