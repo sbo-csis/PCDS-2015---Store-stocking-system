@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Chain.cs" />
+    <Compile Include="Services\ChainService.cs" />
     <Compile Include="Services\DisplayTypeService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\SalesPersonService.cs" />
