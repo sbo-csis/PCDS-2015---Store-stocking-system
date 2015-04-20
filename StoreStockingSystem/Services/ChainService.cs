@@ -65,22 +65,5 @@ namespace StoreStockingSystem.Services
             context.SaveChanges();
         }
 
-        public static List<Sale> GetChainSales(Chain chain, DateTime fromDate, DateTime toDate, StoreStockingContext context)
-        {
-            if (context == null)
-                context = new StoreStockingContext();
-
-            // Get stores in chain
-            var chainStores = ChainService.GetChainStores(chain, context);
-
-            // Get accumulated sales for the chain stores 
-            List<Sale> chainSales = new List<Sale>(); 
-            foreach (Store store in chainStores)
-            {
-                chainSales.AddRange(SalesService.GetSales(store.Id, fromDate, toDate, context));
-            }
-
-            return chainSales;
-        }
     }
 }
