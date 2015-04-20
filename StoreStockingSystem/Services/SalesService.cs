@@ -83,7 +83,7 @@ namespace StoreStockingSystem.Services
                 var monthSales = GetChainSales(chainId, firstDayOfMonth, lastDayOfMonth, context);
 
                 // Accumulate sale values to one data point
-                var totalMonthSales = monthSales.Aggregate(0, (current, sale) => current + sale.SalesPrice);
+                var totalMonthSales = monthSales.Aggregate(0, (current, sale) => (int) (current + sale.SalesPrice));
 
                 yearSales.Add(totalMonthSales);
             }

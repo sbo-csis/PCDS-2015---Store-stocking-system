@@ -19,8 +19,9 @@ namespace StoreStockingSystem.Test.Services
                 var chain = ChainService.AddChain(new Chain
                 {
                     Name = "Fona (Unit Test)"
-
                 }, context);
+
+                context.SaveChanges();
 
                 var foundChain = ChainService.GetChain(chain.Id, context);
 
@@ -29,7 +30,7 @@ namespace StoreStockingSystem.Test.Services
                 var store = StoreService.AddStore(new Store
                 {
                     Name = "Fona Valby (Unit Test)",
-                    Chain = chain
+                    ChainId = chain.Id
                 }, context);
 
                 var chainStoreListAfterInsert = ChainService.GetChainStores(chain, context);

@@ -42,7 +42,7 @@ namespace StoreStockingSystem.Services
                 context = new StoreStockingContext();
 
             return (from t in context.Stores
-                    where t.Chain == chain
+                    where t.Chain.Id == chain.Id
                     select t).ToList();
         }
 
