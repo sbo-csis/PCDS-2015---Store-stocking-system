@@ -1,0 +1,108 @@
+"merchant_id";"store_id";"name";"goplus_store_id"
+"1";"ababg";"Arnold Busck Aalborg";"18"
+"1";"abaf";"Arnold Busck Aalborg Friis";"12"
+"1";"abal";"Arnold Busck Aalborg Storcenter";"6"
+"1";"abbal";"Arnold Busck Ballerup";"11"
+"1";"abbir";"Arnold Busck Birkerød";"20"
+"1";"abep";"Arnold Busck Espergærde";"23"
+"1";"abes";"Arnold Busck Esbjerg";"14"
+"1";"abhad";"Arnold Busck Haderslev";"25"
+"1";"abhhp";"Arnold Busck Hellerup";"28"
+"1";"abhj";"Arnold Busck Hjørring";"13"
+"1";"abhl";"Arnold Busck Helsinge";"19"
+"1";"abhol";"Arnold Busck Holstebro";"22"
+"1";"abhr";"Arnold Busck Herning";"21"
+"1";"abhsg";"Arnold Busck Helsingør";"9"
+"1";"abkbh";"Arnold Busck Købmagergade";"2"
+"1";"abkge";"Arnold Busck Køge";"17"
+"1";"abko";"Arnold Busck Kolding";"5"
+"1";"ablc";"Arnold Busck Lyngby";"1"
+"1";"abnyk";"Arnold Busck Nykøbing";"26"
+"1";"abod";"Arnold Busck Odense på Hjørnet";"15"
+"1";"abrc";"Arnold Busck Rødovre";"3"
+"1";"abrds";"Arnold Busck Randers";"24"
+"1";"abro";"Arnold Busck Rosengårdcentret";"4"
+"1";"abrs";"Arnold Busck Ros Torv";"8"
+"1";"abson";"Arnold Busck Sønderborg";"27"
+"1";"absv";"Arnold Busck Svendborg";"16"
+"1";"abve";"Arnold Busck Vejle";"10"
+"1";"abvy";"Arnold Busck Valby";"7"
+"2";"5251";"Bilka Tilst";\N
+"2";"5252";"Bilka Skalborg";\N
+"2";"5253";"Bilka Hundige";\N
+"2";"5254";"Bilka Odense";"33"
+"2";"5255";"Bilka Ishøj";"54"
+"2";"5256";"Bilka Slagelse";\N
+"2";"5257";"Bilka Næstved";"55"
+"2";"5258";"Bilka Holstebro";\N
+"2";"5259";"Bilka Esbjerg";\N
+"2";"5261";"Bilka Vejle";\N
+"2";"5262";"Bilka Kolding";\N
+"2";"5263";"Bilka Horsens";\N
+"2";"5264";"Bilka OneStop";\N
+"2";"5265";"Bilka Viborg";\N
+"2";"5266";"Bilka Sønderborg";\N
+"2";"5267";"Bilka Herning";\N
+"2";"5268";"Bilka Hillerød";\N
+"2";"5271";"Bilka Hjørring";\N
+"7";"10";"FONA RO's Torv";\N
+"7";"105";"FONA Strøget, Århus";\N
+"7";"110";"FONA Strøget, København";\N
+"7";"113";"FONA Brønshøj Torv";\N
+"7";"114";"FONA Frederiksberg";\N
+"7";"115";"FONA Hellerup";\N
+"7";"117";"FONA Lyngby Storcenter";\N
+"7";"12";"FONA Field's";\N
+"7";"124";"FONA Østerbrogade";\N
+"7";"125";"FONA Rødovre Centrum";\N
+"7";"127";"FONA Hvidovre";\N
+"7";"130";"FONA Nørrebro";\N
+"7";"139";"FONA Ringsted";\N
+"7";"140";"FONA Slagelse";\N
+"7";"141";"FONA Farum Bytorv";\N
+"7";"142";"FONA Helsingør";"63"
+"7";"143";"FONA Sillebroen";\N
+"7";"144";"FONA Køge";\N
+"7";"146";"FONA Roskilde";\N
+"7";"147";"FONA Holbæk";\N
+"7";"148";"FONA Slotsarkaderne";\N
+"7";"150";"FONA Odense C";\N
+"7";"151";"FONA Svendborg";\N
+"7";"152";"FONA Rosengårdscentret";\N
+"7";"155";"FONA Nykøbing F";\N
+"7";"160";"FONA Aalborg Storcenter";\N
+"7";"161";"FONA Aalborg Nytorv";\N
+"7";"162";"FONA Esbjerg";\N
+"7";"165";"FONA Vejle";\N
+"7";"166";"FONA Viborg";\N
+"7";"167";"FONA herningCentret";\N
+"7";"168";"FONA Fredericia";\N
+"7";"169";"FONA Sønderborg";\N
+"7";"17";"FONA Spinderiet";\N
+"7";"170";"FONA Aabenraa";\N
+"7";"171";"FONA Horsens";\N
+"7";"172";"FONA Holstebro";\N
+"7";"173";"FONA Kolding Storcenter";\N
+"7";"174";"FONA City Vest";\N
+"7";"175";"FONA Metropol Centret";\N
+"7";"176";"FONA Silkeborg";\N
+"7";"177";"FONA Thisted";\N
+"7";"178";"FONA Frederikshavn";\N
+"7";"179";"FONA Haderslev";\N
+"7";"18";"FONA Amager Centret";"51"
+"7";"19";"FONA Trianglen";\N
+"7";"21";"FONA Klampenborgvej";\N
+"7";"23";"FONA Hørsholm Midtpunkt";\N
+"7";"24";"FONA Albertslund";\N
+"7";"25";"FONA Waves";\N
+"7";"26";"FONA Nørreport";\N
+"7";"27";"FONA Herlev Bymidte";\N
+"7";"3";"FONA Glostrup Center";\N
+"7";"32";"FONA City2";\N
+"7";"38";"FONA Fisketorvet";\N
+"7";"4";"FONA Ballerup Centret";\N
+"7";"42";"FONA Storcenter Nord";\N
+"7";"43";"FONA Ryesgade";\N
+"7";"5";"FONA Nørrebrogade";\N
+"7";"51";"FONA Næstved Stor-center";\N
+"7";"57";"FONA Randers Storcenter";\N
