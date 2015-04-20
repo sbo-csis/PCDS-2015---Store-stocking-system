@@ -8,6 +8,7 @@ namespace StoreStockingSystem.Models
         [Key]
         public int Id { get; set; }
         public virtual string Name { get; set; }
+        public string ExternalId { get; set; }
         [ForeignKey("SalesPerson")]
         public int? SalesPersonId { get; set; }
         public virtual SalesPerson SalesPerson { get; set; }
