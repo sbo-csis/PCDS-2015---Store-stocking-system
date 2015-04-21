@@ -181,7 +181,9 @@ namespace StoreStockingSystem.Services
         public static void ModifyStockBasedOnSale(Sale sale, StoreStockingContext context = null)
         {
             var productStock = GetProductStockBasedOnSalesData(sale.DisplayType, sale.Store, sale.Product, context);
+
             var amount = (sale.IsReturn ? 1 : -1); // add 1 back to stock if return, otherwise remove 1 from stock.
+
             AddProductToStock(productStock.StockId, sale.Product.Id, amount, context);
         }
 
