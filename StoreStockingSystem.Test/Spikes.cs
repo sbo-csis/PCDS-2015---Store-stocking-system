@@ -13,7 +13,7 @@ namespace StoreStockingSystem.Test
     {
         [Test]
         [Ignore]
-        public void InsertSeedData()
+        public void InsertSeedData() // Runs for a long time (1+ min) if sales data is large (1000+ sales)
         {
             TestData.BuildData();
         }

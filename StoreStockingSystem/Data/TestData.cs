@@ -188,6 +188,7 @@ namespace StoreStockingSystem.Data
 
             var productStock = (from t in context.ProductStocks
                                 where t.StockId == stock.Id
+                                &&    t.ProductId == product.Id
                                 select t).FirstOrDefault();
 
             if (productStock == null)
