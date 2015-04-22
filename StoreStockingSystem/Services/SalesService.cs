@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
+using System.Web.DynamicData;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
@@ -62,7 +64,7 @@ namespace StoreStockingSystem.Services
             List<Sale> chainSales = new List<Sale>();
             foreach (Store store in chainStores)
             {
-                chainSales.AddRange(SalesService.GetSales(store.Id, fromDate, toDate, context));
+                chainSales.AddRange(GetSales(store.Id, fromDate, toDate, context));
             }
 
             return chainSales;
@@ -89,6 +91,38 @@ namespace StoreStockingSystem.Services
             }
 
             return yearSales;
+        }
+
+        //Returns a list where each value is the predicted sale in the i'th month
+        public static List<double> GetPredictedStoreSales(int storeId, StoreStockingContext context)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+            List<double> growthRateResults = new List<double>();
+
+            //Make sure this is the oldest and not the newest
+            int oldestSaleYear = (from sale in context.Sales
+                                  where sale.StoreId == storeId
+                                  orderby sale.SalesDate
+                                  select sale.SalesDate).First().Year;
+            int newestSaleYear = DateTime.UtcNow.Year - 1;
+            
+            for (int i = 1; i <= 12; i++)
+            {
+                DateTime newFromDate = new DateTime(newestSaleYear, i, 1);
+                DateTime newToDate = newFromDate.AddMonths(1).AddDays(-1);
+                List<Sale> newMonthSales = GetSales(storeId, newFromDate, newToDate, context);
+                int totalNewMonthSales = newMonthSales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
+
+                DateTime oldFromDate = new DateTime(oldestSaleYear, i, 1);
+                DateTime oldToDate = oldFromDate.AddMonths(1).AddDays(-1);
+                List<Sale> oldMonthSales = GetSales(storeId, oldFromDate, oldToDate, context);
+                int totalOldMonthSales = oldMonthSales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
+
+                growthRateResults.Add(Math.Pow(totalNewMonthSales/(double) totalOldMonthSales, 1.0 / (newestSaleYear - oldestSaleYear)) * totalNewMonthSales);
+            }
+
+            return growthRateResults;
         }
     }
 }
