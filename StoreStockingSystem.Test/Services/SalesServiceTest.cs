@@ -96,5 +96,147 @@ namespace StoreStockingSystem.Test.Services
                 Assert.AreEqual(4, productstock.Amount);
             }
         }
+
+        [Test]
+        public void can_calculate_product_sales_percentage_correctly()
+        {
+            using (var context = new StoreStockingContext())
+            {
+                var store = StoreService.AddStore(new Store
+                {
+                    Name = "Bilka Skagen (Unit Test)"
+                }, context);
+
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType
+                {
+                    Capacity = 10,
+                    Name = "Plastik display (Unit Test)"
+                }, context);
+
+                var product1 = ProductService.NewProduct(new Product
+                {
+                    Name = "Kør sportsvogn (Unit Test)",
+                    Price = 100
+                }, context);
+
+                var product2 = ProductService.NewProduct(new Product
+                {
+                    Name = "Spring faldskærm (Unit Test)",
+                    Price = 100
+                }, context);
+
+                var stock = StockService.NewStock(store, displayType, null, 25, context);
+
+                StockService.AddProductToStock(stock.Id, product1.Id, 10, context);
+                StockService.AddProductToStock(stock.Id, product2.Id, 10, context);
+
+                for (var i = 0; i < 3; i++)
+                {
+                    SalesService.RegisterSale(new Sale
+                    {
+                        Store = store,
+                        Product = product1,
+                        SalesPrice = 199,
+                        DisplayType = displayType,
+                        SalesDate = DateTime.Now,
+                        IsReturn = false
+                    }, context);
+                }
+
+                SalesService.RegisterSale(new Sale
+                    {
+                        Store = store,
+                        Product = product2,
+                        SalesPrice = 199,
+                        DisplayType = displayType,
+                        SalesDate = DateTime.Now,
+                        IsReturn = false
+                    }, context);
+
+                var salesFractions = SalesService.GetProductsSalesFraction(store.Id, DateTime.Now.AddMinutes(-1), DateTime.Now, context);
+
+                Assert.AreEqual(product1.Id, salesFractions[0].Item1.Id);
+                Assert.AreEqual(0.75d, salesFractions[0].Item2);
+
+                Assert.AreEqual(product2.Id, salesFractions[1].Item1.Id);
+                Assert.AreEqual(0.25d, salesFractions[1].Item2);
+            }
+        }
+
+        [Test]
+        public void can_calculate_product_sales_percentage_correctly_including_returns()
+        {
+            using (var context = new StoreStockingContext())
+            {
+                var store = StoreService.AddStore(new Store
+                {
+                    Name = "Bilka Skagen (Unit Test)"
+                }, context);
+
+                var displayType = DisplayTypeService.AddDisplayType(new DisplayType
+                {
+                    Capacity = 10,
+                    Name = "Plastik display (Unit Test)"
+                }, context);
+
+                var product1 = ProductService.NewProduct(new Product
+                {
+                    Name = "Kør sportsvogn (Unit Test)",
+                    Price = 100
+                }, context);
+
+                var product2 = ProductService.NewProduct(new Product
+                {
+                    Name = "Spring faldskærm (Unit Test)",
+                    Price = 100
+                }, context);
+
+                var stock = StockService.NewStock(store, displayType, null, 25, context);
+
+                StockService.AddProductToStock(stock.Id, product1.Id, 10, context);
+                StockService.AddProductToStock(stock.Id, product2.Id, 10, context);
+
+                for (var i = 0; i < 4; i++)
+                {
+                    SalesService.RegisterSale(new Sale
+                    {
+                        Store = store,
+                        Product = product1,
+                        SalesPrice = 199,
+                        DisplayType = displayType,
+                        SalesDate = DateTime.Now,
+                        IsReturn = false
+                    }, context);
+                }
+
+                SalesService.RegisterSale(new Sale //single return
+                {
+                    Store = store,
+                    Product = product1,
+                    SalesPrice = 199,
+                    DisplayType = displayType,
+                    SalesDate = DateTime.Now,
+                    IsReturn = true
+                }, context);
+
+                SalesService.RegisterSale(new Sale
+                {
+                    Store = store,
+                    Product = product2,
+                    SalesPrice = 199,
+                    DisplayType = displayType,
+                    SalesDate = DateTime.Now,
+                    IsReturn = false
+                }, context);
+
+                var salesFractions = SalesService.GetProductsSalesFraction(store.Id, DateTime.Now.AddMinutes(-1), DateTime.Now, context);
+
+                Assert.AreEqual(product1.Id, salesFractions[0].Item1.Id);
+                Assert.AreEqual(0.75d, salesFractions[0].Item2);
+
+                Assert.AreEqual(product2.Id, salesFractions[1].Item1.Id);
+                Assert.AreEqual(0.25d, salesFractions[1].Item2);
+            }
+        }
     }
 }
