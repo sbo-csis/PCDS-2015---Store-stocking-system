@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Data.Entity;
 using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Web.DynamicData;
 using StoreStockingSystem.Models;
 
@@ -10,6 +12,13 @@ namespace StoreStockingSystem.Services
 {
     public static class SalesService
     {
+        public class SaleSpeed
+        {
+            public ProductStock ProductStock { get; set; }
+            public double SalesCountPerDay { get; set; }
+            public decimal SalesSumPerDay { get; set; }
+        }
+
         public delegate void SaleOccuredEventHandler(Sale sale, StoreStockingContext context);
         public static event SaleOccuredEventHandler SalesEvent;
 
@@ -48,6 +57,19 @@ namespace StoreStockingSystem.Services
 
             return (from t in context.Sales
                     where t.Store.Id == storeId
+                    && (t.SalesDate > fromDate && t.SalesDate < toDate)
+                    select t).ToList();
+        }
+
+        public static List<Sale> GetSalesBasedOnProductStock(ProductStock productStock, DateTime fromDate, DateTime toDate, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            return (from t in context.Sales
+                    where t.Store.Id == productStock.Stock.StoreId
+                       && t.ProductId == productStock.ProductId
+                       && t.DisplayTypeId == productStock.Stock.DisplayTypeId
                     && (t.SalesDate > fromDate && t.SalesDate < toDate)
                     select t).ToList();
         }
@@ -94,6 +116,8 @@ namespace StoreStockingSystem.Services
         }
 
         //Returns a list where each value is the predicted sale in the i'th month
+        //TODO: change logic & refactor so it is possible to get expected sales sum for a specific start and end date
+        //TODO: change logic & refactor so it is possible to get expected sales sum all the stores products for a specific start and end date
         public static List<double> GetPredictedStoreSales(int storeId, StoreStockingContext context = null)
         {
             if (context == null)
@@ -124,6 +148,179 @@ namespace StoreStockingSystem.Services
             }
 
             return growthRateResults;
+        }
+
+        public static List<SaleSpeed> GetPredictedStoreSalesForPeriod(int storeId, DateTime startDate, DateTime endDate, StoreStockingContext context)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var stocks = (from t in context.Stocks // Get all stocks for the current store
+                          where t.StoreId == storeId
+                          select t).Include(t => t.ProductStocks).ToList();
+
+            var saleSpeeds = BuildSaleSpeedsForStocks(stocks, startDate, endDate);
+
+            return saleSpeeds;
+        }
+
+        private static List<SaleSpeed> BuildSaleSpeedsForStocks(IEnumerable<Stock> stocks, DateTime startDate, DateTime endDate)
+        {
+            var result = new List<SaleSpeed>();
+
+            foreach (var stock in stocks)
+            {
+                result.AddRange(BuildSaleSpeedsForSingleStock(stock, startDate, endDate));
+            }
+
+            return result;
+        }
+
+        private static IEnumerable<SaleSpeed> BuildSaleSpeedsForSingleStock(Stock stock, DateTime startDate, DateTime endDate)
+        {
+            var result = new List<SaleSpeed>();
+
+            foreach (var productStock in stock.ProductStocks)
+            {
+                result.Add(BuildSaleSpeedForProductStock(productStock, startDate, endDate));
+            }
+
+            return result;
+        }
+
+        public static SaleSpeed BuildSaleSpeedForProductStock(ProductStock productStock, DateTime startDate, DateTime endDate)
+        {
+            using (var context = new StoreStockingContext())
+            {
+                var sales = GetSalesBasedOnProductStock(productStock, new DateTime(1900, 1, 1), DateTime.Now, context);
+
+                var saleSpeed = CalculateSaleSpeed(sales, startDate, endDate, context);
+
+                saleSpeed.ProductStock = productStock;
+
+                return saleSpeed;
+            }
+        }
+
+        /// <summary>
+        /// Creates SaleSpeed object for a given number of sales. The SaleSpeed is calculated based on either historic sales yeears
+        /// if they exist. Otherwise the average salespeed for all previous sales is used, e.g. all sales divided by days since first sale.
+        /// </summary>
+        /// <param name="sales"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static SaleSpeed CalculateSaleSpeed(List<Sale> sales, DateTime startDate, DateTime endDate, StoreStockingContext context)
+        {
+            var salesPerYear = CalculateSalesPerYear(sales, startDate, endDate);
+
+            var salesIncreaseFactor = CalculateSalesIncreaseFactor(salesPerYear);
+
+            if(salesIncreaseFactor == 1) //If not enough historic data, we use average sales speed for sales so far instead.
+                return CalculateSaleSpeedBasedOnCurrentSales(sales);
+
+            var latestYearSales = GetLatestYearSales(salesPerYear);
+
+            var daysInSalePeriod = (endDate - startDate).TotalDays;
+
+            var saleSpeed = new SaleSpeed
+            {
+                SalesCountPerDay = latestYearSales.Count/daysInSalePeriod,
+                SalesSumPerDay = latestYearSales.Select(t => t.SalesPrice).Sum()/(decimal) daysInSalePeriod
+            };
+
+            return saleSpeed;
+        }
+
+        /// <summary>
+        /// Returns all sales for the latest (highest year int) in supplied list of sales.
+        /// </summary>
+        /// <param name="salesPerYear"></param>
+        /// <returns></returns>
+        private static List<Sale> GetLatestYearSales(List<Tuple<DateTime, List<Sale>>> salesPerYear)
+        {
+            var latestYear = salesPerYear.Select(t => t.Item1.Year).Max();
+            var sales = salesPerYear.FirstOrDefault(t => t.Item1.Year == latestYear);
+
+            if(sales == null)
+                throw new Exception("Logical error: Could not fetch sales in GetLatestYearSales method.");
+
+            return sales.Item2;
+        }
+
+        /// <summary>
+        /// Calculates SaleSpeed based on supplied sales. Simply takes average of sales sum and sales count for all supplied sales.
+        /// </summary>
+        /// <param name="sales"></param>
+        /// <returns></returns>
+        private static SaleSpeed CalculateSaleSpeedBasedOnCurrentSales(List<Sale> sales)
+        {
+            var salesSum = sales.Where(t => !t.IsReturn).Select(t => t.SalesPrice).Sum() - sales.Where(t => t.IsReturn).Select(t => t.SalesPrice).Sum();
+            var salesCount = sales.Count(t => !t.IsReturn) - sales.Count(t => t.IsReturn);
+
+            var daysOfSales = (sales.Max(t => t.SalesDate) - sales.Max(t => t.SalesDate)).TotalDays; // Total number of days sales have happened in
+
+            return new SaleSpeed
+            {
+                SalesCountPerDay = (salesCount/daysOfSales),
+                SalesSumPerDay = salesSum/(decimal) daysOfSales
+            };
+        }
+
+        /// <summary>
+        ///         /// Calculates sales sum in the period between startdate and enddate. Returns a list of tuples where the first element is 
+        /// the year and the second element is the sales sum for that period.
+        /// </summary>
+        private static List<Tuple<DateTime, List<Sale>>> CalculateSalesPerYear(List<Sale> sales, DateTime startDate, DateTime endDate)
+        {
+            var result = new List<Tuple<DateTime, List<Sale>>>();
+
+            var salesYears = sales.Select(t => t.SalesDate.Year).Distinct().ToList();
+
+            salesYears.Remove(DateTime.Now.Year); //remove current year, we only want historic years
+
+            foreach (var year in salesYears)
+            {
+                var periodSales = (from t in sales
+                                   where t.SalesDate > new DateTime(year, startDate.Month, startDate.Day)
+                                      && t.SalesDate < new DateTime(year, endDate.Month, endDate.Day)
+                                   select t).ToList();
+
+                result.Add(new Tuple<DateTime, List<Sale>>(new DateTime(year), periodSales));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Calculates the average increase/decrease factor of previous years sales. Can be used to guess if the sales
+        /// will rise or fall, and by how much, depending on historic data. If there is not enough historic data (minimum 2 previous years),
+        /// then a factor of 1 is returned.
+        /// </summary>
+        /// <param name="salesPerYear"></param>
+        /// <returns></returns>
+        private static decimal CalculateSalesIncreaseFactor(List<Tuple<DateTime, List<Sale>>> salesPerYear)
+        {
+            if (salesPerYear.Count < 2) //If true, then there is no historic data, and we cannot infer a sales factor increase.
+                return 1;
+
+            var increasePerYear = new List<decimal>();
+
+            var i = 0;
+            while (i < salesPerYear.Count)
+            {
+                var saleSumNextYear = salesPerYear[i + 1].Item2.Where(t => !t.IsReturn).Select(t => t.SalesPrice).Sum()
+                                          - salesPerYear[i + 1].Item2.Where(t => t.IsReturn).Select(t => t.SalesPrice).Sum();
+
+                var saleSumPreviousYear = salesPerYear[i].Item2.Where(t => !t.IsReturn).Select(t => t.SalesPrice).Sum()
+                                          - salesPerYear[i].Item2.Where(t => t.IsReturn).Select(t => t.SalesPrice).Sum();
+
+                increasePerYear.Add(saleSumNextYear / saleSumPreviousYear);
+                i++;
+            }
+
+            return increasePerYear.Average();
         }
 
         public static List<Tuple<Product, decimal>> GetProductsSalesFraction(int storeId, DateTime startDate, DateTime endDate, StoreStockingContext context = null)
