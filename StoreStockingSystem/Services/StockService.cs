@@ -250,5 +250,99 @@ namespace StoreStockingSystem.Services
 
             return result;
         }
+
+        /// <summary>
+        /// Returns a list of productstocks and the dates of when they hit their corresponding warning levels.
+        /// </summary>
+        /// <param name="stockId"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static List<Tuple<ProductStock, DateTime>> PredictStockWarningLevelDates(int stockId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var stock = (from t in context.Stocks
+                                     where t.Id == stockId
+                                     select t).FirstOrDefault();
+
+            if(stock == null)
+                throw new Exception("Could not find stock");
+
+            return GetPredictedStockTargetDate(stockId, stock.WarningAmountLeft, context);
+        }
+
+        /// <summary>
+        /// Returns a list of productstocks and the dates of when they hit their corresponding empty levels.
+        /// </summary>
+        /// <param name="stockId"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static List<Tuple<ProductStock, DateTime>> GetPredictedStockEmptyLevelDates(int stockId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var predictedDate = GetPredictedStockTargetDate(stockId, 0, context);
+
+            return predictedDate;
+        }
+
+        /// <summary>
+        /// Internal method to calculate when a stock hits a specific product count.
+        /// </summary>
+        /// <param name="stockId"></param>
+        /// <param name="targetStockLevel"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static List<Tuple<ProductStock, DateTime>> GetPredictedStockTargetDate(int stockId, int targetStockLevel, StoreStockingContext context)
+        {
+            var stock = (from t in context.Stocks
+                         where t.Id == stockId
+                         select t).Include(t => t.ProductStocks).FirstOrDefault(); //Fetch the product stocks now to avoid lazy loading later.
+
+            if (stock == null)
+                throw new Exception("Stock not found for stock id " + stockId);
+
+            if (targetStockLevel < 0) // Defensive programming to avoid illogical even of having negative stock.
+                targetStockLevel = 0;
+
+            var result = new List<Tuple<ProductStock, DateTime>>();
+
+            foreach (var productStock in stock.ProductStocks)
+            {
+                var psTargetDate = PredictProductTargetStockLevelDate(productStock, targetStockLevel, context);
+
+                result.Add(new Tuple<ProductStock, DateTime>(productStock, psTargetDate));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gives the date when a stock hits the wanted level, based on sales speed of a specific productstock (i.e. a product in a specific store)
+        /// </summary>
+        /// <param name="productStock"></param>
+        /// <param name="targetStockLevel"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static DateTime PredictProductTargetStockLevelDate(ProductStock productStock, int targetStockLevel, StoreStockingContext context)
+        {
+            //TODO: Refactor the dates out, either to constants or to parameters in the method signature.
+            //Currently 30 days future period hardcoded as the period we want sales speed for.
+            var saleSpeed = SalesService.BuildSaleSpeedForProductStock(productStock, DateTime.Now, DateTime.Now.AddDays(30));
+
+            var currentStockCount = productStock.Amount;
+
+            var daysUntilTargetLevel = 0;
+
+            while (targetStockLevel < currentStockCount)
+            {
+                currentStockCount = (int) (currentStockCount - Math.Floor(saleSpeed.SalesCountPerDay));
+                daysUntilTargetLevel++;
+            }
+
+            return DateTime.Now.AddDays(daysUntilTargetLevel);
+        }
     }
 }
