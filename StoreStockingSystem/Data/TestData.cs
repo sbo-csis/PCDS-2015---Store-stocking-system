@@ -166,8 +166,9 @@ namespace StoreStockingSystem.Data
                 });
             }
 
-
             context.SaveChanges();
+
+            SalesService.RegisterSales(sales);
 
 
         }
