@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Data.Entity;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Web.DynamicData;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services

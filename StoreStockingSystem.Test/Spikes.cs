@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using StoreStockingSystem.Data;
 
 namespace StoreStockingSystem.Test
@@ -13,7 +9,7 @@ namespace StoreStockingSystem.Test
     {
         [Test]
         [Ignore]
-        public void InsertSeedData() // Runs for a long time (1+ min) if sales data is large (1000+ sales)
+        public void InsertSeedData()
         {
             TestData.BuildData();
         }
