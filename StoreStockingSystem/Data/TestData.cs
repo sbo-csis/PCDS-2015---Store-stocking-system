@@ -25,7 +25,6 @@ namespace StoreStockingSystem.Data
                 InsertStores(context);
                 InsertSales(context);
 
-                context.SaveChanges();
             }
         }
 
@@ -168,7 +167,7 @@ namespace StoreStockingSystem.Data
 
             context.SaveChanges();
 
-            SalesService.RegisterSales(sales);
+            SalesService.RegisterSales(sales, context);
 
 
         }
