@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using StoreStockingSystem.Models;
@@ -148,7 +149,7 @@ namespace StoreStockingSystem.Data
                 StockCheck(cacheResult, product, displayTypeId, context);
 
                 var isReturn = values[2].Replace("\"", string.Empty) != "0" ? true : false;
-                var salesDate = DateTime.Parse(values[3].Replace("\"", string.Empty));
+                var salesDate = DateTime.Parse(values[3].Replace("\"", string.Empty), CultureInfo.InvariantCulture);
                 var salesPrice = decimal.Parse(values[5].Replace("\"", string.Empty));
 
                 sales.Add(new Sale
