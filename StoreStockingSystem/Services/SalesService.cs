@@ -22,16 +22,26 @@ namespace StoreStockingSystem.Services
         public delegate void SaleOccuredEventHandler(Sale sale, StoreStockingContext context);
         public static event SaleOccuredEventHandler SalesEvent;
 
-
-        public static void RegisterSale(Sale newSale, StoreStockingContext context = null)
+        // TODO: This does not update stock currently, fix it!
+        public static void RegisterSales(List<Sale> sales, StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
-            context.Sales.Add(newSale);
+            context.Sales.AddRange(sales);
+            context.SaveChanges();
+        }
+
+        public static void RegisterSale(Sale sale, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            context.Sales.Add(sale);
             context.SaveChanges();
 
-            SalesEvent(newSale, context); // Make sales event. StockService subscribes to this, which in turn updates the stock for the given store.
+            if(SalesEvent != null)
+                SalesEvent(sale, context); // Make sales event. StockService subscribes to this, which in turn updates the stock for the given store.
         }
 
         public static void RegisterSale(int storeId, int productId, int salesPrice, int displayTypeId, bool isreturn, DateTime salesDate, StoreStockingContext context = null)

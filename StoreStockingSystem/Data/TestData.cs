@@ -109,6 +109,8 @@ namespace StoreStockingSystem.Data
 
             var cache = new List<StoreIdRelation>();
 
+            var sales = new List<Sale>();
+
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -153,7 +155,7 @@ namespace StoreStockingSystem.Data
                 var salesDate = DateTime.Parse(values[3].Replace("\"", string.Empty));
                 var salesPrice = decimal.Parse(values[5].Replace("\"", string.Empty));
 
-                SalesService.RegisterSale(new Sale
+                sales.Add(new Sale
                 {
                     DisplayTypeId = displayTypeId,
                     IsReturn = isReturn,
@@ -161,9 +163,13 @@ namespace StoreStockingSystem.Data
                     SalesDate = salesDate,
                     StoreId = cacheResult.InternalId,
                     SalesPrice = (int)salesPrice
-                }, context);
+                });
             }
+
+
             context.SaveChanges();
+
+
         }
 
         private static void StockCheck(StoreIdRelation cacheResult, Product product, int displayTypeId, StoreStockingContext context)
