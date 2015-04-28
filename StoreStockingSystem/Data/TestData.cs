@@ -14,16 +14,15 @@ namespace StoreStockingSystem.Data
         private static readonly string StoresPath = Path.Combine(BasePath, "opl_merchants_stores.csv");
         private static readonly string SalesDataPath = Path.Combine(BasePath, "salesdata.csv");
 
-        public static void BuildData()
+        public static void BuildData(StoreStockingContext context = null)
         {
-            using (var context = new StoreStockingContext())
-            {
-                InsertFakeDisplayTypes(context);
-                InsertMerchants(context);
-                InsertStores(context);
-                InsertSales(context);
+            if (context == null)
+                context = new StoreStockingContext();
 
-            }
+            InsertFakeDisplayTypes(context);
+            InsertMerchants(context);
+            InsertStores(context);
+            InsertSales(context);
         }
 
         private static void InsertFakeDisplayTypes(StoreStockingContext context)
@@ -192,7 +191,7 @@ namespace StoreStockingSystem.Data
 
             var productStock = (from t in context.ProductStocks
                                 where t.StockId == stock.Id
-                                &&    t.ProductId == product.Id
+                                && t.ProductId == product.Id
                                 select t).FirstOrDefault();
 
             if (productStock == null)

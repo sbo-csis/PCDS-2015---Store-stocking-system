@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using StoreStockingSystem.Data;
 
 namespace StoreStockingSystem.Models
 {
@@ -13,11 +14,19 @@ namespace StoreStockingSystem.Models
         public DbSet<SalesPerson> SalesPersons { get; set; }
         public DbSet<ProductStock> ProductStocks { get; set; }
 
+
         public StoreStockingContext()
         {
-            //TODO: Play with this a bit, does it ruin shit? This disables lazy loading, so not good per definition
-            Configuration.ProxyCreationEnabled = false;
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<StoreStockingContext>()); //TODO: MUST NOT run in production. Enable check for environment, and disable if production.
+            Configuration.ProxyCreationEnabled = false; // Currently disables lazy loading to avoid includes all over the place.
+            Database.SetInitializer(new RecreateDbIfModelChangesAndInsertSeedData()); //TODO: MUST NOT run in production. Enable check for environment, and disable if production.
+        }
+
+        private class RecreateDbIfModelChangesAndInsertSeedData : DropCreateDatabaseIfModelChanges<StoreStockingContext>
+        {
+            protected override void Seed(StoreStockingContext context)
+            {
+                TestData.BuildData(context);
+            }
         }
     }
 
