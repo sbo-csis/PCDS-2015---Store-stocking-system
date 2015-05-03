@@ -149,7 +149,7 @@ namespace StoreStockingSystem.Data
                 StockCheck(cacheResult, product, displayTypeId, context);
 
                 var isReturn = values[2].Replace("\"", string.Empty) != "0" ? true : false;
-                var salesDate = DateTime.Parse(values[3].Replace("\"", string.Empty), new CultureInfo("en-US"));
+                var salesDate = DateTime.ParseExact(values[3].Replace("\"", string.Empty), "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture);
                 var salesPrice = decimal.Parse(values[5].Replace("\"", string.Empty));
 
                 sales.Add(new Sale
