@@ -15,5 +15,6 @@ namespace StoreStockingSystem.Models
         [ForeignKey("Chain")]
         public int? ChainId { get; set; }
         public virtual Chain Chain { get; set; }
+        public int WarningPercentage { get; set; }
     }
 }

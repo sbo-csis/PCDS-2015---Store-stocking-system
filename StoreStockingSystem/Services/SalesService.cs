@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using StoreStockingSystem.Models;
 
@@ -14,6 +15,14 @@ namespace StoreStockingSystem.Services
             public ProductStock ProductStock { get; set; }
             public double SalesCountPerDay { get; set; }
             public decimal SalesSumPerDay { get; set; }
+        }
+
+        public class WarningInfo
+        {
+            public SaleSpeed PredictedSaleSpeed { get; set; }
+            public SaleSpeed ActualSaleSpeed { get; set; }
+            public Product Product { get; set; }
+            public Store Store { get; set; }
         }
 
         public delegate void SaleOccuredEventHandler(Sale sale, StoreStockingContext context);
@@ -122,6 +131,7 @@ namespace StoreStockingSystem.Services
             return yearSales;
         }
 
+
         //Returns a list where each value is the predicted sale in the i'th month
         //TODO: change logic & refactor so it is possible to get expected sales sum for a specific start and end date
         //TODO: change logic & refactor so it is possible to get expected sales sum all the stores products for a specific start and end date
@@ -157,14 +167,52 @@ namespace StoreStockingSystem.Services
             return growthRateResults;
         }
 
+
+        //For each store, for each product, if actual sales are <Store.WarningPercentage> or less from predicted sales,
+        //we return a class with the actual sales speed, predicted sales speed, store and product.
+        public static List<WarningInfo> GetStoreWarnings(StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            List<WarningInfo> results = new List<WarningInfo>();
+
+            foreach (Store store in context.Stores)
+            {
+                int storeId = store.Id;
+                DateTime from = DateTime.Today.AddDays(-8);
+                DateTime to = DateTime.Today.AddDays(-1);
+                List<SaleSpeed> predictedSalesSpeeds = GetPredictedStoreSalesForPeriod(storeId, from, to, context);
+                foreach (SaleSpeed salesSpeed in predictedSalesSpeeds)
+                {
+                    Product product = salesSpeed.ProductStock.Product;
+                    List<Sale> actualProductSales = context.Sales.Where(sale => sale.StoreId == storeId && sale.SalesDate <= to && sale.SalesDate >= from && sale.Product == product).ToList();
+                    SaleSpeed actualProductSalesSpeed = CalculateSaleSpeedBasedOnCurrentSales(actualProductSales);
+                    double comparedSalesCountPerDay = (100 / predictedProductSalesSpeeds.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
+                    decimal comparedSalesSumPerDay = (100 / predictedProductSalesSpeeds.SalesSumPerDay) * actualProductSalesSpeed.SalesSumPerDay;
+                    if ((100 - comparedSalesCountPerDay > store.WarningPercentage) || (100 - comparedSalesSumPerDay > store.WarningPercentage))
+                    {
+                        WarningInfo warningInfo = new WarningInfo();
+                        warningInfo.ActualSaleSpeed = actualProductSalesSpeed;
+                        warningInfo.PredictedSaleSpeed = predictedProductSalesSpeeds;
+                        warningInfo.Store = store;
+                        warningInfo.Product = product;
+                        results.Add(warningInfo);
+                    }
+                }
+            }
+
+            return results;
+        }
+
         public static List<SaleSpeed> GetPredictedStoreSalesForPeriod(int storeId, DateTime startDate, DateTime endDate, StoreStockingContext context)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
-            var stocks = (from t in context.Stocks // Get all stocks for the current store
+            IEnumerable<Stock> stocks = (from t in context.Stocks // Get all stocks for the current store
                           where t.StoreId == storeId
-                          select t).Include(t => t.ProductStocks).ToList();
+                          select t).Include(t => t.ProductStocks);
 
             var saleSpeeds = BuildSaleSpeedsForStocks(stocks, startDate, endDate);
 
