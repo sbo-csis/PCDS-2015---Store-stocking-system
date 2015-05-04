@@ -492,7 +492,7 @@ namespace StoreStockingSystem.Services
         }
 
         // Get monthly performance for a store
-        public static List<int> GetMonthlylyStorePerformance(int storeId, DateTime fromDate, DateTime toDate,
+        public static List<int> GetMonthlyStorePerformance(int storeId, DateTime fromDate, DateTime toDate,
             StoreStockingContext context)
         {
             var monthlyPerformance = new List<int>();
@@ -537,7 +537,7 @@ namespace StoreStockingSystem.Services
         }
 
         // Get monthly performance for a chain
-        public static List<int> GetMonthlylyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
+        public static List<int> GetMonthlyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
             StoreStockingContext context)
         {
             var monthlyPerformance = new List<int>();
