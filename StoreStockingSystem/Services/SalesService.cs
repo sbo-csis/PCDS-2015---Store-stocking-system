@@ -110,12 +110,13 @@ namespace StoreStockingSystem.Services
             return chainSales;
         }
 
-        public static ArrayList GetYearSales(int year, int chainId, StoreStockingContext context)
+        // Get a list of 12 lists, each corresponding to a months sales
+        public static List<List<Sale>> GetYearSales(int year, int chainId, StoreStockingContext context)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
-            var yearSales = new ArrayList(12);
+            var yearSales = new List<List<Sale>>(12);
 
             for (int i = 1; i <= 12; i++)
             {
@@ -125,9 +126,9 @@ namespace StoreStockingSystem.Services
                 var monthSales = GetChainSales(chainId, firstDayOfMonth, lastDayOfMonth, context);
 
                 // Accumulate sale values to one data point
-                var totalMonthSales = monthSales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
+                //var totalMonthSales = monthSales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
 
-                yearSales.Add(totalMonthSales);
+                yearSales.Add(monthSales);
             }
 
             return yearSales;
