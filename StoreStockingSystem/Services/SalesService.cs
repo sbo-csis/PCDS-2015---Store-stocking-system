@@ -66,6 +66,7 @@ namespace StoreStockingSystem.Services
             }, context);
         }
 
+        // Returns a list of sales for the given store in the given period
         public static List<Sale> GetSales(int storeId, DateTime fromDate, DateTime toDate, StoreStockingContext context = null)
         {
             if (context == null)
@@ -90,6 +91,7 @@ namespace StoreStockingSystem.Services
                     select t).ToList();
         }
 
+        // Returns a list of sales for the given chain in the given period
         public static List<Sale> GetChainSales(int chainId, DateTime fromDate, DateTime toDate, StoreStockingContext context)
         {
             if (context == null)

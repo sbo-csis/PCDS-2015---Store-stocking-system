@@ -238,5 +238,29 @@ namespace StoreStockingSystem.Test.Services
                 Assert.AreEqual(0.25d, salesFractions[1].Item2);
             }
         }
+
+        [Test]
+        public void can_get_sales()
+        {
+            using (var context = new StoreStockingContext())
+            {
+                // Get store sales from January 2015
+                DateTime fromDate = new DateTime(2015, 1, 1,0,0,0);
+                DateTime toDate = new DateTime(2015, 1, 31,23,59,59);
+                var storeSales = SalesService.GetSales(99, fromDate, toDate, context);
+
+                //System.Diagnostics.Debug.WriteLine("January sales: " + storeSales.Count);
+
+                Assert.IsNotEmpty(storeSales);
+
+       
+                // Get chain sales from January 2015
+                var chainSales = SalesService.GetChainSales(1, fromDate, toDate, context);
+
+                //System.Diagnostics.Debug.WriteLine("January sales: " + chainSales.Count);
+
+                Assert.IsNotEmpty(chainSales);
+            }
+        }
     }
 }
