@@ -20,10 +20,10 @@ namespace StoreStockingSystem.Services
 
             if (newStock.Store != null)
                 context.Stores.Attach(newStock.Store);
-            
+
             if (newStock.DisplayType != null)
                 context.DisplayTypes.Attach(newStock.DisplayType);
-            
+
             context.Stocks.Add(newStock);
             context.SaveChanges();
 
@@ -55,21 +55,41 @@ namespace StoreStockingSystem.Services
             }, context);
         }
 
+        public static Stock GetStockWithEmptyDate(Stock stock, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            if (stock == null)
+                return null;
+
+            foreach (var productStock in stock.ProductStocks)
+            {
+                var warningDate = PredictProductTargetStockLevelDate(productStock, productStock.WarningAmount ?? stock.WarningAmountLeft, context);
+                productStock.ExpectedWarningDate = warningDate;
+            }
+
+            return stock;
+        }
+
+
         public static Stock GetStock(int stockId, StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
-            return (from t in context.Stocks
-                    where t.Id == stockId
-                    select t).FirstOrDefault();
+            var stock = (from t in context.Stocks
+                         where t.Id == stockId
+                         select t).FirstOrDefault();
+
+            return stock;
         }
 
         public static Stock GetStock(Store store, int displayTypeId, StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
-            
+
             var stock = (from t in context.Stocks
                          where t.Store.Id == store.Id
                          && t.DisplayType.Id == displayTypeId
@@ -77,7 +97,7 @@ namespace StoreStockingSystem.Services
 
             if (stock == null)
                 throw new ArgumentException("Could not find stock for store id: " + store.Id + " and display-type id " + displayTypeId);
-            
+
             return stock;
         }
 
@@ -85,10 +105,10 @@ namespace StoreStockingSystem.Services
         {
             if (context == null)
                 context = new StoreStockingContext();
-            
+
             var stocks = (from t in context.Stocks
-                         where t.Store.Id == store.Id
-                         select t)
+                          where t.Store.Id == store.Id
+                          select t)
                          .Include(t => t.DisplayType)
                          .Include(t => t.Store)
                          .Include(t => t.ProductStocks.Select(s => s.Product))
@@ -96,7 +116,7 @@ namespace StoreStockingSystem.Services
 
             if (stocks == null)
                 throw new ArgumentException("Could not find stocks for store id: " + store.Id);
-            
+
             return stocks;
         }
 
@@ -129,9 +149,9 @@ namespace StoreStockingSystem.Services
         {
             if (context == null)
                 context = new StoreStockingContext();
-            
+
             return (from t in context.Stocks
-                          select t);
+                    select t);
         }
 
         public static void AddProductToStock(Stock stock, Product product, int amount, StoreStockingContext context = null)
@@ -163,9 +183,9 @@ namespace StoreStockingSystem.Services
 
         public static void AddProductToStock(int stockId, int productId, int amount, StoreStockingContext context)
         {
-            if(context == null)
-                context = new StoreStockingContext(); 
-    
+            if (context == null)
+                context = new StoreStockingContext();
+
             var stock = context.Stocks.Find(stockId);
             if (stock == null)
                 throw new ArgumentException("Failed adding product to stock. Could not find stock id: " + stockId);
@@ -187,7 +207,7 @@ namespace StoreStockingSystem.Services
         private static ProductStock GetProductStockBasedOnSalesData(DisplayType displayType, Store store, Product product, StoreStockingContext context = null)
         {
             if (context == null)
-                context = new StoreStockingContext(); 
+                context = new StoreStockingContext();
 
             var stock = (from t in context.Stocks
                          where t.Store.Id == store.Id && t.DisplayType.Id == displayType.Id
@@ -204,7 +224,7 @@ namespace StoreStockingSystem.Services
         public static void RemoveProductFromStock(Stock stock, Product product, StoreStockingContext context = null)
         {
             if (context == null)
-                context = new StoreStockingContext(); 
+                context = new StoreStockingContext();
 
             var productStock = (from t in context.ProductStocks
                                 where t.Stock.Id == stock.Id && t.Product.Id == product.Id
@@ -228,7 +248,7 @@ namespace StoreStockingSystem.Services
                 context = new StoreStockingContext();
 
             var result = new List<Stock>();
-            
+
             var stocks =
                 context.Stocks
                 .Include(t => t.ProductStocks)
@@ -243,7 +263,7 @@ namespace StoreStockingSystem.Services
                                      where t.Amount < t.WarningAmount || t.Amount < stock.WarningAmountLeft
                                      select t).ToList();
 
-                if(productStocks.Count > 0)
+                if (productStocks.Count > 0)
                     result.Add(stock);
             }
 
@@ -262,10 +282,10 @@ namespace StoreStockingSystem.Services
                 context = new StoreStockingContext();
 
             var stock = (from t in context.Stocks
-                                     where t.Id == stockId
-                                     select t).FirstOrDefault();
+                         where t.Id == stockId
+                         select t).FirstOrDefault();
 
-            if(stock == null)
+            if (stock == null)
                 throw new Exception("Could not find stock");
 
             return GetPredictedStockTargetDate(stockId, stock.WarningAmountLeft, context);
@@ -337,7 +357,7 @@ namespace StoreStockingSystem.Services
 
             while (targetStockLevel < currentStockCount)
             {
-                currentStockCount = (int) (currentStockCount - Math.Floor(saleSpeed.SalesCountPerDay));
+                currentStockCount = (int)(currentStockCount - Math.Ceiling(saleSpeed.SalesCountPerDay));
                 daysUntilTargetLevel++;
             }
 

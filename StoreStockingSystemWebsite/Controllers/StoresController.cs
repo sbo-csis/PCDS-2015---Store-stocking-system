@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Data;
-using PCDSWebsite.Models;
+﻿using System.Web.Mvc;
 using StoreStockingSystem.Services;
 
 namespace PCDSWebsite.Controllers
@@ -24,9 +20,13 @@ namespace PCDSWebsite.Controllers
         public ActionResult StoreDetails(int id = 0)
         {
             var store = StoreService.GetStore(id);
-            var model = StockService.GetStocks(store);
-
-            return View(model);
+            var stocks = StockService.GetStocks(store);
+            foreach (var stock in stocks)
+            {
+                StockService.GetStockWithEmptyDate(stock);
+            }
+            
+            return View(stocks);
         }
 
         public ActionResult StorePerformanceDetails()
