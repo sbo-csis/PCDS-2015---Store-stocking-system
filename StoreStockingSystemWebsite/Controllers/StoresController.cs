@@ -31,6 +31,7 @@ namespace PCDSWebsite.Controllers
 
         public ActionResult StorePerformanceDetails()
         {
+            
             return View();
         }
 

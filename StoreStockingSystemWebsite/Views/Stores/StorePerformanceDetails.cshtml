@@ -1,30 +1,39 @@
-﻿@{
+﻿@model List<StoreStockingSystem.Models.Stock>
+@{
     ViewBag.Title = "Store Details";
 }
-
 @section scripts{
-<script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
-<script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+   
+    <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
     <script>
         $(function () {
-            $('#container').highcharts({
+            $("#datepickerStart").datepicker();
+            $("#datepickerEnd").datepicker();
+            $("#container").highcharts({
                 title: {
                     text: 'Monthly sales',
                     x: -20 //center
                 },
                 xAxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    categories: [
+                        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                    ]
                 },
                 yAxis: {
                     title: {
                         text: 'Sales amount'
                     },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }]
+                    plotLines: [
+                        {
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }
+                    ]
                 },
                 tooltip: {
                     valueSuffix: 'Kr'
@@ -35,35 +44,50 @@
                     verticalAlign: 'middle',
                     borderWidth: 0
                 },
-                series: [{
-                    name: 'Salg 2012',
-                    data: [1578,1035,1950,2530,3400,3399,4585,4500,3800,6500,15300,35000]
-                }, {
-                    name: 'Salg 2013',
-                    data: [4050, 4535, 3750, 6530, 6400, 4399, 0, 5500, 6800, 8500, 19300, 45000]
-                }, {
-                    name: 'Salg 2014',
-                    data: [5700, 6535, 6750, 3530, 8400, 2399, 4585, 9500, 2800, 9500, 24300, 85000]
-                }, {
-                    name: 'Salg 2015',
-                    data: [8700, 15535, 12750]
-                }]
+                series: [
+                    {
+                        name: 'Salg 2012',
+                        data: [1578, 1035, 1950, 2530, 3400, 3399, 4585, 4500, 3800, 6500, 15300, 35000]
+                    }, {
+                        name: 'Salg 2013',
+                        data: [4050, 4535, 3750, 6530, 6400, 4399, 0, 5500, 6800, 8500, 19300, 45000]
+                    }, {
+                        name: 'Salg 2014',
+                        data: [5700, 6535, 6750, 3530, 8400, 2399, 4585, 9500, 2800, 9500, 24300, 85000]
+                    }, {
+                        name: 'Salg 2015',
+                        data: [8700, 15535, 12750]
+                    }, {
+                        name: 'Salg 2015 chain',
+                        date: [88000, 50000, 70000]
+                    }
+                ]
             });
         });
     </script>
+    
+
 }
 
+
 <h2>Store Details</h2>
+<br/>
+
+<div align="center">
+    <p> Start date: <input type="text" id="datepickerStart">
+        End date: <input type="text" id="datepickerEnd">
+    </p>
+</div>
 <table border="0">
     <tr >
-        <td width="300px" style="text-align:left;vertical-align:top;padding:0">
+        <td width="300px" style="text-align: left; vertical-align: top; padding: 0">
             <table border="0">
                 <tr>
                     <td>
                         <h3>Føtex Amager</h3>
-                        Amagerbrogade 123<br />
-                        2300 København S<br />
-                        Tlf: 88 77 66 55<br />
+                        Amagerbrogade 123<br/>
+                        2300 København S<br/>
+                        Tlf: 88 77 66 55<br/>
                     </td>
                 </tr>
                 <tr>
@@ -77,10 +101,13 @@
                 </tr>
             </table>
         </td>
-        <td  width="700px" style="text-align:left;vertical-align:top;padding:0">
+        <td width="700px" style="text-align: left; vertical-align: top; padding: 0">
             <div id="container"></div>
         </td>
     </tr>
 </table>
+
+<br/>
+<br/>
 
 
