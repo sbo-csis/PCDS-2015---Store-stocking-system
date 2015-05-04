@@ -3,6 +3,9 @@ using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
 {
+    /// <summary>
+    /// Class for fetching and manipulating display objects. Should be used for getting displays and adding new displays to database.
+    /// </summary>
     public static class DisplayTypeService
     {
         /// <summary>

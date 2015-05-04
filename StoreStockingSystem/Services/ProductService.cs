@@ -4,6 +4,9 @@ using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
 {
+    /// <summary>
+    /// Class for fetching and manipulating product objects. Should be used for getting products & inserting new products.
+    /// </summary>
     public static class ProductService
     {
         /// <summary>
