@@ -460,5 +460,51 @@ namespace StoreStockingSystem.Services
 
             return new Tuple<Product, decimal>(product, fraction);
         }
+
+
+        // Get store performance, ie. total sale value, for a time period
+        public static int GetStorePerformance(int storeId, DateTime fromDate, DateTime toDate, StoreStockingContext context)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var sales = GetSales(storeId, fromDate, toDate, context);
+
+            var totalSales = sales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
+
+            return totalSales;
+        }
+
+        // Get daily performance in a period for a store
+        public static List<int> GetDailyStorePerformance(int storeId, DateTime fromDate, DateTime toDate,
+            StoreStockingContext context)
+        {
+            var dailyPerformance = new List<int>();
+
+            for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
+            {
+                var sales = GetStorePerformance(storeId, day, day.AddDays(1), context);
+
+                dailyPerformance.Add(sales);
+            }
+
+            return dailyPerformance;
+        }
+
+        // Get monthly performance for a store
+        public static List<int> GetMonthlylyStorePerformance(int storeId, DateTime fromDate, DateTime toDate,
+            StoreStockingContext context)
+        {
+            var monthlyPerformance = new List<int>();
+
+            for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddMonths(1))
+            {
+                var sales = GetStorePerformance(storeId, day, day.AddMonths(1), context);
+
+                monthlyPerformance.Add(sales);
+            }
+
+            return monthlyPerformance;
+        }
     }
 }
