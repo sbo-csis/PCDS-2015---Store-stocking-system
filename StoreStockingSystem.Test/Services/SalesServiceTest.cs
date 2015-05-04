@@ -271,5 +271,44 @@ namespace StoreStockingSystem.Test.Services
             }
         }
 
+        [Test]
+        public void can_get_store_performance()
+        {
+            using (var context = new StoreStockingContext())
+            {
+                // Get store performance for January 2015
+                var fromDate = new DateTime(2015, 1, 1);
+                var toDate = new DateTime(2015, 1, 31);
+                var storePerformance = SalesService.GetStorePerformance(99, fromDate, toDate, context);
+
+                Assert.IsTrue(storePerformance>0);
+                //System.Diagnostics.Debug.WriteLine("January sales: " + storePerformance);
+
+                // Get the performance on a daily basis
+                var dailyPerformance = SalesService.GetDailyStorePerformance(99, fromDate, toDate, context);
+
+                Assert.AreEqual(dailyPerformance.Count,31);
+            }
+        }
+
+        [Test]
+        public void can_get_chain_performance()
+        {
+            using (var context = new StoreStockingContext())
+            {
+                // Get chain performance for January 2015
+                var fromDate = new DateTime(2015, 1, 1);
+                var toDate = new DateTime(2015, 1, 31);
+                var chainPerformance = SalesService.GetChainPerformance(1, fromDate, toDate, context);
+
+                Assert.IsTrue(chainPerformance > 0);
+                //System.Diagnostics.Debug.WriteLine("January sales: " + chainPerformance);
+
+                // Get the performance on a daily basis
+                var dailyPerformance = SalesService.GetDailyChainPerformance(1, fromDate, toDate, context);
+
+                Assert.AreEqual(dailyPerformance.Count, 31);
+            }
+        }
     }
 }
