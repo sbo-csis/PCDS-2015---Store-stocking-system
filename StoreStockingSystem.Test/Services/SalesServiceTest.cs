@@ -246,8 +246,8 @@ namespace StoreStockingSystem.Test.Services
             using (var context = new StoreStockingContext())
             {
                 // Get store sales from January 2015
-                DateTime fromDate = new DateTime(2015, 1, 1);
-                DateTime toDate = new DateTime(2015, 1, 31);
+                var fromDate = new DateTime(2015, 1, 1);
+                var toDate = new DateTime(2015, 1, 31);
                 var storeSales = SalesService.GetSales(99, fromDate, toDate, context);
 
                 //System.Diagnostics.Debug.WriteLine("January sales: " + storeSales.Count);
@@ -265,7 +265,7 @@ namespace StoreStockingSystem.Test.Services
                 // Check that the yearly sales correspond to monthly sales
                 var yearSales = SalesService.GetYearSales(2015, 1, context);
 
-                Assert.AreEqual(yearSales.First().Count, chainSales);
+                Assert.AreEqual(yearSales.First().Count, chainSales.Count);
 
                 //System.Diagnostics.Debug.WriteLine("January sales: " + yearSales.First().Count);
             }
