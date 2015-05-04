@@ -188,13 +188,13 @@ namespace StoreStockingSystem.Services
                     Product product = salesSpeed.ProductStock.Product;
                     List<Sale> actualProductSales = context.Sales.Where(sale => sale.StoreId == storeId && sale.SalesDate <= to && sale.SalesDate >= from && sale.Product == product).ToList();
                     SaleSpeed actualProductSalesSpeed = CalculateSaleSpeedBasedOnCurrentSales(actualProductSales);
-                    double comparedSalesCountPerDay = (100 / predictedProductSalesSpeeds.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
-                    decimal comparedSalesSumPerDay = (100 / predictedProductSalesSpeeds.SalesSumPerDay) * actualProductSalesSpeed.SalesSumPerDay;
+                    double comparedSalesCountPerDay = (100 / salesSpeed.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
+                    decimal comparedSalesSumPerDay = (100 / salesSpeed.SalesSumPerDay) * actualProductSalesSpeed.SalesSumPerDay;
                     if ((100 - comparedSalesCountPerDay > store.WarningPercentage) || (100 - comparedSalesSumPerDay > store.WarningPercentage))
                     {
                         WarningInfo warningInfo = new WarningInfo();
                         warningInfo.ActualSaleSpeed = actualProductSalesSpeed;
-                        warningInfo.PredictedSaleSpeed = predictedProductSalesSpeeds;
+                        warningInfo.PredictedSaleSpeed = salesSpeed;
                         warningInfo.Store = store;
                         warningInfo.Product = product;
                         results.Add(warningInfo);
