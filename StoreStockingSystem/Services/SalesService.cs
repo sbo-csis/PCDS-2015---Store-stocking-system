@@ -28,12 +28,20 @@ namespace StoreStockingSystem.Services
         public delegate void SaleOccuredEventHandler(Sale sale, StoreStockingContext context);
         public static event SaleOccuredEventHandler SalesEvent;
 
-        // TODO: This does not update stock currently, fix it!
+        // TODO: This does not update stock currently because of performance issues!
         public static void RegisterSales(List<Sale> sales, StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
+            //if (SalesEvent != null) //Comment out to gain performance.
+            //{
+            //    foreach (var sale in sales)
+            //    {
+            //        SalesEvent(sale, context);
+            //    }
+            //}
+            
             context.Sales.AddRange(sales);
             context.SaveChanges();
         }
@@ -314,12 +322,17 @@ namespace StoreStockingSystem.Services
             var salesSum = sales.Where(t => !t.IsReturn).Select(t => t.SalesPrice).Sum() - sales.Where(t => t.IsReturn).Select(t => t.SalesPrice).Sum();
             var salesCount = sales.Count(t => !t.IsReturn) - sales.Count(t => t.IsReturn);
 
-            var daysOfSales = (sales.Max(t => t.SalesDate) - sales.Max(t => t.SalesDate)).TotalDays; // Total number of days sales have happened in
+            var daysOfSales = (sales.Select(t => t.SalesDate).Max() - sales.Select(t=> t.SalesDate).Min()).TotalDays; // Total number of days sales have happened in
+
+            if (daysOfSales == 0.0 && salesCount > 0) //In the case of only a single sale in the period.
+            {
+                daysOfSales = (DateTime.Now - sales.First().SalesDate).TotalDays; 
+            }
 
             return new SaleSpeed
             {
-                SalesCountPerDay = (salesCount/daysOfSales),
-                SalesSumPerDay = salesSum/(decimal) daysOfSales
+                SalesCountPerDay = (daysOfSales > 0 ) ? (salesCount/daysOfSales) : 0,
+                SalesSumPerDay = (daysOfSales > 0) ? salesSum/(decimal) daysOfSales : 0
             };
         }
 
