@@ -74,6 +74,7 @@ namespace StoreStockingSystem.Services
             }, context);
         }
 
+        // Returns a list of sales for the given store in the given period
         public static List<Sale> GetSales(int storeId, DateTime fromDate, DateTime toDate, StoreStockingContext context = null)
         {
             if (context == null)
@@ -98,6 +99,7 @@ namespace StoreStockingSystem.Services
                     select t).ToList();
         }
 
+        // Returns a list of sales for the given chain in the given period
         public static List<Sale> GetChainSales(int chainId, DateTime fromDate, DateTime toDate, StoreStockingContext context)
         {
             if (context == null)
@@ -116,12 +118,13 @@ namespace StoreStockingSystem.Services
             return chainSales;
         }
 
-        public static ArrayList GetYearSales(int year, int chainId, StoreStockingContext context)
+        // Get a list of 12 lists, each corresponding to a months sales
+        public static List<List<Sale>> GetYearSales(int year, int chainId, StoreStockingContext context)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
-            var yearSales = new ArrayList(12);
+            var yearSales = new List<List<Sale>>(12);
 
             for (int i = 1; i <= 12; i++)
             {
@@ -131,9 +134,9 @@ namespace StoreStockingSystem.Services
                 var monthSales = GetChainSales(chainId, firstDayOfMonth, lastDayOfMonth, context);
 
                 // Accumulate sale values to one data point
-                var totalMonthSales = monthSales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
+                //var totalMonthSales = monthSales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
 
-                yearSales.Add(totalMonthSales);
+                yearSales.Add(monthSales);
             }
 
             return yearSales;
@@ -191,18 +194,18 @@ namespace StoreStockingSystem.Services
                 DateTime from = DateTime.Today.AddDays(-8);
                 DateTime to = DateTime.Today.AddDays(-1);
                 List<SaleSpeed> predictedSalesSpeeds = GetPredictedStoreSalesForPeriod(storeId, from, to, context);
-                foreach (SaleSpeed salesSpeed in predictedSalesSpeeds)
+                foreach (SaleSpeed predictedSaleSpeed in predictedSalesSpeeds)
                 {
-                    Product product = salesSpeed.ProductStock.Product;
+                    Product product = predictedSaleSpeed.ProductStock.Product;
                     List<Sale> actualProductSales = context.Sales.Where(sale => sale.StoreId == storeId && sale.SalesDate <= to && sale.SalesDate >= from && sale.Product == product).ToList();
                     SaleSpeed actualProductSalesSpeed = CalculateSaleSpeedBasedOnCurrentSales(actualProductSales);
-                    double comparedSalesCountPerDay = (100 / salesSpeed.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
-                    decimal comparedSalesSumPerDay = (100 / salesSpeed.SalesSumPerDay) * actualProductSalesSpeed.SalesSumPerDay;
+                    double comparedSalesCountPerDay = (100 / predictedSaleSpeed.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
+                    decimal comparedSalesSumPerDay = (100 / predictedSaleSpeed.SalesSumPerDay) * actualProductSalesSpeed.SalesSumPerDay;
                     if ((100 - comparedSalesCountPerDay > store.WarningPercentage) || (100 - comparedSalesSumPerDay > store.WarningPercentage))
                     {
                         WarningInfo warningInfo = new WarningInfo();
                         warningInfo.ActualSaleSpeed = actualProductSalesSpeed;
-                        warningInfo.PredictedSaleSpeed = salesSpeed;
+                        warningInfo.PredictedSaleSpeed = predictedSaleSpeed;
                         warningInfo.Store = store;
                         warningInfo.Product = product;
                         results.Add(warningInfo);
