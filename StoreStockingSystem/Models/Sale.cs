@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
 
 namespace StoreStockingSystem.Models
 {
-    public class Sale : DbContext
+    public class Sale
     {
         [Key]
         public int Id { get; set; }

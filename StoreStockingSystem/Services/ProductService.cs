@@ -6,6 +6,12 @@ namespace StoreStockingSystem.Services
 {
     public static class ProductService
     {
+        /// <summary>
+        /// Get populated product object.
+        /// </summary>
+        /// <param name="productId">Product ID.</param>
+        /// <param name="context">Optional database context.</param>
+        /// <returns></returns>
         public static Product GetProduct(int productId, StoreStockingContext context = null)
         {
             if (context == null)
@@ -14,6 +20,12 @@ namespace StoreStockingSystem.Services
             return context.Products.Find(productId);
         }
 
+        /// <summary>
+        /// Add new product to database. Returns the added product object.
+        /// </summary>
+        /// <param name="product">Product object.</param>
+        /// <param name="context">Optional database context.</param>
+        /// <returns></returns>
         public static Product NewProduct(Product product, StoreStockingContext context = null)
         {
             if (context == null)
@@ -25,11 +37,23 @@ namespace StoreStockingSystem.Services
             return product;
         }
 
+        /// <summary>
+        /// Add new product to database. Returns the added product object.
+        /// </summary>
+        /// <param name="name">Product name.</param>
+        /// <param name="price">Product price.</param>
+        /// <param name="context">Optional database context.</param>
+        /// <returns></returns>
         public static Product NewProduct(string name, int price, StoreStockingContext context = null)
         {
             return NewProduct(new Product {Name = name, Price = price}, context);
         }
 
+        /// <summary>
+        /// Update an existing product.
+        /// </summary>
+        /// <param name="changedProduct">Updated product object.</param>
+        /// <param name="context">Optional database context.</param>
         public static void UpdateProduct(Product changedProduct, StoreStockingContext context = null)
         {
             if (context == null)

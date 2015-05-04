@@ -5,6 +5,12 @@ namespace StoreStockingSystem.Services
 {
     public static class DisplayTypeService
     {
+        /// <summary>
+        /// Gets display-type object.
+        /// </summary>
+        /// <param name="displayTypeId">Display type ID</param>
+        /// <param name="context">Optional database context.</param>
+        /// <returns></returns>
         public static DisplayType GetDisplayType(int displayTypeId, StoreStockingContext context = null)
         {
             if (context == null)
@@ -15,6 +21,12 @@ namespace StoreStockingSystem.Services
                      select t).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Add new displaytype object to database. Returns the displaytype object after database insertion.
+        /// </summary>
+        /// <param name="display">Display object.</param>
+        /// <param name="context">Optional database context.</param>
+        /// <returns></returns>
         public static DisplayType AddDisplayType(DisplayType display, StoreStockingContext context = null)
         {
             if (context == null)
@@ -25,6 +37,13 @@ namespace StoreStockingSystem.Services
             return display;
         }
 
+        /// <summary>
+        /// Create new displaytype. Returns the displaytype object after database insertion.
+        /// </summary>
+        /// <param name="name">Displaytype name.</param>
+        /// <param name="capacity">Displaytype capacity</param>
+        /// <param name="context">Optional database context.</param>
+        /// <returns></returns>
         public static DisplayType AddDisplayType(string name, int capacity, StoreStockingContext context = null)
         {
             if (context == null)
