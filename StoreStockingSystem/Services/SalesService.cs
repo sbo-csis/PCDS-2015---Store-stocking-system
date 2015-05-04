@@ -186,18 +186,18 @@ namespace StoreStockingSystem.Services
                 DateTime from = DateTime.Today.AddDays(-8);
                 DateTime to = DateTime.Today.AddDays(-1);
                 List<SaleSpeed> predictedSalesSpeeds = GetPredictedStoreSalesForPeriod(storeId, from, to, context);
-                foreach (SaleSpeed salesSpeed in predictedSalesSpeeds)
+                foreach (SaleSpeed predictedSaleSpeed in predictedSalesSpeeds)
                 {
-                    Product product = salesSpeed.ProductStock.Product;
+                    Product product = predictedSaleSpeed.ProductStock.Product;
                     List<Sale> actualProductSales = context.Sales.Where(sale => sale.StoreId == storeId && sale.SalesDate <= to && sale.SalesDate >= from && sale.Product == product).ToList();
                     SaleSpeed actualProductSalesSpeed = CalculateSaleSpeedBasedOnCurrentSales(actualProductSales);
-                    double comparedSalesCountPerDay = (100 / salesSpeed.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
-                    decimal comparedSalesSumPerDay = (100 / salesSpeed.SalesSumPerDay) * actualProductSalesSpeed.SalesSumPerDay;
+                    double comparedSalesCountPerDay = (100 / predictedSaleSpeed.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
+                    decimal comparedSalesSumPerDay = (100 / predictedSaleSpeed.SalesSumPerDay) * actualProductSalesSpeed.SalesSumPerDay;
                     if ((100 - comparedSalesCountPerDay > store.WarningPercentage) || (100 - comparedSalesSumPerDay > store.WarningPercentage))
                     {
                         WarningInfo warningInfo = new WarningInfo();
                         warningInfo.ActualSaleSpeed = actualProductSalesSpeed;
-                        warningInfo.PredictedSaleSpeed = salesSpeed;
+                        warningInfo.PredictedSaleSpeed = predictedSaleSpeed;
                         warningInfo.Store = store;
                         warningInfo.Product = product;
                         results.Add(warningInfo);
