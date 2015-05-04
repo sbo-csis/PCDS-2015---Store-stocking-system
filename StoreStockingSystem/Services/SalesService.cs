@@ -506,5 +506,50 @@ namespace StoreStockingSystem.Services
 
             return monthlyPerformance;
         }
+
+        // Get performance for a chain
+        public static int GetChainPerformance(int chainId, DateTime fromDate, DateTime toDate, StoreStockingContext context)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var sales = GetChainSales(chainId, fromDate, toDate, context);
+
+            var totalSales = sales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
+
+            return totalSales;
+        }
+
+        // Get daily performance in a period for a store
+        public static List<int> GetDailyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
+            StoreStockingContext context)
+        {
+            var dailyPerformance = new List<int>();
+
+            for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
+            {
+                var sales = GetStorePerformance(chainId, day, day.AddDays(1), context);
+
+                dailyPerformance.Add(sales);
+            }
+
+            return dailyPerformance;
+        }
+
+        // Get monthly performance for a store
+        public static List<int> GetMonthlylyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
+            StoreStockingContext context)
+        {
+            var monthlyPerformance = new List<int>();
+
+            for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddMonths(1))
+            {
+                var sales = GetStorePerformance(chainId, day, day.AddMonths(1), context);
+
+                monthlyPerformance.Add(sales);
+            }
+
+            return monthlyPerformance;
+        }
     }
 }
