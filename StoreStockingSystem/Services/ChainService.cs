@@ -100,6 +100,5 @@ namespace StoreStockingSystem.Services
             context.Chains.Remove(chain);
             context.SaveChanges();
         }
-
     }
 }

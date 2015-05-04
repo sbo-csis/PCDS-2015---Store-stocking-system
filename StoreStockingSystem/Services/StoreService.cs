@@ -6,6 +6,9 @@ using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
 {
+    /// <summary>
+    /// Class for fetching and manipulating store objects. Should be used for getting stores and adding new stores to database.
+    /// </summary>
     public static class StoreService
     {
         /// <summary>
