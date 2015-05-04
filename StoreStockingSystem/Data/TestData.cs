@@ -10,7 +10,9 @@ namespace StoreStockingSystem.Data
 {
     public static class TestData
     {
-        private static readonly string BasePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, @"StoreStockingSystem\Data");
+        private static readonly string BasePath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase), "Data").Substring(6);
+
+
         private static readonly string MerchantPath = Path.Combine(BasePath, "opl_merchants.csv");
         private static readonly string StoresPath = Path.Combine(BasePath, "opl_merchants_stores.csv");
         private static readonly string SalesDataPath = Path.Combine(BasePath, "salesdata.csv");
@@ -166,8 +168,6 @@ namespace StoreStockingSystem.Data
             context.SaveChanges();
 
             SalesService.RegisterSales(sales, context);
-
-
         }
 
         private static void StockCheck(StoreIdRelation cacheResult, Product product, int displayTypeId, StoreStockingContext context)
@@ -199,7 +199,7 @@ namespace StoreStockingSystem.Data
             {
                 productStock = new ProductStock
                 {
-                    Amount = 10000,
+                    Amount = new Random().Next(10, 500),
                     Product = product,
                     StockId = stock.Id
                 };
@@ -207,8 +207,6 @@ namespace StoreStockingSystem.Data
                 context.ProductStocks.Add(productStock);
                 context.SaveChanges();
             }
-
-            StockService.GetStock(stock.Id, context);
         }
 
         private static Product GetProduct(decimal price, StoreStockingContext context)
