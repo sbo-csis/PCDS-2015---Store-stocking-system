@@ -189,6 +189,7 @@ namespace StoreStockingSystem.Services
                 foreach (SaleSpeed salesSpeed in predictedSalesSpeeds)
                 {
                     Product product = salesSpeed.ProductStock.Product;
+                    SaleSpeed predictedProductSalesSpeeds = predictedSalesSpeeds.First(saleSpeed => saleSpeed.ProductStock.Product == product);
                     List<Sale> actualProductSales = context.Sales.Where(sale => sale.StoreId == storeId && sale.SalesDate <= to && sale.SalesDate >= from && sale.Product == product).ToList();
                     SaleSpeed actualProductSalesSpeed = CalculateSaleSpeedBasedOnCurrentSales(actualProductSales);
                     double comparedSalesCountPerDay = (100 / salesSpeed.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
