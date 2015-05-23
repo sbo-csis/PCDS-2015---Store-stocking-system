@@ -225,7 +225,7 @@ namespace StoreStockingSystem.Services
                           where t.StoreId == storeId
                           select t).Include(t => t.ProductStocks);
 
-            var saleSpeeds = BuildSaleSpeedsForStocks(stocks, startDate, endDate);
+            List<SaleSpeed> saleSpeeds = BuildSaleSpeedsForStocks(stocks, startDate, endDate);
 
             return saleSpeeds;
         }

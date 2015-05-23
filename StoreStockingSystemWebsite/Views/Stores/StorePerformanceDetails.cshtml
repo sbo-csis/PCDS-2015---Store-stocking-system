@@ -1,4 +1,5 @@
-﻿@model List<StoreStockingSystem.Models.Stock>
+﻿@using System.Globalization
+@model List<StoreStockingSystem.Models.Stock>
 @{
     ViewBag.Title = "Store Details";
 }
@@ -9,59 +10,68 @@
    
     <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
     <script>
-        $(function () {
-            $("#datepickerStart").datepicker();
-            $("#datepickerEnd").datepicker();
-            $("#container").highcharts({
-                title: {
-                    text: 'Monthly sales',
-                    x: -20 //center
-                },
-                xAxis: {
-                    categories: [
-                        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-                    ]
-                },
-                yAxis: {
-                    title: {
-                        text: 'Sales amount'
-                    },
-                    plotLines: [
-                        {
-                            value: 0,
-                            width: 1,
-                            color: '#808080'
-                        }
-                    ]
-                },
-                tooltip: {
-                    valueSuffix: 'Kr'
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'middle',
-                    borderWidth: 0
-                },
-                series: [
-                    {
-                        name: 'Salg 2012',
-                        data: [1578, 1035, 1950, 2530, 3400, 3399, 4585, 4500, 3800, 6500, 15300, 35000]
-                    }, {
-                        name: 'Salg 2013',
-                        data: [4050, 4535, 3750, 6530, 6400, 4399, 0, 5500, 6800, 8500, 19300, 45000]
-                    }, {
-                        name: 'Salg 2014',
-                        data: [5700, 6535, 6750, 3530, 8400, 2399, 4585, 9500, 2800, 9500, 24300, 85000]
-                    }, {
-                        name: 'Salg 2015',
-                        data: [8700, 15535, 12750]
-                    }, {
-                        name: 'Salg 2015 chain',
-                        date: [88000, 50000, 70000]
-                    }
+    $(function () {
+        $("#datepickerStart").datepicker();
+        $("#datepickerEnd").datepicker();
+        @{
+            DateTime fromDate = new DateTime(DateTime.UtcNow.Year, 1, 1);
+            DateTime toDate = new DateTime(DateTime.UtcNow.Year, 12, 31);
+            List<double> sales = StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1);
+        }
+        $("#container").highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Monthly sales vs monthly expected sales'
+            },
+            xAxis: {
+                categories: [
+                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
                 ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Sales (millions)',
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' millions'
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 100,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: [
+            {
+                name: 'Predicted sales',
+                data: @StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1)
+            }, {
+                name: 'Actual sales',
+                data: @StoreStockingSystem.Services.SalesService.GetSales(1, fromDate, toDate)
+            }]
             });
         });
     </script>
@@ -78,6 +88,7 @@
         End date: <input type="text" id="datepickerEnd">
     </p>
 </div>
+<div id="container" style="height: 400px; min-width: 310px"></div>
 <table border="0">
     <tr >
         <td width="300px" style="text-align: left; vertical-align: top; padding: 0">
