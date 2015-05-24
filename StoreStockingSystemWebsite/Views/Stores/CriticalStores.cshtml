@@ -1,4 +1,4 @@
-﻿@model List<StoreStockingSystem.Models.Stock>
+﻿@model StoreStockingSystem.Models.StockRefill
 
 @{
     ViewBag.Title = "Critial Stores";
@@ -186,7 +186,7 @@
             <tbody>
                 @using (Html.BeginForm())
                 {
-                    foreach (var stock in Model)
+                    foreach (var stock in Model.Stocks)
                     {
                         var currentMissingProductCount = 0;
 
@@ -364,7 +364,7 @@
                     </table>
                 </td>
             </tr>
-        </table>
+        </table></div>
 
 
 </body>
