@@ -17,12 +17,18 @@ namespace StoreStockingSystem.Services
             public decimal SalesSumPerDay { get; set; }
         }
 
-        public class WarningInfo
+        public class SalesWarningInfo
         {
             public SaleSpeed PredictedSaleSpeed { get; set; }
             public SaleSpeed ActualSaleSpeed { get; set; }
             public Product Product { get; set; }
-            public Store Store { get; set; }
+        }
+
+        public class RefillWarningInfo
+        {
+            public DateTime ExpectedDateOutOfStock { get; set; }
+            public int AmountLeft { get; set; }
+            public Product Product { get; set; }
         }
 
         public delegate void SaleOccuredEventHandler(Sale sale, StoreStockingContext context);
@@ -153,10 +159,9 @@ namespace StoreStockingSystem.Services
 
             List<double> growthRateResults = new List<double>();
 
-            //Make sure this is the oldest and not the newest
             int oldestSaleYear = (from sale in context.Sales
                                   where sale.StoreId == storeId
-                                  orderby sale.SalesDate
+                                  orderby sale.SalesDate ascending
                                   select sale.SalesDate).First().Year;
             int newestSaleYear = DateTime.UtcNow.Year - 1;
 
@@ -172,6 +177,12 @@ namespace StoreStockingSystem.Services
                 List<Sale> oldMonthSales = GetSales(storeId, oldFromDate, oldToDate, context);
                 int totalOldMonthSales = oldMonthSales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
 
+                if (oldestSaleYear >= newestSaleYear)
+                {
+                    growthRateResults.Add(totalOldMonthSales);
+                    continue;
+                }
+
                 growthRateResults.Add(Math.Pow(totalNewMonthSales / (double)totalOldMonthSales, 1.0 / (newestSaleYear - oldestSaleYear)) * totalNewMonthSales);
             }
 
@@ -181,14 +192,19 @@ namespace StoreStockingSystem.Services
 
         //For each store, for each product, if actual sales are <Store.WarningPercentage> or less from predicted sales,
         //we return a class with the actual sales speed, predicted sales speed, store and product.
-        public static List<WarningInfo> GetStoreWarnings(StoreStockingContext context = null)
+        //The result returned is sorted by Store.StorePriority aka ABC (here known as 1,2,3)
+        public static List<KeyValuePair<Store, List<SalesWarningInfo>>> GetStoreSalesWarnings(StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
-            List<WarningInfo> results = new List<WarningInfo>();
+            Dictionary<Store, List<SalesWarningInfo>> result = new Dictionary<Store, List<SalesWarningInfo>>();
 
-            foreach (Store store in context.Stores)
+            IEnumerable stores = from store in context.Stores
+                orderby store.StorePriority ascending
+                select store;
+
+            foreach (Store store in stores)
             {
                 int storeId = store.Id;
                 DateTime from = DateTime.Today.AddDays(-8);
@@ -201,19 +217,68 @@ namespace StoreStockingSystem.Services
                     SaleSpeed actualProductSalesSpeed = CalculateSaleSpeedBasedOnCurrentSales(actualProductSales);
                     double comparedSalesCountPerDay = (100 / predictedSaleSpeed.SalesCountPerDay) * actualProductSalesSpeed.SalesCountPerDay;
                     decimal comparedSalesSumPerDay = (100 / predictedSaleSpeed.SalesSumPerDay) * actualProductSalesSpeed.SalesSumPerDay;
-                    if ((100 - comparedSalesCountPerDay > store.WarningPercentage) || (100 - comparedSalesSumPerDay > store.WarningPercentage))
+                    if ((comparedSalesCountPerDay < store.WarningPercentage) || (comparedSalesSumPerDay < store.WarningPercentage))
                     {
-                        WarningInfo warningInfo = new WarningInfo();
-                        warningInfo.ActualSaleSpeed = actualProductSalesSpeed;
-                        warningInfo.PredictedSaleSpeed = predictedSaleSpeed;
-                        warningInfo.Store = store;
-                        warningInfo.Product = product;
-                        results.Add(warningInfo);
+                        SalesWarningInfo salesWarningInfo = new SalesWarningInfo();
+                        salesWarningInfo.ActualSaleSpeed = actualProductSalesSpeed;
+                        salesWarningInfo.PredictedSaleSpeed = predictedSaleSpeed;
+                        salesWarningInfo.Product = product;
+                        if (result.ContainsKey(store))
+                        {
+                            result[store].Add(salesWarningInfo);
+                            continue;
+                        }
+
+                        result[store] = new List<SalesWarningInfo>() { salesWarningInfo };
                     }
                 }
             }
 
-            return results;
+            var sortedResults = result.ToList();
+                sortedResults.Sort((firstPair, nextPair) => firstPair.Key.StorePriority.CompareTo(nextPair.Key.StorePriority));
+
+            return sortedResults;
+        }
+
+        //For each product for each store, if the predicted empty level date is less than 7 days from now, warn,
+        //if the amount left is less than warning amount, warn.
+        //The result returned is sorted by Store.StorePriority aka ABC (here known as 1,2,3)
+        public static List<KeyValuePair<Store, List<RefillWarningInfo>>> GetStoreRefillWarnings(StoreStockingContext context = null)
+        {
+            if (context == null)
+            {
+                context = new StoreStockingContext();
+            }
+
+            DateTime minimum = DateTime.Today.AddDays(7);
+            Dictionary<Store, List<RefillWarningInfo>> result = new Dictionary<Store, List<RefillWarningInfo>>();
+
+            foreach (Stock stock in context.Stocks)
+            {
+                List<Tuple<ProductStock, DateTime>> outOfStockDate = StockService.GetPredictedStockEmptyLevelDates(stock.Id, context);
+                foreach (Tuple<ProductStock, DateTime> productStock in outOfStockDate)
+                {
+                    if (productStock.Item2 < minimum || productStock.Item1.Amount < productStock.Item1.WarningAmount)
+                    {
+                        //TODO: It should sort by ABC first, date/amount second.
+                        RefillWarningInfo refillWarninginfo =  new RefillWarningInfo();
+                        refillWarninginfo.AmountLeft = productStock.Item1.Amount;
+                        refillWarninginfo.ExpectedDateOutOfStock = productStock.Item2.Date;
+                        refillWarninginfo.Product = productStock.Item1.Product;
+                        if (result.ContainsKey(stock.Store))
+                        {
+                            result[stock.Store].Add(refillWarninginfo);
+                            continue;
+                        }
+                        result[stock.Store] = new List<RefillWarningInfo> { refillWarninginfo };
+                    }
+                }
+            }
+
+            var sortedResults = result.ToList();
+            sortedResults.Sort((firstPair, nextPair) => firstPair.Key.StorePriority.CompareTo(nextPair.Key.StorePriority));
+
+            return sortedResults;
         }
 
         public static List<SaleSpeed> GetPredictedStoreSalesForPeriod(int storeId, DateTime startDate, DateTime endDate, StoreStockingContext context)

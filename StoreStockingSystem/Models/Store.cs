@@ -16,5 +16,8 @@ namespace StoreStockingSystem.Models
         public int? ChainId { get; set; }
         public virtual Chain Chain { get; set; }
         public int WarningPercentage { get; set; }
+        //1 is highest
+        [Range(1,3)]
+        public int StorePriority { get; set; }
     }
 }
