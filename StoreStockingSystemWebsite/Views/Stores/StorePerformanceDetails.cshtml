@@ -7,107 +7,106 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-   
+
     <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
     <script>
-    $(function () {
-        $("#datepickerStart").datepicker();
-        $("#datepickerEnd").datepicker();
-        @{
+        $(function () {
+            $("#datepickerStart").datepicker();
+            $("#datepickerEnd").datepicker();
+            @{
             DateTime fromDate = new DateTime(DateTime.UtcNow.Year, 1, 1);
             DateTime toDate = new DateTime(DateTime.UtcNow.Year, 12, 31);
             List<double> sales = StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1);
         }
-        $("#container").highcharts({
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Monthly sales vs monthly expected sales'
-            },
-            xAxis: {
-                categories: [
-                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-                ]
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Sales (millions)',
-                    align: 'high'
+            $("#container").highcharts({
+                chart: {
+                    type: 'bar'
                 },
-                labels: {
-                    overflow: 'justify'
-                }
-            },
-            tooltip: {
-                valueSuffix: ' millions'
-            },
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        enabled: true
+                title: {
+                    text: 'Monthly sales vs monthly expected sales'
+                },
+                xAxis: {
+                    categories: [
+                        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                    ]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Sales (millions)',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
                     }
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -40,
-                y: 100,
-                floating: true,
-                borderWidth: 1,
-                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                shadow: true
-            },
-            credits: {
-                enabled: false
-            },
-            series: [
-            {
-                name: 'Predicted sales',
-                data: @StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1)
-            }, {
-                name: 'Actual sales',
-                data: @StoreStockingSystem.Services.SalesService.GetSales(1, fromDate, toDate)
-            }]
+                },
+                tooltip: {
+                    valueSuffix: ' millions'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 100,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [
+                {
+                    name: 'Predicted sales',
+                    data: @StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1)
+                },
+                {
+                    name: 'Actual sales',
+                    data: @StoreStockingSystem.Services.SalesService.GetSales(1, fromDate, toDate)
+                    }]
             });
         });
     </script>
-    
-
 }
 
-
 <h2>Store Details</h2>
-<br/>
+<br />
 
 <div align="center">
-    <p> Start date: <input type="text" id="datepickerStart">
+    <p>
+        Start date: <input type="text" id="datepickerStart">
         End date: <input type="text" id="datepickerEnd">
     </p>
 </div>
 <div id="container" style="height: 400px; min-width: 310px"></div>
 <table border="0">
-    <tr >
+    <tr>
         <td width="300px" style="text-align: left; vertical-align: top; padding: 0">
             <table border="0">
                 <tr>
                     <td>
                         <h3>Føtex Amager</h3>
-                        Amagerbrogade 123<br/>
-                        2300 København S<br/>
-                        Tlf: 88 77 66 55<br/>
+                        Amagerbrogade 123<br />
+                        2300 København S<br />
+                        Tlf: 88 77 66 55<br />
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <hr/>
-                        Sales 2012: 75.000 kr.<br/>
-                        Sales 2013: 90.000 kr.<br/>
-                        Sales 2014: 95.000 kr.<br/>
-                        Sales 2015: 12.000 kr.<br/>
+                        <hr />
+                        Sales 2012: 75.000 kr.<br />
+                        Sales 2013: 90.000 kr.<br />
+                        Sales 2014: 95.000 kr.<br />
+                        Sales 2015: 12.000 kr.<br />
                     </td>
                 </tr>
             </table>
@@ -118,7 +117,7 @@
     </tr>
 </table>
 
-<br/>
-<br/>
+<br />
+<br />
 
 

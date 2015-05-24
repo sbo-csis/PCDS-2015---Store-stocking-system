@@ -184,23 +184,45 @@
                 </tr>
             </thead>
             <tbody>
-
-                @foreach (var stock in Model)
+                @using (Html.BeginForm())
                 {
-                    foreach (var productStock in stock.ProductStocks)
+                    foreach (var stock in Model)
                     {
-                        if (productStock.CurrentAmount <= productStock.WarningCurrentAmount || productStock.CurrentAmount <= stock.WarningCurrentAmountLeft)
+                        var currentMissingProductCount = 0;
+
+                        foreach (var productstock in stock.ProductStocks)
                         {
-                            <tr class="critical">
-                                <td>@stock.Store.Id</td>
-                                <td>@stock.Store.Name</td>
-                                <td>@stock.DisplayType.Name</td>
-                                <td>@productStock.Product.Name</td>
-                                <td>@(productStock.WarningCurrentAmount ?? stock.WarningCurrentAmountLeft)</td>
-                                <td>@productStock.CurrentAmount</td>
-                            </tr>
+                            currentMissingProductCount += productstock.Capacity - productstock.CurrentAmount;
                         }
+                        
+                        @Html.HiddenFor(m => stock)
+                    
+                        <tr class="critical">
+                            <td>@Html.LabelFor(m => stock.Store.Name)</td>
+                            <td>@Html.LabelFor(m => stock.DisplayType.Name)</td>
+                            <td>currentMissingProductCount</td>
+                            <td>@Html.CheckBoxFor(m => stock.SelectedForRefilling)</td>
+                        </tr>
+
+
+                        @*foreach (var productStock in stock.ProductStocks)
+                        {
+                            if (productStock.CurrentAmount <= productStock.WarningAmount || productStock.CurrentAmount <= stock.WarningAmountLeft)
+                            {
+                                <tr class="critical">
+                                    <td>@stock.Store.Id</td>
+                                    <td>@stock.Store.Name</td>
+                                    <td>@stock.DisplayType.Name</td>
+                                    <td>@productStock.Product.Name</td>
+                                    <td>@(productStock.WarningAmount ?? stock.WarningAmountLeft)</td>
+                                    <td>@productStock.CurrentAmount</td>
+                                    <td></td>
+                                </tr>
+                            }
+                        }*@
                     }
+                    
+                    
                 }
             </tbody>
         </table>

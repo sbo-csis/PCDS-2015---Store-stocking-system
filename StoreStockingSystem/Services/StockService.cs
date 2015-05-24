@@ -308,6 +308,35 @@ namespace StoreStockingSystem.Services
         }
 
         /// <summary>
+        /// Get a list of each product that needs refilling and the count for each product.
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IEnumerable<Tuple<ProductStock, int>> GetProductRefillList(int storeId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var productStocks = (from t in context.ProductStocks
+                                 where t.Stock.StoreId == storeId
+                                 select t)
+                                 .Include(t => t.Stock)
+                                 .Include(t => t.Stock.Store)
+                                 .Include(t => t.Stock.DisplayType)
+                                 .Include(t => t.Product);
+
+            var result = new List<Tuple<ProductStock, int>>();
+
+            foreach (var productStock in productStocks)
+            {
+                result.Add(new Tuple<ProductStock, int>(productStock, productStock.Capacity - productStock.CurrentAmount));
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Internal method to calculate when a stock hits a specific product count.
         /// </summary>
         /// <param name="stockId"></param>

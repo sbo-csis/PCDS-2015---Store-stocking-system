@@ -56,7 +56,9 @@ namespace StoreStockingSystem.Services
         /// <returns></returns>
         public static IEnumerable<Tuple<ProductStock, int>> GetProductRefillList(int storeId, StoreStockingContext context = null)
         {
-            throw new NotImplementedException();
+            var refillList = StockService.GetProductRefillList(storeId, context);
+
+            return refillList;
         }
 
         /// <summary>
