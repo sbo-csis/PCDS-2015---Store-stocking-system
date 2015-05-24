@@ -19,14 +19,8 @@ namespace StoreStockingSystem.Models
         {
             Configuration.ProxyCreationEnabled = false; // Currently disables lazy loading to avoid includes all over the place.
 
-            if (Database.Exists())
-            {
                 Database.SetInitializer(new RecreateDbIfModelChangesAndInsertSeedData()); //TODO: MUST NOT run in production. Enable check for environment, and disable if production.
-            }
-            else
-            {
-                Database.SetInitializer(new BuildDatabaseFromScratch()); //TODO: MUST NOT run in production. Enable check for environment, and disable if production.
-            }
+
 
         }
 
@@ -37,15 +31,6 @@ namespace StoreStockingSystem.Models
                 TestData.BuildData(context);
             }
         }
-
-        private class BuildDatabaseFromScratch : CreateDatabaseIfNotExists<StoreStockingContext>
-        {
-            protected override void Seed(StoreStockingContext context)
-            {
-                TestData.BuildData(context);
-            }
-        }
-
     }
 
 }
