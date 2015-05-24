@@ -235,7 +235,10 @@ namespace StoreStockingSystem.Services
             }
 
             var sortedResults = result.ToList();
-                sortedResults.Sort((firstPair, nextPair) => firstPair.Key.StorePriority.CompareTo(nextPair.Key.StorePriority));
+
+            var comparer = new FuzzyComparer();
+
+            sortedResults.Sort(comparer);
 
             return sortedResults;
         }
@@ -275,10 +278,32 @@ namespace StoreStockingSystem.Services
                 }
             }
 
-            var sortedResults = result.ToList();
-            sortedResults.Sort((firstPair, nextPair) => firstPair.Key.StorePriority.CompareTo(nextPair.Key.StorePriority));
+            var results = result.ToList();
 
-            return sortedResults;
+            var comparer = new FuzzyComparer();
+
+            results.Sort(comparer);
+
+            return results;
+        }
+
+        private class FuzzyComparer : IComparer<KeyValuePair<Store, List<RefillWarningInfo>>>
+        {
+            int IComparer<KeyValuePair<Store, List<RefillWarningInfo>>>.Compare(KeyValuePair<Store, List<RefillWarningInfo>> x, KeyValuePair<Store, List<RefillWarningInfo>> y)
+            {
+                return Compare(x, y);
+            }
+
+            private static int Compare(KeyValuePair<Store, List<RefillWarningInfo>> entry1, KeyValuePair<Store, List<RefillWarningInfo>> entry2)
+            {
+                if (entry1.Key.StorePriority == entry2.Key.StorePriority)
+                    return 0;
+
+                if (entry1.Key.StorePriority > entry2.Key.StorePriority)
+                    return 1;
+                
+                return -1;
+            }
         }
 
         public static List<SaleSpeed> GetPredictedStoreSalesForPeriod(int storeId, DateTime startDate, DateTime endDate, StoreStockingContext context)
