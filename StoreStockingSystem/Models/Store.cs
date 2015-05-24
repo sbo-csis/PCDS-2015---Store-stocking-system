@@ -18,6 +18,6 @@ namespace StoreStockingSystem.Models
         public int WarningPercentage { get; set; }
         //1 is highest
         [Range(1,3)]
-        public int StorePriority { get; set; }
+        public int? StorePriority { get; set; }
     }
 }
