@@ -189,15 +189,15 @@
                 {
                     foreach (var productStock in stock.ProductStocks)
                     {
-                        if (productStock.Amount <= productStock.WarningAmount || productStock.Amount <= stock.WarningAmountLeft)
+                        if (productStock.CurrentAmount <= productStock.WarningCurrentAmount || productStock.CurrentAmount <= stock.WarningCurrentAmountLeft)
                         {
                             <tr class="critical">
                                 <td>@stock.Store.Id</td>
                                 <td>@stock.Store.Name</td>
                                 <td>@stock.DisplayType.Name</td>
                                 <td>@productStock.Product.Name</td>
-                                <td>@(productStock.WarningAmount ?? stock.WarningAmountLeft)</td>
-                                <td>@productStock.Amount</td>
+                                <td>@(productStock.WarningCurrentAmount ?? stock.WarningCurrentAmountLeft)</td>
+                                <td>@productStock.CurrentAmount</td>
                             </tr>
                         }
                     }

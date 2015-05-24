@@ -40,7 +40,7 @@ namespace StoreStockingSystem.Test.Services
                 if (productstock == null)
                     throw new Exception("No product stock found.");
 
-                Assert.AreEqual(productstock.Amount, 3);
+                Assert.AreEqual(productstock.CurrentAmount, 3);
                 Assert.AreEqual(productstock.ProductId, product.Id);
                 Assert.AreEqual(productstock.StockId, stock.Id);
             }
@@ -78,7 +78,7 @@ namespace StoreStockingSystem.Test.Services
                 if (productstock == null)
                     throw new Exception("Could not create product stock.");
 
-                Assert.AreEqual(productstock.Amount, 3);
+                Assert.AreEqual(productstock.CurrentAmount, 3);
                 Assert.AreEqual(productstock.ProductId, product.Id);
                 Assert.AreEqual(productstock.StockId, stock.Id);
 

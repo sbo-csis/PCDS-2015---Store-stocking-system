@@ -49,6 +49,17 @@ namespace StoreStockingSystem.Services
         }
 
         /// <summary>
+        /// Get a list of each product that needs refilling and the count for each product.
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IEnumerable<Tuple<ProductStock, int>> GetProductRefillList(int storeId, StoreStockingContext context = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Get stocks for each product in a store.
         /// </summary>
         /// <param name="storeId">ID for store.</param>

@@ -199,7 +199,7 @@ namespace StoreStockingSystem.Data
             {
                 productStock = new ProductStock
                 {
-                    Amount = new Random().Next(10, 500),
+                    CurrentAmount = new Random().Next(10, 500),
                     Product = product,
                     StockId = stock.Id
                 };

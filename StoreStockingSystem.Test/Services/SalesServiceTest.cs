@@ -49,7 +49,7 @@ namespace StoreStockingSystem.Test.Services
                 if (productstock == null)
                     throw new Exception("No product stock found.");
 
-                Assert.AreEqual(2, productstock.Amount);
+                Assert.AreEqual(2, productstock.CurrentAmount);
             }
         }
 
@@ -94,7 +94,7 @@ namespace StoreStockingSystem.Test.Services
                 if (productstock == null)
                     throw new Exception("No product stock found.");
 
-                Assert.AreEqual(4, productstock.Amount);
+                Assert.AreEqual(4, productstock.CurrentAmount);
             }
         }
 

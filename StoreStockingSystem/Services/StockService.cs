@@ -168,14 +168,14 @@ namespace StoreStockingSystem.Services
             {
                 context.ProductStocks.Add((new ProductStock
                 {
-                    Amount = amount,
+                    CurrentAmount = amount,
                     ProductId = product.Id,
                     StockId = stock.Id
                 }));
             }
             else //Updating already existing product to stock
             {
-                productStock.Amount += amount;
+                productStock.CurrentAmount += amount;
             }
 
             context.SaveChanges();
@@ -260,7 +260,7 @@ namespace StoreStockingSystem.Services
             foreach (var stock in stocks)
             {
                 var productStocks = (from t in stock.ProductStocks
-                                     where t.Amount < t.WarningAmount || t.Amount < stock.WarningAmountLeft
+                                     where t.CurrentAmount < t.WarningAmount || t.CurrentAmount < stock.WarningAmountLeft
                                      select t).ToList();
 
                 if (productStocks.Count > 0)
@@ -351,7 +351,7 @@ namespace StoreStockingSystem.Services
             //Currently 30 days future period hardcoded as the period we want sales speed for.
             var saleSpeed = SalesService.BuildSaleSpeedForProductStock(productStock, DateTime.Now, DateTime.Now.AddDays(30));
 
-            var currentStockCount = productStock.Amount;
+            var currentStockCount = productStock.CurrentAmount;
 
             var daysUntilTargetLevel = 0;
 
