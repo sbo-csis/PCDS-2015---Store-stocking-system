@@ -195,6 +195,7 @@ namespace StoreStockingSystem.Services
                 throw new ArgumentException("Failed adding product to stock. Could not find product id: " + productId);
 
             AddProductToStock(stock, product, amount, context);
+            StoreService.SetRefillFlag(false, stock.StoreId, context); //When adding stock manually, this counts as a refill.
         }
 
         public static void ModifyStockBasedOnSale(Sale sale, StoreStockingContext context = null)

@@ -222,5 +222,20 @@ namespace StoreStockingSystem.Services
 
             return capacity;
         }
+
+        public static void SetRefillFlag(bool flag, int storeId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var store = (from t in context.Stores
+                         where t.Id == storeId
+                         select t).FirstOrDefault();
+
+            if (store != null)
+            {
+                store.BeingRefilled = flag;
+            }
+        }
     }
 }

@@ -23,5 +23,6 @@ namespace StoreStockingSystem.Models
         //1 is highest
         [Range(1,3)]
         public int? StorePriority { get; set; }
+        public bool BeingRefilled { get; set; }
     }
 }
