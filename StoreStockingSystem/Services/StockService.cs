@@ -242,7 +242,8 @@ namespace StoreStockingSystem.Services
             RemoveProductFromStock(GetStock(stockId, context), ProductService.GetProduct(productId, context), context);
         }
 
-        public static List<Stock> GetLowStocks(StoreStockingContext context = null)
+        // Returns a StockRefill object
+        public static StockRefill GetLowStocks(StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
@@ -267,7 +268,19 @@ namespace StoreStockingSystem.Services
                     result.Add(stock);
             }
 
-            return result;
+            var stockRefill = new StockRefill {
+                Stocks = result,
+                RefillResponseible = null};
+
+            //return NewStock(new Stock
+            //{
+            //    Capacity = capacity ?? displayType.Capacity, // Default capacity equal to displaytypes standard capacity
+            //    DisplayTypeId = displayType.Id,
+            //    StoreId = store.Id,
+            //    WarningAmountLeft = warningPercentage ?? 10 // Default warning at 10%
+            //}, context);
+
+            return stockRefill;
         }
 
         /// <summary>
