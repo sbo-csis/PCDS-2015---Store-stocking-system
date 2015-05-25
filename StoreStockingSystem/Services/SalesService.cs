@@ -148,6 +148,28 @@ namespace StoreStockingSystem.Services
             return yearSales;
         }
 
+        public static PerformanceDetail StorePerformanceDetails(int storeId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            PerformanceDetail result = new PerformanceDetail();
+            List<double> sales = new List<double>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                DateTime fromDate = new DateTime(DateTime.UtcNow.Year, i, 1);
+                DateTime toDate = fromDate.AddMonths(1).AddDays(-1);
+
+                //Can i add an int to a list of double??
+                sales.Add(GetSales(storeId, fromDate, toDate).Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice)));
+            }
+
+            result.predictedSales = GetPredictedStoreSales(storeId);
+            result.actualSales = sales;
+
+            return result;
+        } 
 
         //Returns a list where each value is the predicted sale in the i'th month
         //TODO: change logic & refactor so it is possible to get expected sales sum for a specific start and end date

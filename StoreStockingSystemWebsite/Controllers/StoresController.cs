@@ -29,10 +29,10 @@ namespace PCDSWebsite.Controllers
             return View(stocks);
         }
 
+        //Pass parameter id
         public ActionResult StorePerformanceDetails()
         {
-            
-            return View();
+            return View(SalesService.StorePerformanceDetails(99));
         }
 
         public ActionResult CriticalStores()

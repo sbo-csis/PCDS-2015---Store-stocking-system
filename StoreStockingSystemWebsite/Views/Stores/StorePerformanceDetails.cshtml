@@ -1,5 +1,11 @@
 ﻿@using System.Globalization
-@model List<StoreStockingSystem.Models.Stock>
+@using System.Web.UI.WebControls
+@using NUnit.Framework.Constraints
+@using PCDSWebsite.Models
+@using StoreStockingSystem.Models
+@using StoreStockingSystem.Test
+@model PerformanceDetail
+       
 @{
     ViewBag.Title = "Store Details";
 }
@@ -7,17 +13,12 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-   
+
     <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
     <script>
-    $(function () {
+    $(function() {
         $("#datepickerStart").datepicker();
         $("#datepickerEnd").datepicker();
-        @{
-            DateTime fromDate = new DateTime(DateTime.UtcNow.Year, 1, 1);
-            DateTime toDate = new DateTime(DateTime.UtcNow.Year, 12, 31);
-            List<double> sales = StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1);
-        }
         $("#container").highcharts({
             chart: {
                 type: 'bar'
@@ -64,61 +65,59 @@
             credits: {
                 enabled: false
             },
-            series: [
-            {
-                name: 'Predicted sales',
-                data: @StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1)
-            }, {
-                name: 'Actual sales',
-                data: @StoreStockingSystem.Services.SalesService.GetSales(1, fromDate, toDate)
-            }]
-            });
-        });
+            series: [{
+                    name: 'Actual sales',
+                    data: @Model.actualSales},
+                        {
+                    name: 'Predicted sales',
+                    data: @Model.predictedSales}] /*data: [10.0, 20.0, 30.0, 30.0, 40.0, 50.0, 60.0]*/
+    });
+    });
     </script>
-    
+
 
 }
 
 
-<h2>Store Details</h2>
-<br/>
+    <h2>Store Details</h2>
+    <br/>
 
-<div align="center">
-    <p> Start date: <input type="text" id="datepickerStart">
-        End date: <input type="text" id="datepickerEnd">
-    </p>
-</div>
-<div id="container" style="height: 400px; min-width: 310px"></div>
-<table border="0">
-    <tr >
-        <td width="300px" style="text-align: left; vertical-align: top; padding: 0">
-            <table border="0">
-                <tr>
-                    <td>
-                        <h3>Føtex Amager</h3>
-                        Amagerbrogade 123<br/>
-                        2300 København S<br/>
-                        Tlf: 88 77 66 55<br/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <hr/>
-                        Sales 2012: 75.000 kr.<br/>
-                        Sales 2013: 90.000 kr.<br/>
-                        Sales 2014: 95.000 kr.<br/>
-                        Sales 2015: 12.000 kr.<br/>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td width="700px" style="text-align: left; vertical-align: top; padding: 0">
-            <div id="container"></div>
-        </td>
-    </tr>
-</table>
+    <div align="center">
+        <p> Start date: <input type="text" id="datepickerStart">
+            End date: <input type="text" id="datepickerEnd">
+        </p>
+    </div>
+    <div id="container" style="height: 400px; min-width: 310px"></div>
+    <table border="0">
+        <tr >
+            <td width="300px" style="text-align: left; vertical-align: top; padding: 0">
+                <table border="0">
+                    <tr>
+                        <td>
+                            <h3>Føtex Amager</h3>
+                            Amagerbrogade 123<br/>
+                            2300 København S<br/>
+                            Tlf: 88 77 66 55<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <hr/>
+                            Sales 2012: 75.000 kr.<br/>
+                            Sales 2013: 90.000 kr.<br/>
+                            Sales 2014: 95.000 kr.<br/>
+                            Sales 2015: 12.000 kr.<br/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="700px" style="text-align: left; vertical-align: top; padding: 0">
+                <div id="container"></div>
+            </td>
+        </tr>
+    </table>
 
-<br/>
-<br/>
+    <br/>
+    <br/>
 
 
