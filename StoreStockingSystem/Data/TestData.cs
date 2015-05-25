@@ -84,14 +84,62 @@ namespace StoreStockingSystem.Data
                 if (chain == null)
                     throw new Exception("Failed to add store: Chain internal ID not found for external chain ID " + externalChainIdStr);
 
+                var random = new Random();
+
+                var fakeLocation = FakeLocations[random.Next(FakeLocations.Count)];
+
                 StoreService.AddStore(new Store
                 {
                     ChainId = chain.Id,
                     ExternalId = values[1].Replace("\"", string.Empty),
-                    Name = values[2].Replace("\"", string.Empty)
+                    Name = values[2].Replace("\"", string.Empty),
+                    Country = fakeLocation.Country,
+                    Address = fakeLocation.Address,
+                    PostalCode = fakeLocation.PostalCode,
+                    City = fakeLocation.City
                 }, context);
             }
             context.SaveChanges();
+        }
+
+        private static readonly List<FakeLocation> FakeLocations = new List<FakeLocation>
+        {
+            new FakeLocation
+            {
+                Country = "Denmark",
+                Address = "Tigervej 11",
+                City = "Køge",
+                PostalCode = "4600"
+            },
+            new FakeLocation
+            {
+                Country = "Denmark",
+                Address = "Vesterbrogade 3",
+                City = "København",
+                PostalCode = "1620"
+            },
+            new FakeLocation
+            {
+                Country = "Denmark",
+                Address = "Vermlandsgade 2",
+                City = "København",
+                PostalCode = "2300"
+            },
+            new FakeLocation
+            {
+                Country = "Denmark",
+                Address = "Gurrevej 6",
+                City = "Helsingør",
+                PostalCode = "3000"
+            }
+        };
+
+        private class FakeLocation
+        {
+            public string Country { get; set; }
+            public string Address { get; set; }
+            public string PostalCode { get; set; }
+            public string City { get; set; }
         }
 
         private class StoreIdRelation
