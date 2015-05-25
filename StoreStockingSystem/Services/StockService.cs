@@ -243,6 +243,34 @@ namespace StoreStockingSystem.Services
             RemoveProductFromStock(GetStock(stockId, context), ProductService.GetProduct(productId, context), context);
         }
 
+        public static List<Stock> GetStocksNeedingRefilling(StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var stocks = (from t in context.Stocks
+                          select t)
+                          .Include(t => t.ProductStocks)
+                          .Include(t => t.ProductStocks.Select(p => p.Product))
+                          .Include(t => t.DisplayType)
+                          .Include(t => t.Store)
+                          .ToList();
+
+            var result = new List<Stock>();
+
+            foreach (var stock in stocks)
+            {
+                foreach (var productStock in stock.ProductStocks)
+                {
+                    if(productStock.CurrentAmount < productStock.Capacity)
+                        result.Add(stock);
+                    break;
+                }
+            }
+
+            return result;
+        }
+
         // Returns a StockRefill object
         public static StockRefill GetLowStocks(StoreStockingContext context = null)
         {
@@ -269,9 +297,11 @@ namespace StoreStockingSystem.Services
                     result.Add(stock);
             }
 
-            var stockRefill = new StockRefill {
+            var stockRefill = new StockRefill
+            {
                 Stocks = result,
-                RefillResponseible = null};
+                RefillResponseible = null
+            };
 
             //return NewStock(new Stock
             //{

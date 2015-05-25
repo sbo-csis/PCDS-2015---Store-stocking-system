@@ -228,7 +228,7 @@ namespace StoreStockingSystem.Data
             {
                 stock = new Stock
                 {
-                    Capacity = 100000,
+                    Capacity = 500,
                     DisplayTypeId = displayTypeId,
                     StoreId = cacheResult.InternalId,
                     WarningAmountLeft = 2
@@ -247,11 +247,11 @@ namespace StoreStockingSystem.Data
             {
                 productStock = new ProductStock
                 {
-                    CurrentAmount = 10,
+                    CurrentAmount = 25,
                     Product = product,
                     StockId = stock.Id,
-                    Capacity = 10,
-                    WarningAmount = 3
+                    Capacity = 40,
+                    WarningAmount = 15
                 };
 
                 context.ProductStocks.Add(productStock);

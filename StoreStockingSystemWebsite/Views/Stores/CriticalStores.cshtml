@@ -1,4 +1,4 @@
-﻿@model StoreStockingSystem.Models.StockRefill
+﻿@model List<StoreStockingSystem.Models.Stock>
 
 @{
     ViewBag.Title = "Critial Stores";
@@ -169,13 +169,13 @@
                     }
 
                     Geocoder coder = new Geocoder(this);
-                        address = coder.getFromLocationName(strAddress,5);
-                        if (address == null) {
-                            return null;
-                        }
-                        Address location = address.get(0);
-                        location.getLatitude();
-                        location.getLongitude();
+                    address = coder.getFromLocationName(strAddress,5);
+                    if (address == null) {
+                        return null;
+                    }
+                    Address location = address.get(0);
+                    location.getLatitude();
+                    location.getLongitude();
 
                     // Old address selection
                     //var waypts = [];
@@ -241,94 +241,69 @@
         }
 
         <h1>Critical stock status</h1>
-        <table id="criticalCustomers" class="display" style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>Store id</th>
-                    <th>Store name</th>
-                    <th>Stock type</th>
-                    <th>Product name</th>
-                    <th>Warning amount</th>
-                    <th>Current amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                @using (Html.BeginForm())
-                {
-                    foreach (var stock in Model.Stocks)
+
+        @using (Html.BeginForm())
+        {
+            <table id="criticalCustomers" class="display" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Store id</th>
+                        <th>Store name</th>
+                        <th>Stock type</th>
+                        <th>Missing product count</th>
+                        <th>Refill</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var stock in Model)
                     {
-                        var currentMissingProductCount = 0;
+                        Html.HiddenFor(m => stock.DisplayType.Name);
+                        
+                        if (stock.SelectedForRefilling)
+                        {
+                            continue;
+                        }
 
-                        @*foreach (var productstock in stock.ProductStocks)
-                            {
-                                currentMissingProductCount += productstock.Capacity - productstock.CurrentAmount;
-                            }
-
-                            @Html.HiddenFor(m => stock)
-
-                            <tr class="critical">
-                                <td>@Html.LabelFor(m => stock.Store.Name)</td>
-                                <td>@Html.LabelFor(m => stock.DisplayType.Name)</td>
-                                <td>currentMissingProductCount</td>
-                                <td>@Html.CheckBoxFor(m => stock.SelectedForRefilling)</td>
-                            </tr>*@
-
+                        var productsMissing = 0;
 
                         foreach (var productStock in stock.ProductStocks)
                         {
-                            if (productStock.CurrentAmount <= productStock.WarningAmount || productStock.CurrentAmount <= stock.WarningAmountLeft)
+                            Html.HiddenFor(m => productStock.Product.Name);
+                            Html.HiddenFor(m => productStock.CurrentAmount);
+                            Html.HiddenFor(m => productStock.Capacity);
+                            
+                            if (productStock.CurrentAmount <= productStock.Capacity)
                             {
-                                <tr class="critical">
-                                    <td>@stock.Store.Id</td>
-                                    <td>@stock.Store.Name</td>
-                                    <td>@stock.DisplayType.Name</td>
-                                    <td>@productStock.Product.Name</td>
-                                    <td>@(productStock.WarningAmount ?? stock.WarningAmountLeft)</td>
-                                    <td>@productStock.CurrentAmount</td>
-                                </tr>
+                                if (productStock.CurrentAmount >= 0 && productStock.Capacity >= productStock.CurrentAmount)
+                                {
+                                    productsMissing += productStock.Capacity - productStock.CurrentAmount;
+                                }
+                                else
+                                {
+                                    productsMissing += productStock.Capacity + Math.Abs(productStock.CurrentAmount);
+                                }
                             }
                         }
+
+                        <tr class="critical">
+                            <td>@Html.DisplayFor(m => stock.Store.Id)</td>
+                            <td>@Html.DisplayFor(m => stock.Store.Name)</td>
+                            <td>@Html.DisplayFor(m => stock.DisplayType.Name)</td>
+                            <td>@productsMissing</td>
+                            <td>@Html.CheckBoxFor(m => stock.SelectedForRefilling)</td>
+                        </tr>
                     }
 
+                </tbody>
+            </table>
+            <p>
+                <input type="submit" value="Confirm refilling" />
+            </p>
+        }
 
-                }
-            </tbody>
-        </table>
 
-        <h3>Selected stores</h3>
-        <table id="selectedCustomers" class="display" style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>Store id</th>
-                    <th>Store name</th>
-                    <th>Stock type</th>
-                    <th>Product name</th>
-                    <th>Warning amount</th>
-                    <th>Current amount</th>
-                    @*<th>Address</th>*@
-                </tr>
-            </thead>
-            <tbody>
 
-                @*@foreach (var stock in Model)
-                    {
-                        foreach (var productStock in stock.ProductStocks)
-                        {
-                            if (productStock.Amount <= productStock.WarningAmount || productStock.Amount <= stock.WarningAmountLeft)
-                            {
-                                <tr class="critical">
-                                    <td>@stock.Store.Id</td>
-                                    <td>@stock.Store.Name</td>
-                                    <td>@stock.DisplayType.Name</td>
-                                    <td>@productStock.Product.Name</td>
-                                    <td>@(productStock.WarningAmount ?? stock.WarningAmountLeft)</td>
-                                    <td>@productStock.Amount</td>
-                                </tr>
-                            }
-                        }
-                    }*@
-            </tbody>
-        </table>
 
         <h3>Waypoints</h3>
         <table id="waypoints2" class="display" style="width: 100%;">
@@ -498,6 +473,9 @@
             </tr>
         </table>
     </div>
+
+
+
 
 
 </body>

@@ -1,0 +1,35 @@
+﻿@model List<PCDSWebsite.Models.RefillEntry>
+
+@{
+    ViewBag.Title = "Critial Stores";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Store Refill</title>
+</head>
+<body>
+    <h1>Store refill run</h1>
+    <table class="display" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Display Type</th>
+                <th>Product Name</th>
+                <th>Count to pack</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var refillEntry in Model)
+            {
+                <tr class="critical">
+                    <td>@refillEntry.DisplayType.Name</td>
+                    <td>@refillEntry.Product.Name</td>
+                    <td>@refillEntry.RefillCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
