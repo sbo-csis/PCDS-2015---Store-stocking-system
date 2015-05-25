@@ -118,7 +118,7 @@ namespace StoreStockingSystem.Test.Services
 
                 var warningStocks = StockService.GetLowStocks(context);
 
-                Assert.AreEqual(warningStocks.Find(stock1 => stock1.Id == stock.Id), stock);
+                Assert.AreEqual(warningStocks.Stocks.Find(stock1 => stock1.Id == stock.Id), stock);
             }
         }
 
@@ -150,7 +150,7 @@ namespace StoreStockingSystem.Test.Services
 
                 var warningStocks = StockService.GetLowStocks(context);
 
-                Assert.AreEqual(warningStocks.Find(stock1 => stock1.Id == stock.Id), null);
+                Assert.AreEqual(warningStocks.Stocks.Find(stock1 => stock1.Id == stock.Id), null);
             }
         }
     }
