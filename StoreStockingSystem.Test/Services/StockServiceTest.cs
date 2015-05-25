@@ -40,7 +40,7 @@ namespace StoreStockingSystem.Test.Services
                 if (productstock == null)
                     throw new Exception("No product stock found.");
 
-                Assert.AreEqual(productstock.Amount, 3);
+                Assert.AreEqual(productstock.CurrentAmount, 3);
                 Assert.AreEqual(productstock.ProductId, product.Id);
                 Assert.AreEqual(productstock.StockId, stock.Id);
             }
@@ -78,7 +78,7 @@ namespace StoreStockingSystem.Test.Services
                 if (productstock == null)
                     throw new Exception("Could not create product stock.");
 
-                Assert.AreEqual(productstock.Amount, 3);
+                Assert.AreEqual(productstock.CurrentAmount, 3);
                 Assert.AreEqual(productstock.ProductId, product.Id);
                 Assert.AreEqual(productstock.StockId, stock.Id);
 
@@ -118,7 +118,7 @@ namespace StoreStockingSystem.Test.Services
 
                 var warningStocks = StockService.GetLowStocks(context);
 
-                Assert.AreEqual(warningStocks.Find(stock1 => stock1.Id == stock.Id), stock);
+                Assert.AreEqual(warningStocks.Stocks.Find(stock1 => stock1.Id == stock.Id), stock);
             }
         }
 
@@ -150,7 +150,7 @@ namespace StoreStockingSystem.Test.Services
 
                 var warningStocks = StockService.GetLowStocks(context);
 
-                Assert.AreEqual(warningStocks.Find(stock1 => stock1.Id == stock.Id), null);
+                Assert.AreEqual(warningStocks.Stocks.Find(stock1 => stock1.Id == stock.Id), null);
             }
         }
     }

@@ -168,14 +168,14 @@ namespace StoreStockingSystem.Services
             {
                 context.ProductStocks.Add((new ProductStock
                 {
-                    Amount = amount,
+                    CurrentAmount = amount,
                     ProductId = product.Id,
                     StockId = stock.Id
                 }));
             }
             else //Updating already existing product to stock
             {
-                productStock.Amount += amount;
+                productStock.CurrentAmount += amount;
             }
 
             context.SaveChanges();
@@ -195,6 +195,7 @@ namespace StoreStockingSystem.Services
                 throw new ArgumentException("Failed adding product to stock. Could not find product id: " + productId);
 
             AddProductToStock(stock, product, amount, context);
+            StoreService.SetRefillFlag(false, stock.StoreId, context); //When adding stock manually, this counts as a refill.
         }
 
         public static void ModifyStockBasedOnSale(Sale sale, StoreStockingContext context = null)
@@ -242,7 +243,8 @@ namespace StoreStockingSystem.Services
             RemoveProductFromStock(GetStock(stockId, context), ProductService.GetProduct(productId, context), context);
         }
 
-        public static List<Stock> GetLowStocks(StoreStockingContext context = null)
+        // Returns a StockRefill object
+        public static StockRefill GetLowStocks(StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();
@@ -260,14 +262,26 @@ namespace StoreStockingSystem.Services
             foreach (var stock in stocks)
             {
                 var productStocks = (from t in stock.ProductStocks
-                                     where t.Amount < t.WarningAmount || t.Amount < stock.WarningAmountLeft
+                                     where t.CurrentAmount < t.WarningAmount || t.CurrentAmount < stock.WarningAmountLeft
                                      select t).ToList();
 
                 if (productStocks.Count > 0)
                     result.Add(stock);
             }
 
-            return result;
+            var stockRefill = new StockRefill {
+                Stocks = result,
+                RefillResponseible = null};
+
+            //return NewStock(new Stock
+            //{
+            //    Capacity = capacity ?? displayType.Capacity, // Default capacity equal to displaytypes standard capacity
+            //    DisplayTypeId = displayType.Id,
+            //    StoreId = store.Id,
+            //    WarningAmountLeft = warningPercentage ?? 10 // Default warning at 10%
+            //}, context);
+
+            return stockRefill;
         }
 
         /// <summary>
@@ -305,6 +319,35 @@ namespace StoreStockingSystem.Services
             var predictedDate = GetPredictedStockTargetDate(stockId, 0, context);
 
             return predictedDate;
+        }
+
+        /// <summary>
+        /// Get a list of each product that needs refilling and the count for each product.
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IEnumerable<Tuple<ProductStock, int>> GetProductRefillList(int storeId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var productStocks = (from t in context.ProductStocks
+                                 where t.Stock.StoreId == storeId
+                                 select t)
+                                 .Include(t => t.Stock)
+                                 .Include(t => t.Stock.Store)
+                                 .Include(t => t.Stock.DisplayType)
+                                 .Include(t => t.Product);
+
+            var result = new List<Tuple<ProductStock, int>>();
+
+            foreach (var productStock in productStocks)
+            {
+                result.Add(new Tuple<ProductStock, int>(productStock, productStock.Capacity - productStock.CurrentAmount));
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -351,7 +394,7 @@ namespace StoreStockingSystem.Services
             //Currently 30 days future period hardcoded as the period we want sales speed for.
             var saleSpeed = SalesService.BuildSaleSpeedForProductStock(productStock, DateTime.Now, DateTime.Now.AddDays(30));
 
-            var currentStockCount = productStock.Amount;
+            var currentStockCount = productStock.CurrentAmount;
 
             var daysUntilTargetLevel = 0;
 

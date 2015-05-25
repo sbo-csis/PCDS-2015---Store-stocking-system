@@ -7,7 +7,11 @@ namespace StoreStockingSystem.Models
     {
         [Key]
         public int Id { get; set; }
-        public virtual string Name { get; set; }
+        public string Name { get; set; }
+        public string Country { get; set; }
+        public string Address { get; set; }
+        public string PostalCode { get; set; }
+        public string City { get; set; }
         public string ExternalId { get; set; }
         [ForeignKey("SalesPerson")]
         public int? SalesPersonId { get; set; }
@@ -18,6 +22,7 @@ namespace StoreStockingSystem.Models
         public int WarningPercentage { get; set; }
         //1 is highest
         [Range(1,3)]
-        public int StorePriority { get; set; }
+        public int? StorePriority { get; set; }
+        public bool BeingRefilled { get; set; }
     }
 }

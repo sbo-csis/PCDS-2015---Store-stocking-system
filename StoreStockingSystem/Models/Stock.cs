@@ -32,5 +32,8 @@ namespace StoreStockingSystem.Models
         public int WarningAmountLeft { get; set; }
 
         public virtual List<ProductStock> ProductStocks { get; set; }
+
+        [NotMapped]
+        public bool SelectedForRefilling { get; set; }
     }
 }

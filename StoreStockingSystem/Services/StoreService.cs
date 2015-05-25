@@ -49,6 +49,19 @@ namespace StoreStockingSystem.Services
         }
 
         /// <summary>
+        /// Get a list of each product that needs refilling and the count for each product.
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IEnumerable<Tuple<ProductStock, int>> GetProductRefillList(int storeId, StoreStockingContext context = null)
+        {
+            var refillList = StockService.GetProductRefillList(storeId, context);
+
+            return refillList;
+        }
+
+        /// <summary>
         /// Get stocks for each product in a store.
         /// </summary>
         /// <param name="storeId">ID for store.</param>
@@ -208,6 +221,21 @@ namespace StoreStockingSystem.Services
                                 select t.Capacity).FirstOrDefault();
 
             return capacity;
+        }
+
+        public static void SetRefillFlag(bool flag, int storeId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var store = (from t in context.Stores
+                         where t.Id == storeId
+                         select t).FirstOrDefault();
+
+            if (store != null)
+            {
+                store.BeingRefilled = flag;
+            }
         }
     }
 }

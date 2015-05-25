@@ -34,20 +34,31 @@
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Sales (millions)',
-                    align: 'high'
+                    text: 'Monthly sales vs monthly expected sales'
                 },
-                labels: {
-                    overflow: 'justify'
-                }
-            },
-            tooltip: {
-                valueSuffix: ' millions'
-            },
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        enabled: true
+                xAxis: {
+                    categories: [
+                        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                    ]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Sales (millions)',
+                        align: 'high'
+                    },
+                    labels: {
+                        overflow: 'justify'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ' millions'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
                     }
                 }
             },
@@ -78,46 +89,47 @@
 
 }
 
+<h2>Store Details</h2>
+<br />
 
-    <h2>Store Details</h2>
-    <br/>
+<div align="center">
+    <p>
+        Start date: <input type="text" id="datepickerStart">
+        End date: <input type="text" id="datepickerEnd">
+    </p>
+</div>
+<div id="container" style="height: 400px; min-width: 310px"></div>
+<table border="0">
+    <tr>
+        <td width="300px" style="text-align: left; vertical-align: top; padding: 0">
+            <table border="0">
+                <tr>
+                    <td>
+                        <h3>Føtex Amager</h3>
+                        Amagerbrogade 123<br />
+                        2300 København S<br />
+                        Tlf: 88 77 66 55<br />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <hr />
+                        Sales 2012: 75.000 kr.<br />
+                        Sales 2013: 90.000 kr.<br />
+                        Sales 2014: 95.000 kr.<br />
+                        Sales 2015: 12.000 kr.<br />
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td width="700px" style="text-align: left; vertical-align: top; padding: 0">
+            <div id="container"></div>
+        </td>
+    </tr>
+</table>
 
-    <div align="center">
-        <p> Start date: <input type="text" id="datepickerStart">
-            End date: <input type="text" id="datepickerEnd">
-        </p>
-    </div>
-    <div id="container" style="height: 400px; min-width: 310px"></div>
-    <table border="0">
-        <tr >
-            <td width="300px" style="text-align: left; vertical-align: top; padding: 0">
-                <table border="0">
-                    <tr>
-                        <td>
-                            <h3>Føtex Amager</h3>
-                            Amagerbrogade 123<br/>
-                            2300 København S<br/>
-                            Tlf: 88 77 66 55<br/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <hr/>
-                            Sales 2012: 75.000 kr.<br/>
-                            Sales 2013: 90.000 kr.<br/>
-                            Sales 2014: 95.000 kr.<br/>
-                            Sales 2015: 12.000 kr.<br/>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <td width="700px" style="text-align: left; vertical-align: top; padding: 0">
-                <div id="container"></div>
-            </td>
-        </tr>
-    </table>
-
-    <br/>
-    <br/>
+<br />
+<br />
+>>>>>>> origin/master
 
 

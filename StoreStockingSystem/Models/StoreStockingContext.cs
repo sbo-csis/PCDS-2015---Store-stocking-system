@@ -14,10 +14,10 @@ namespace StoreStockingSystem.Models
         public DbSet<SalesPerson> SalesPersons { get; set; }
         public DbSet<ProductStock> ProductStocks { get; set; }
 
-
         public StoreStockingContext()
         {
             Configuration.ProxyCreationEnabled = false; // Currently disables lazy loading to avoid includes all over the place.
+
             Database.SetInitializer(new RecreateDbIfModelChangesAndInsertSeedData()); //TODO: MUST NOT run in production. Enable check for environment, and disable if production.
         }
 

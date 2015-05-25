@@ -16,7 +16,8 @@ namespace StoreStockingSystem.Models
         [Column(Order = 2)] 
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }
-        public int Amount { get; set; }
+        public int CurrentAmount { get; set; }
+        public int Capacity { get; set; }
         public int? WarningAmount { get; set; }
         public DateTime? ExpectedWarningDate { get; set; }
     }

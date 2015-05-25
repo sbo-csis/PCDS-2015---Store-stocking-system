@@ -257,9 +257,26 @@ namespace StoreStockingSystem.Services
             }
 
             var sortedResults = result.ToList();
-                sortedResults.Sort((firstPair, nextPair) => firstPair.Key.StorePriority.CompareTo(nextPair.Key.StorePriority));
+
+            var comparer = new SalesWarningComparer();
+
+            sortedResults.Sort(comparer);
 
             return sortedResults;
+        }
+
+        private class SalesWarningComparer : IComparer<KeyValuePair<Store, List<SalesWarningInfo>>>
+        {
+            public int Compare(KeyValuePair<Store, List<SalesWarningInfo>> entry1, KeyValuePair<Store, List<SalesWarningInfo>> entry2)
+            {
+                if (entry1.Key.StorePriority == entry2.Key.StorePriority)
+                    return 0;
+
+                if (entry1.Key.StorePriority > entry2.Key.StorePriority)
+                    return 1;
+
+                return -1;
+            }
         }
 
         //For each product for each store, if the predicted empty level date is less than 7 days from now, warn,
@@ -280,11 +297,11 @@ namespace StoreStockingSystem.Services
                 List<Tuple<ProductStock, DateTime>> outOfStockDate = StockService.GetPredictedStockEmptyLevelDates(stock.Id, context);
                 foreach (Tuple<ProductStock, DateTime> productStock in outOfStockDate)
                 {
-                    if (productStock.Item2 < minimum || productStock.Item1.Amount < productStock.Item1.WarningAmount)
+                    if (productStock.Item2 < minimum || productStock.Item1.CurrentAmount < productStock.Item1.WarningAmount)
                     {
                         //TODO: It should sort by ABC first, date/amount second.
                         RefillWarningInfo refillWarninginfo =  new RefillWarningInfo();
-                        refillWarninginfo.AmountLeft = productStock.Item1.Amount;
+                        refillWarninginfo.AmountLeft = productStock.Item1.CurrentAmount;
                         refillWarninginfo.ExpectedDateOutOfStock = productStock.Item2.Date;
                         refillWarninginfo.Product = productStock.Item1.Product;
                         if (result.ContainsKey(stock.Store))
@@ -297,10 +314,32 @@ namespace StoreStockingSystem.Services
                 }
             }
 
-            var sortedResults = result.ToList();
-            sortedResults.Sort((firstPair, nextPair) => firstPair.Key.StorePriority.CompareTo(nextPair.Key.StorePriority));
+            var results = result.ToList();
 
-            return sortedResults;
+            var comparer = new RefillWarningComparer();
+
+            results.Sort(comparer);
+
+            return results;
+        }
+
+        private class RefillWarningComparer : IComparer<KeyValuePair<Store, List<RefillWarningInfo>>>
+        {
+            int IComparer<KeyValuePair<Store, List<RefillWarningInfo>>>.Compare(KeyValuePair<Store, List<RefillWarningInfo>> x, KeyValuePair<Store, List<RefillWarningInfo>> y)
+            {
+                return Compare(x, y);
+            }
+
+            private static int Compare(KeyValuePair<Store, List<RefillWarningInfo>> entry1, KeyValuePair<Store, List<RefillWarningInfo>> entry2)
+            {
+                if (entry1.Key.StorePriority == entry2.Key.StorePriority)
+                    return 0;
+
+                if (entry1.Key.StorePriority > entry2.Key.StorePriority)
+                    return 1;
+                
+                return -1;
+            }
         }
 
         public static List<SaleSpeed> GetPredictedStoreSalesForPeriod(int storeId, DateTime startDate, DateTime endDate, StoreStockingContext context)
