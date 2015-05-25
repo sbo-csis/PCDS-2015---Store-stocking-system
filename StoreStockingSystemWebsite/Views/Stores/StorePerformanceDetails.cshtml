@@ -1,5 +1,11 @@
 ﻿@using System.Globalization
-@model List<StoreStockingSystem.Models.Stock>
+@using System.Web.UI.WebControls
+@using NUnit.Framework.Constraints
+@using PCDSWebsite.Models
+@using StoreStockingSystem.Models
+@using StoreStockingSystem.Test
+@model PerformanceDetail
+       
 @{
     ViewBag.Title = "Store Details";
 }
@@ -10,18 +16,23 @@
 
     <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
     <script>
-        $(function () {
-            $("#datepickerStart").datepicker();
-            $("#datepickerEnd").datepicker();
-            @{
-            DateTime fromDate = new DateTime(DateTime.UtcNow.Year, 1, 1);
-            DateTime toDate = new DateTime(DateTime.UtcNow.Year, 12, 31);
-            List<double> sales = StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1);
-        }
-            $("#container").highcharts({
-                chart: {
-                    type: 'bar'
-                },
+    $(function() {
+        $("#datepickerStart").datepicker();
+        $("#datepickerEnd").datepicker();
+        $("#container").highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Monthly sales vs monthly expected sales'
+            },
+            xAxis: {
+                categories: [
+                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                ]
+            },
+            yAxis: {
+                min: 0,
                 title: {
                     text: 'Monthly sales vs monthly expected sales'
                 },
@@ -49,33 +60,33 @@
                             enabled: true
                         }
                     }
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    x: -40,
-                    y: 100,
-                    floating: true,
-                    borderWidth: 1,
-                    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                    shadow: true
-                },
-                credits: {
-                    enabled: false
-                },
-                series: [
-                {
-                    name: 'Predicted sales',
-                    data: @StoreStockingSystem.Services.SalesService.GetPredictedStoreSales(1)
-                },
-                {
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 100,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
                     name: 'Actual sales',
-                    data: @StoreStockingSystem.Services.SalesService.GetSales(1, fromDate, toDate)
-                    }]
-            });
-        });
+                    data: @Model.actualSales},
+                        {
+                    name: 'Predicted sales',
+                    data: @Model.predictedSales}] /*data: [10.0, 20.0, 30.0, 30.0, 40.0, 50.0, 60.0]*/
+    });
+    });
     </script>
+
+
 }
 
 <h2>Store Details</h2>
@@ -119,5 +130,6 @@
 
 <br />
 <br />
+>>>>>>> origin/master
 
 

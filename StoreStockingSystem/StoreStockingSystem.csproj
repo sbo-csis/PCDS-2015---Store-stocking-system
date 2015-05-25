@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="Data\TestData.cs" />
     <Compile Include="Models\Chain.cs" />
+    <Compile Include="Models\PerformanceDetail.cs" />
     <Compile Include="Models\StockRefill.cs" />
     <Compile Include="Services\ChainService.cs" />
     <Compile Include="Services\DisplayTypeService.cs" />
