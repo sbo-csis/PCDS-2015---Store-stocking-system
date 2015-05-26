@@ -1,9 +1,4 @@
-﻿@using System.Globalization
-@using System.Web.UI.WebControls
-@using NUnit.Framework.Constraints
-@using PCDSWebsite.Models
-@using StoreStockingSystem.Models
-@using StoreStockingSystem.Test
+﻿@using StoreStockingSystem.Models
 @model PerformanceDetail
        
 @{
@@ -16,6 +11,18 @@
 
     <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
     <script>
+    $(function () {
+        var actualSales = [];
+        var predictedSales = [];
+        @foreach (double actualSale in Model.actualSales)
+            {
+                @:actualSales.push(@actualSale);
+            }
+        @foreach (double predictedSale in Model.predictedSales)
+            {
+                @:predictedSales.push(@predictedSale);
+            }
+
         $("#datepickerStart").datepicker();
         $("#datepickerEnd").datepicker();
         $("#container").highcharts({
@@ -76,6 +83,12 @@
                 enabled: false
             },
             series: [{
+                name: 'Actual sales',
+                data: actualSales},
+                {
+                name: 'Predicted sales',
+                data: predictedSales}]
+        });
     });
     </script>
 
