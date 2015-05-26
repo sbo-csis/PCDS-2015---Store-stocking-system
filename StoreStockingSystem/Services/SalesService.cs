@@ -22,6 +22,7 @@ namespace StoreStockingSystem.Services
             public SaleSpeed PredictedSaleSpeed { get; set; }
             public SaleSpeed ActualSaleSpeed { get; set; }
             public Product Product { get; set; }
+            public double Comparison { get; set; }
         }
 
         public class RefillWarningInfo
@@ -245,6 +246,7 @@ namespace StoreStockingSystem.Services
                         salesWarningInfo.ActualSaleSpeed = actualProductSalesSpeed;
                         salesWarningInfo.PredictedSaleSpeed = predictedSaleSpeed;
                         salesWarningInfo.Product = product;
+                        salesWarningInfo.Comparison = (store.WarningPercentage - comparedSalesCountPerDay) + (double)(store.WarningPercentage - comparedSalesSumPerDay);
                         if (result.ContainsKey(store))
                         {
                             result[store].Add(salesWarningInfo);
@@ -258,19 +260,32 @@ namespace StoreStockingSystem.Services
 
             var sortedResults = result.ToList();
 
-            var comparer = new SalesWarningComparer();
+            var comparer = new Comparer();
 
             sortedResults.Sort(comparer);
 
             return sortedResults;
         }
 
-        private class SalesWarningComparer : IComparer<KeyValuePair<Store, List<SalesWarningInfo>>>
+        private class Comparer : IComparer<KeyValuePair<Store, List<SalesWarningInfo>>>
         {
             public int Compare(KeyValuePair<Store, List<SalesWarningInfo>> entry1, KeyValuePair<Store, List<SalesWarningInfo>> entry2)
             {
+                //Comparer Priority, but also compare sales if the priorities are the same
                 if (entry1.Key.StorePriority == entry2.Key.StorePriority)
+                {
+                    double sum1 = entry1.Value.Sum(x => x.Comparison);
+                    double sum2 = entry1.Value.Sum(x => x.Comparison);
+                    if (sum1 > sum2)
+                    {
+                        return 1;
+                    }
+                    if (sum2 > sum1)
+                    {
+                        return -1;
+                    }
                     return 0;
+                }
 
                 if (entry1.Key.StorePriority > entry2.Key.StorePriority)
                     return 1;
