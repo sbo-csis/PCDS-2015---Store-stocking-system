@@ -149,7 +149,7 @@ namespace StoreStockingSystem.Services
             return yearSales;
         }
 
-        public static PerformanceDetail StorePerformanceDetails(int storeId, StoreStockingContext context = null)
+        public static PerformanceDetail GetStorePerformanceDetails(int storeId, StoreStockingContext context = null)
         {
             if (context == null)
                 context = new StoreStockingContext();

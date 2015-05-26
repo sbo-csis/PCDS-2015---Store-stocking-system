@@ -16,7 +16,6 @@
 
     <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
     <script>
-    $(function() {
         $("#datepickerStart").datepicker();
         $("#datepickerEnd").datepicker();
         $("#container").highcharts({
@@ -77,12 +76,6 @@
                 enabled: false
             },
             series: [{
-                    name: 'Actual sales',
-                    data: @Model.actualSales},
-                        {
-                    name: 'Predicted sales',
-                    data: @Model.predictedSales}] /*data: [10.0, 20.0, 30.0, 30.0, 40.0, 50.0, 60.0]*/
-    });
     });
     </script>
 
