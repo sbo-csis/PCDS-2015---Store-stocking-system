@@ -290,7 +290,7 @@ namespace StoreStockingSystem.Services
             foreach (var stock in stocks)
             {
                 var productStocks = (from t in stock.ProductStocks
-                                     where t.CurrentAmount < t.WarningAmount || t.CurrentAmount < stock.WarningAmountLeft
+                                     where t.CurrentAmount <= t.WarningAmount || t.CurrentAmount <= stock.WarningAmountLeft
                                      select t).ToList();
 
                 if (productStocks.Count > 0)

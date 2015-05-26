@@ -237,5 +237,25 @@ namespace StoreStockingSystem.Services
                 store.BeingRefilled = flag;
             }
         }
+
+        // Get Store address as String
+        public static String GetAddress(int storeId, StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var addressSeq = (from t in context.Stores
+                           where t.Id == storeId
+                           select t); ;
+            String address = "";
+            foreach(var e in addressSeq)
+            {
+                //Console.WriteLine(e.Name.ToString());
+                address = String.Concat(e.Name, ", ", e.Address, ", ", e.PostalCode, ", ", e.City, ", ", e.Country);
+            }
+
+
+            return address;
+        }
     }
 }

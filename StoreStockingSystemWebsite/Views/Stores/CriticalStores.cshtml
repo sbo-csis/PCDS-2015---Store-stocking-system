@@ -1,4 +1,5 @@
-﻿@model List<StoreStockingSystem.Models.Stock>
+﻿@using StoreStockingSystem.Models
+@model List<StoreStockingSystem.Models.Stock>
 
 @{
     ViewBag.Title = "Critial Stores";
@@ -41,22 +42,34 @@
 
             <script>
                 $(document).ready(function () {
-                    var criticalCustomers = $('#criticalCustomers').DataTable();
-                    var selectedCustomers = $('#selectedCustomers').DataTable();
-                    var waypoints = $('#waypoints2').DataTable();
+                    var criticalCustomers = $('#criticalCustomers').DataTable({
+                        "columnDefs": [
+                          { "visible": false, "targets": 0 }
+                        ]
+                    });
+                    //var selectedCustomers = $('#selectedCustomers').DataTable();
+                    var selectedRefills = $('#selectedRefills').DataTable();
+                    var waypoints = $('#waypoints2').DataTable({
+                        "paging": false,
+                        "ordering": false,
+                        "info": false,
+                        "filtering": false,
+                        "searching": false
+                    });
 
 
                     $('#criticalCustomers tbody').on('click', 'tr', function () {
                         $(this).toggleClass('selected');
-                        selectedCustomers.clear();
+                        //selectedCustomers.clear();
                         waypoints.clear();
                         var ids = $.map(criticalCustomers.rows('.selected').data(), function (item) {
-                            selectedCustomers.row.add(item);
-                            var addr = item[1];
+                            //selectedCustomers.row.add(item);
+                            var addr = item[0];
+                            console.log([addr]);
                             waypoints.row.add([addr]);
                             return item[0];
                         });
-                        selectedCustomers.draw();
+                        //selectedCustomers.draw();
                         waypoints.draw();
                     });
 
@@ -160,22 +173,17 @@
                     var selectedTable = document.getElementById('waypoints2');
                     var rows = selectedTable.getElementsByTagName("tr");
 
+                    if (rows.length>1) {
                     for (var i = 1; i < rows.length; i++) {
-                        console.log(rows[i].cells[0].innerHTML);
+                        //console.log(rows[i].cells[0].innerHTML.valueAsString);
+                        //console.log(rows[i].cells[0].firstChild.nodeValue);
                         waypts.push({
-                            location: rows[i].cells[0].innerHTML,
+                            location: rows[i].cells[0].firstChild.nodeValue,
                             stopover: true
                         });
                     }
-
-                    Geocoder coder = new Geocoder(this);
-                    address = coder.getFromLocationName(strAddress,5);
-                    if (address == null) {
-                        return null;
                     }
-                    Address location = address.get(0);
-                    location.getLatitude();
-                    location.getLongitude();
+
 
                     // Old address selection
                     //var waypts = [];
@@ -240,11 +248,11 @@
                 ];*@
         }
 
-        <h1>Critical stock status</h1>
+        <h1>Selected for Refill</h1>
 
         @using (Html.BeginForm())
         {
-            <table id="criticalCustomers" class="display" style="width: 100%;">
+            <table id="selectedRefills" class="display" style="width: 100%;">
                 <thead>
                     <tr>
                         <th>Store id</th>
@@ -259,11 +267,11 @@
                     @foreach (var stock in Model)
                     {
                         Html.HiddenFor(m => stock.DisplayType.Name);
-                        
-                        if (stock.SelectedForRefilling)
-                        {
-                            continue;
-                        }
+
+                        //if (stock.SelectedForRefilling)
+                        //{
+                        //    continue;
+                        //}
 
                         var productsMissing = 0;
 
@@ -272,7 +280,7 @@
                             Html.HiddenFor(m => productStock.Product.Name);
                             Html.HiddenFor(m => productStock.CurrentAmount);
                             Html.HiddenFor(m => productStock.Capacity);
-                            
+
                             if (productStock.CurrentAmount <= productStock.Capacity)
                             {
                                 if (productStock.CurrentAmount >= 0 && productStock.Capacity >= productStock.CurrentAmount)
@@ -302,10 +310,66 @@
             </p>
         }
 
+        <h3>Critical stock status</h3>
+        <table id="criticalCustomers" class="display" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Store id</th>
+                    <th>Store name</th>
+                    <th>Stock type</th>
+                    <th>Product name</th>
+                    <th>Warning amount</th>
+                    <th>Current amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @using (Html.BeginForm())
+                {
+                    StockRefill lowStocks = StoreStockingSystem.Services.StockService.GetLowStocks();
+                    foreach (var stock in lowStocks.Stocks)
+                    {
+                        var currentMissingProductCount = 0;
+
+                        @*foreach (var productstock in stock.ProductStocks)
+                            {
+                                currentMissingProductCount += productstock.Capacity - productstock.CurrentAmount;
+                            }
+
+                            @Html.HiddenFor(m => stock)
+
+                            <tr class="critical">
+                                <td>@Html.LabelFor(m => stock.Store.Name)</td>
+                                <td>@Html.LabelFor(m => stock.DisplayType.Name)</td>
+                                <td>currentMissingProductCount</td>
+                                <td>@Html.CheckBoxFor(m => stock.SelectedForRefilling)</td>
+                            </tr>*@
 
 
+                        foreach (var productStock in stock.ProductStocks)
+                        {
+                            if (productStock.CurrentAmount <= productStock.WarningAmount || productStock.CurrentAmount <= stock.WarningAmountLeft)
+                            {
+                                <tr class="critical">
+                                    <td>@StoreStockingSystem.Services.StoreService.GetAddress(stock.Store.Id)</td>
+                                    <td>@stock.Store.Id</td>
+                                    <td>@stock.Store.Name</td>
+                                    <td>@stock.DisplayType.Name</td>
+                                    <td>@productStock.Product.Name</td>
+                                    <td>@(productStock.WarningAmount ?? stock.WarningAmountLeft)</td>
+                                    <td>@productStock.CurrentAmount</td>
+                                </tr>
+                            }
+                        }
+                    }
 
-        <h3>Waypoints</h3>
+
+                }
+            </tbody>
+        </table>
+
+
+        @*<h3>Waypoints</h3>
         <table id="waypoints2" class="display" style="width: 100%;">
             <thead>
                 <tr>
@@ -314,7 +378,7 @@
             </thead>
             <tbody>
 
-                @*@foreach (var stock in Model)
+                @*foreach (var stock in Model)
                     {
                         foreach (var productStock in stock.ProductStocks)
                         {
@@ -330,9 +394,9 @@
                                 </tr>
                             }
                         }
-                    }*@
+                    }
             </tbody>
-        </table>
+       </table>*@
 
 
         @*<h1>Critical stock status</h1>
@@ -403,18 +467,18 @@
             </div>*@
 
         <h3>Store locations</h3>
-        <table>
+        <table style="width: 100%;">
             <tr>
                 <td>
                     <div id="map" style="width: 500px; height: 400px; vertical-align: top; float: left; "></div>
                 </td>
                 <!--Right side of map area-->
                 <td style="vertical-align: top">
-                    <table>
+                    <table style="width: 100%;">
                         <tr>
                             <td>
                                 <!--<div id=" mapoptions" style="width: 200px; height: 400px; float: left; margin-left: 20px;">
-                                -->
+                            -->
                                 <h4>Start location</h4>
                             </td>
                             <td>
@@ -436,7 +500,40 @@
 
                             </td>
                         </tr>
+                        <tr><td colspan="2"><h4>Waypoints</h4></td></tr>
+
                         <tr>
+                            <td colspan="2">
+                                <table id="waypoints2" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @*@foreach (var stock in Model)
+                    {
+                        foreach (var productStock in stock.ProductStocks)
+                        {
+                            if (productStock.Amount <= productStock.WarningAmount || productStock.Amount <= stock.WarningAmountLeft)
+                            {
+                                <tr class="critical">
+                                    <td>@stock.Store.Id</td>
+                                    <td>@stock.Store.Name</td>
+                                    <td>@stock.DisplayType.Name</td>
+                                    <td>@productStock.Product.Name</td>
+                                    <td>@(productStock.WarningAmount ?? stock.WarningAmountLeft)</td>
+                                    <td>@productStock.Amount</td>
+                                </tr>
+                            }
+                        }
+                    }*@
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        @*<tr>
                             <td colspan="2">
                                 <h4>Selected locations</h4>
                                 <select multiple id="waypoints" style="height:100px; width:100%; overflow:hidden; overflow-y:scroll;">
@@ -451,7 +548,7 @@
                                 </select>
 
                             </td>
-                        </tr>
+                        </tr>*@
                         <tr>
                             <td>
                                 <button type="button" onclick=" calcRoute(); ">Calculate route</button>
