@@ -38,6 +38,7 @@ namespace StoreStockingSystem.Test.Services
                                                     }, context);
 
                 var stockAfterInsert = StockService.GetStock(store, displayType.Id);
+
                 Assert.AreEqual(stockAfterInsert.Id, stock.Id);
 
                 StoreService.RemoveStore(store.Id, context);
