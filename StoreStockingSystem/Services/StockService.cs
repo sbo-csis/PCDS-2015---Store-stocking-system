@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using StoreStockingSystem.Models;
 
 namespace StoreStockingSystem.Services
@@ -113,6 +114,16 @@ namespace StoreStockingSystem.Services
                          .Include(t => t.Store)
                          .Include(t => t.ProductStocks.Select(s => s.Product))
                          .ToList();
+
+            foreach (var stock in stocks)
+            {
+                var warningPrediction = PredictStockWarningLevelDates(stock.Id, context);
+
+                foreach (var prediction in warningPrediction)
+                {
+                    stock.ProductStocks.First(ps => ps.Id == prediction.Item1.Id).ExpectedWarningDate = prediction.Item2;
+                }
+            }
 
             if (stocks == null)
                 throw new ArgumentException("Could not find stocks for store id: " + store.Id);

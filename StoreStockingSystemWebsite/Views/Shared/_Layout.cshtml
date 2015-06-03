@@ -21,14 +21,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Channel Performance", "ChannelsPerformance", "Stores")</li>
-                    <li>@Html.ActionLink("Stores Status", "CriticalStores", "Stores")</li>
-                    <li>@Html.ActionLink("Stores Performance", "StorePerformance", "Stores")</li>
-                    <li>@Html.ActionLink("Stores Overview", "Stores", "Stores")</li>
-                    <li>@Html.ActionLink("Stock Update", "StockUpdate", "Stores")</li>
-                    
+                    <li>@Html.ActionLink("Stores System", "Index", "Stores")</li>
+                    <li>@Html.ActionLink("Sales Performance", "ChainPerformance", "Stores")</li>
+                    <li>@Html.ActionLink("Stock System", "StockList", "Stores")</li>
+                    <li>@Html.ActionLink("Alerts", "Alerts", "Stores")</li>
                 </ul>
-                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
@@ -36,7 +33,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - PCDS GODREAM Project</p>
+            <p>&copy; 2015 - PCDS GODREAM Project</p>
         </footer>
     </div>
 

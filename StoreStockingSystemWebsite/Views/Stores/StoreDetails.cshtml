@@ -1,4 +1,4 @@
-﻿@model List<StoreStockingSystem.Models.Stock>
+﻿@model PCDSWebsite.Models.StoreViewModel
 
 
 <!DOCTYPE html>
@@ -8,59 +8,150 @@
     <title>ViewBag.Title</title>
 
 </head>
-<h2>Options</h2>
+<body>
+    <h3>@Model.Store.Name</h3>
+    <b>Address: @Model.Store.Address</b>
+    <br />
+    <b>City: @Model.Store.City</b>
+    <br />
+    <b>Postal Code: @Model.Store.PostalCode</b>
+    <br />
+    <b>
+        Sales Person:
+        @{
+            var salesPerson = (Model.Store.SalesPerson != null) ? Model.Store.SalesPerson.Name : "-";
 
+            <text>@salesPerson</text>
+        }
+    </b>
+    <br />
 
-<h2>Stores</h2>
-@section scripts
-{
-    <!-- DataTables CSS -->
+    <div id="container" style="height: 400px; min-width: 310px"></div>
+
+    <br />
+
+    <h3>Current Stock</h3>
+    <table id="stores-table" class="display" width="100%">
+        <thead>
+            <tr>
+                <th>Display type</th>
+                <th>Product name</th>
+                <th>Product count</th>
+                <th>Expected warning date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var stock in Model.Stocks)
+            {
+                foreach (var product in stock.ProductStocks)
+                {
+                    <tr>
+                        <td>@stock.DisplayType.Name</td>
+
+                        <td>@product.Product.Name</td>
+
+                        <td>@product.CurrentAmount</td>
+
+                        <td>@product.ExpectedWarningDate</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</body>
+</html>
+
+@section scripts{
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
-
-    <!-- jQuery -->
     <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
-
-    <!-- DataTables -->
     <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
 
     <script>
-        $(document).ready(function () {
-            $('#stores-table').DataTable();
-        });
+        $(function () {
 
+            $('#stores-table').DataTable();
+
+            var actualSales = [];
+            var predictedSales = [];
+            @foreach (double actualSale in Model.Performance.actualSales)
+            {
+                @:actualSales.push(@actualSale);
+                                                                                                                                                }
+            @foreach (double predictedSale in Model.Performance.predictedSales)
+            {
+                @:predictedSales.push(@predictedSale);
+                                                                                                                                                }
+            $("#container").highcharts({
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Sales'
+                },
+                xAxis: {
+                    categories: [
+                        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                    ]
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Monthly sales vs monthly expected sales'
+                    },
+                    xAxis: {
+                        categories: [
+                            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                        ]
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Sales (millions)',
+                            align: 'high'
+                        },
+                        labels: {
+                            overflow: 'justify'
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: ' millions'
+                    },
+                    plotOptions: {
+                        bar: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -40,
+                    y: 100,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Actual sales',
+                    data: actualSales
+                },
+                    {
+                        name: 'Predicted sales',
+                        data: predictedSales
+                    }]
+            });
+        });
     </script>
 }
-
-
-<h2>@Model.First().Store.Name</h2>
-
-
-<table id="stores-table" class="display" width="100%">
-    <thead>
-        <tr>
-            <th>Display type</th>
-            <th>Product name</th>
-            <th>Product count</th>
-            <th>Expected warning date</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var stock in Model)
-        {
-            foreach (var product in stock.ProductStocks)
-            {
-                <tr>
-                    <td>@stock.DisplayType.Name</td>
-
-                    <td>@product.Product.Name</td>
-                    
-                    <td>@product.CurrentAmount</td>
-                    
-                    <td>@product.ExpectedWarningDate</td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
-

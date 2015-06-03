@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using PCDSWebsite.Models;
-using StoreStockingSystem.Data;
-using StoreStockingSystem.Models;
 using StoreStockingSystem.Services;
 using Stock = StoreStockingSystem.Models.Stock;
 
@@ -12,9 +10,40 @@ namespace PCDSWebsite.Controllers
 {
     public class StoresController : Controller
     {
-        public ActionResult ChannelsPerformance()
+        public ActionResult Index()
+        {
+            var model = StoreService.GetStores();
+
+            return this.View(model);
+        }
+
+        [HttpGet]
+        public ActionResult StoreDetails(int id = 0)
+        {
+            var store = StoreService.GetStore(id);
+            var stocks = StockService.GetStocks(store);
+            var storePerformance = SalesService.GetStorePerformanceDetails(id);
+
+            var model = new StoreViewModel
+            {
+                Store = store,
+                Stocks = stocks,
+                Performance = storePerformance
+            };
+
+            return View(model);
+        }
+
+        public ActionResult ChainPerformance()
         {
             return View();
+        }
+
+        public ActionResult StockList()
+        {
+            var model = StockService.GetStocksNeedingRefilling();
+
+            return View(model);
         }
 
         public ActionResult Stores()
@@ -24,33 +53,8 @@ namespace PCDSWebsite.Controllers
             return View(model);
         }
 
-        public ActionResult StoreDetails(int id = 0)
-        {
-            var store = StoreService.GetStore(id);
-            var stocks = StockService.GetStocks(store);
-            foreach (var stock in stocks)
-            {
-                StockService.GetStockWithEmptyDate(stock);
-            }
-
-            return View(stocks);
-        }
-
-        //Pass parameter id
-        public ActionResult StorePerformanceDetails(int id)
-        {
-            return View(SalesService.GetStorePerformanceDetails(id));
-        }
-
-        public ActionResult CriticalStores()
-        {
-            var model = StockService.GetStocksNeedingRefilling();
-
-            return View(model);
-        }
-
         [HttpPost] //TODO: Refactor this method, was completed in a hurry before sprint end.
-        public void CriticalStores(List<Stock> stocks)
+        public void StockList(List<Stock> stocks)
         {
             var productsRefill = new List<RefillEntry>(); //TODO: Refactor into seperate class. Currently holds a tuple <product, displayType, amountToBringForRefill>
 
@@ -98,7 +102,7 @@ namespace PCDSWebsite.Controllers
             return View(StocksToRefill);
         }
 
-        public ActionResult StorePerformance()
+        public ActionResult Alerts()
         {
             return View();
         }

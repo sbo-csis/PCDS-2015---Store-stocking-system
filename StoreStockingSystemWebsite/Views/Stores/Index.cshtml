@@ -8,7 +8,7 @@
 @using Store = StoreStockingSystem.Models.Store
 
 @{
-    ViewBag.Title = "Kunder";
+    ViewBag.Title = "Stores";
 }
 
 <!DOCTYPE html>
@@ -18,10 +18,38 @@
     <title>ViewBag.Title</title>
 
 </head>
-<h2>Options</h2>
+<body>
+    <h2>Stores</h2>
 
 
-<h2>Stores</h2>
+    <table id="stores-table" class="display" width="100%">
+        <thead>
+            <tr>
+                <th>Store Id</th>
+                <th>Store Name</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var store in Model)
+            {
+                <tr>
+                    <td>@store.Id</td>
+
+                    <td>@store.Name</td>
+
+                    <td>
+                        @Html.ActionLink("Details", "StoreDetails", new { store.Id })
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
+
 @section scripts
 {
     <!-- DataTables CSS -->
@@ -35,32 +63,9 @@
 
     <script>
         $(document).ready(function () {
-            $('#stores-table').DataTable();
+            $("#stores-table").DataTable();
         });
 
     </script>
 }
-
-<table id="stores-table" class="display" width="100%">
-    <thead>
-        <tr>
-            <th>Store name</th>
-            <th>Store Details</th>
-        </tr>
-    </thead>
-
-    <tbody>
-    @foreach (var store in Model)
-    {
-        <tr>
-            <td>@store.Name</td>
-            
-            <td>
-                @Html.ActionLink("Details", "StoreDetails", new { store.Id } )
-            </td>
-            
-        </tr>
-    }
-    </tbody>
-</table>
 

@@ -173,6 +173,7 @@
     <Compile Include="Models\RefillEntry.cs" />
     <Compile Include="Models\Stock.cs" />
     <Compile Include="Models\Store.cs" />
+    <Compile Include="Models\StoreViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -562,11 +563,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Stores\Stores.cshtml" />
-    <Content Include="Views\Stores\CriticalStores.cshtml" />
-    <Content Include="Views\Stores\StorePerformance.cshtml" />
+    <Content Include="Views\Stores\Index.cshtml" />
+    <Content Include="Views\Stores\StockList.cshtml" />
+    <Content Include="Views\Stores\Alerts.cshtml" />
     <Content Include="Views\Stores\StorePerformanceDetails.cshtml" />
-    <Content Include="Views\Stores\ChannelsPerformance.cshtml" />
+    <Content Include="Views\Stores\ChainPerformance.cshtml" />
     <Content Include="Views\Stores\StockUpdate.cshtml" />
     <Content Include="Views\Stores\StoreDetails.cshtml" />
     <Content Include="Views\Stores\Refill.cshtml" />
@@ -579,7 +580,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StoreStockingSystem\StoreStockingSystem.csproj">
