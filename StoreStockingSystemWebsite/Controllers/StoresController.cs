@@ -39,6 +39,13 @@ namespace PCDSWebsite.Controllers
             return View();
         }
 
+        public ActionResult ChainsOverview()
+        {
+            var model = ChainService.GetChains();
+
+            return View(model);
+        }
+
         public ActionResult StockList()
         {
             var model = StockService.GetStocksNeedingRefilling();

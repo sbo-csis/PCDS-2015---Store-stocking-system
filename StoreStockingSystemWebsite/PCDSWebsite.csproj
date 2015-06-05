@@ -571,6 +571,7 @@
     <Content Include="Views\Stores\StockUpdate.cshtml" />
     <Content Include="Views\Stores\StoreDetails.cshtml" />
     <Content Include="Views\Stores\Refill.cshtml" />
+    <Content Include="Views\Stores\ChainsOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -100,5 +100,21 @@ namespace StoreStockingSystem.Services
             context.Chains.Remove(chain);
             context.SaveChanges();
         }
+
+        /// <summary>
+        /// Gets all existing chains
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IEnumerable<Chain> GetChains(StoreStockingContext context = null)
+        {
+            if (context == null)
+                context = new StoreStockingContext();
+
+            var chains = (from t in context.Chains
+                          select t);
+
+            return chains;
+        }
     }
 }

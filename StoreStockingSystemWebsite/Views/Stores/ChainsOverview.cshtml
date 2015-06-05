@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Chain>
+
+@using Chain = StoreStockingSystem.Models.Chain
+
+@{
+    ViewBag.Title = "Chains";
+}
+
+@section scripts
+{
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#chains-table").DataTable();
+        });
+
+    </script>
+}
+
+<h2>Chains Overview</h2>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>ViewBag.Title</title>
+
+</head>
+<body>
+    <h2>Chains</h2>
+
+
+    <table id="chains-table" class="display" width="100%">
+        <thead>
+            <tr>
+                <th>Chain Id</th>
+                <th>Chain Name</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var chain in Model)
+            {
+                <tr>
+                    <td>@chain.Id</td>
+
+                    <td>@chain.Name</td>
+
+                    <td>
+                        @Html.ActionLink("Details", "ChainPerformance", new { chain.Id })
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

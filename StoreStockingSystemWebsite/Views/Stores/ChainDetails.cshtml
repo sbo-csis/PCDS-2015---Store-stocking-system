@@ -1,0 +1,68 @@
+﻿@model StoreStockingSystem.Models.Chain
+
+@{
+    ViewBag.Title = "Chain Details";
+}
+
+@section scripts
+{
+    <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
+    <script>
+        $(function () {
+            $('#container').highcharts({
+                title: {
+                    text: 'Monthly sales',
+                    x: -20 //center
+                },
+                xAxis: {
+                    categories: [
+                        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Sales amount'
+                    },
+                    plotLines: [
+                        {
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }
+                    ]
+                },
+                tooltip: {
+                    valueSuffix: 'Kr'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: [
+                    {
+                        name: 'Salg 2012',
+                        data: [1578, 1035, 1950, 2530, 3400, 3399, 4585, 4500, 3800, 6500, 15300, 35000]
+                    }, {
+                        name: 'Salg 2013',
+                        data: [4050, 4535, 3750, 6530, 6400, 4399, 0, 5500, 6800, 8500, 19300, 45000]
+                    }, {
+                        name: 'Salg 2014',
+                        data: [5700, 6535, 6750, 3530, 8400, 2399, 4585, 9500, 2800, 9500, 24300, 85000]
+                    }, {
+                        name: 'Salg 2015',
+                        data: [8700, 15535, 12750]
+                    }
+                ]
+            });
+        });
+    </script>
+
+}
+
+
+<h2>Chain Performance</h2>
+
+<div id="container"></div>
