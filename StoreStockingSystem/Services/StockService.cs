@@ -112,7 +112,7 @@ namespace StoreStockingSystem.Services
                           select t)
                          .Include(t => t.DisplayType)
                          .Include(t => t.Store)
-                         .Include(t => t.ProductStocks.Select(s => s.Product))
+                         .Include(t => t.ProductStocks.Select(ps => ps.Product))
                          .ToList();
 
             foreach (var stock in stocks)
@@ -407,7 +407,7 @@ namespace StoreStockingSystem.Services
             if (stock == null)
                 throw new Exception("Stock not found for stock id " + stockId);
 
-            if (targetStockLevel < 0) // Defensive programming to avoid illogical even of having negative stock.
+            if (targetStockLevel < 0) // avoiding illogical event of having negative stock.
                 targetStockLevel = 0;
 
             var result = new List<Tuple<ProductStock, DateTime>>();
