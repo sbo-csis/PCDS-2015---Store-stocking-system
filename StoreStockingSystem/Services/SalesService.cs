@@ -649,23 +649,23 @@ namespace StoreStockingSystem.Services
         }
 
         // Get performance for a chain, ie. total sale value, for a time period
-        public static int GetChainPerformance(int chainId, DateTime fromDate, DateTime toDate, StoreStockingContext context)
+        public static decimal GetChainPerformance(int chainId, DateTime fromDate, DateTime toDate, StoreStockingContext context)
         {
             if (context == null)
                 context = new StoreStockingContext();
 
             var sales = GetChainSales(chainId, fromDate, toDate, context);
 
-            var totalSales = sales.Aggregate(0, (current, sale) => (int)(current + sale.SalesPrice));
+            var totalSales = sales.Aggregate((decimal)0, (current, sale) => (current + sale.SalesPrice));
 
             return totalSales;
         }
 
         // Get daily performance in a period for a chain
-        public static List<int> GetDailyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
+        public static List<decimal> GetDailyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
             StoreStockingContext context)
         {
-            var dailyPerformance = new List<int>();
+            var dailyPerformance = new List<decimal>();
 
             for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
             {
@@ -678,16 +678,34 @@ namespace StoreStockingSystem.Services
         }
 
         // Get monthly performance for a chain
-        public static List<int> GetMonthlyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
+        public static List<decimal> GetMonthlyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
             StoreStockingContext context)
         {
-            var monthlyPerformance = new List<int>();
+            var monthlyPerformance = new List<decimal>();
 
             for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddMonths(1))
             {
                 var sales = GetChainPerformance(chainId, day, day.AddMonths(1), context);
 
                 monthlyPerformance.Add(sales);
+            }
+
+            return monthlyPerformance;
+        }
+
+        // Get accumulated monthly performance for a chain
+        public static List<decimal> GetAccumMonthlyChainPerformance(int chainId, DateTime fromDate, DateTime toDate,
+            StoreStockingContext context)
+        {
+            var monthlyPerformance = new List<decimal>();
+            var accumPerformance = (decimal)0;
+
+            for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddMonths(1))
+            {
+                var sales = GetChainPerformance(chainId, day, day.AddMonths(1), context);
+                accumPerformance = accumPerformance + sales;
+
+                monthlyPerformance.Add(accumPerformance);
             }
 
             return monthlyPerformance;

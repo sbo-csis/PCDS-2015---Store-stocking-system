@@ -35,7 +35,7 @@
                     <input type="submit" value="Get Performance" />
                 }
 
-                <hr/>
+                <hr />
                 <h4>Totel period sales</h4>
                 <b>@Model.Performance.TotalSales</b>
                 @*<h4>Include Expected Sales Numbers</h4>
@@ -51,7 +51,7 @@
 
         </tr>
     </table>
-<hr/>
+    <hr />
 
     <h4>Chain Stores</h4>
     <table id="chainstores-table" class="display" width="100%">
@@ -106,19 +106,19 @@
     <script>
         $(function () {
             var actualSales = [];
-            //var predictedSales = [];
-            @foreach (double actualSale in Model.Performance.Values)
+            var accSales = [];
+            @foreach (decimal actualSale in Model.Performance.Values)
             {
                 @:actualSales.push(@actualSale);
-                                                                                                                                    }
+                                }
 
-            @*@foreach (double predictedSale in Model.Performance.predictedSales)
-        {
-        @:predictedSales.push(@predictedSale);
-                        }*@
+            @foreach (decimal accSale in Model.Performance.AccPerValues)
+            {
+                @:accSales.push(@accSale);
+                    }
             $('#performancegraph').highcharts({
                 title: {
-                    text: 'Monthly sales',
+                    text: 'Chain Performance',
                     x: -20 //center
                 },
                 xAxis: {
@@ -151,14 +151,15 @@
                 series: [
                     {
                         name: 'Actual sales',
+                        type: 'column',
                         data: actualSales
                     }
-                ]
-                //,
-                //    {
-                //        name: 'Predicted sales',
-                //        data: predictedSales
-                //    }]
+                ,
+                    {
+                        name: 'Accumulated sales',
+                        type: 'line',
+                        data: accSales
+                    }]
             });
         });
     </script>
