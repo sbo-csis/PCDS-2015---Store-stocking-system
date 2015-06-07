@@ -31,5 +31,122 @@
             }
         </tbody>
     </table>
+
+    <h3>Store locations</h3>
+    <table style="width: 100%;">
+        <tr>
+            <td>
+                <div id="map" style="width: 500px; height: 400px; vertical-align: top; float: left;"></div>
+            </td>
+            <!--Right side of map area-->
+            <td style="vertical-align: top">
+                <table style="width: 100%;">
+                    <tr><td colspan="2"><h4>Waypoints</h4></td></tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div id="directions_panel" style="margin: 20px; background-color: #FFEE77;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="totalDuration" style="background-color: orange;"></div>
+                            <div id="totalDistance" style="background-color: orange;"></div>
+                        </td>
+                    </tr>
+                </table>
+    </table>
 </body>
 </html>
+
+<!--Loading google maps javascript api with our api key-->
+<script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFZQo4FYhLzLW9FIwKmbO235mRDg6n2kM&sensor=false">
+
+</script>
+<!--Google Maps stuff-->
+<script type="text/javascript">
+    google.maps.event.addDomListener(window, "load", initialize);
+
+    // Route calculation
+    var directionsService;
+    var directionsDisplay;
+    var map;
+
+    function initialize() {
+        directionsService = new google.maps.DirectionsService();
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        var copenhagen = new google.maps.LatLng(55.6712673, 12.5608388);
+        var mapOptions = {
+            zoom: 6,
+            center: copenhagen
+        }
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        directionsDisplay.setMap(map);
+
+        console.log("Calling route");
+        calcRoute();
+    }
+
+
+    // Calculation function
+    function calcRoute() {
+        var start = 'Sortedams Dossering 55, 2100 København Ø, Denmark';
+        var end = 'Sortedams Dossering 55, 2100 København Ø, Denmark';
+
+        var waypts = [];
+
+        waypts.push({ location: "FONA Trianglen, Østerbrogade 62, 2100 København Ø, Denmark" });
+        waypts.push({ location: 'FONA, Nørre Voldgade 17, 1358 København K, Denmark' });
+        waypts.push({ location: 'FONA Strøget, Østergade 47, 1100 København K, Denmark' });
+
+        var request = {
+            origin: start,
+            destination: end,
+            waypoints: waypts,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+
+
+        directionsService.route(request, function (response, status) {
+            console.log("getting route");
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                var route = response.routes[0];
+                var summaryPanel = document.getElementById('directions_panel');
+                summaryPanel.innerHTML = '';
+                var duration = 0;
+                var distance = 0;
+                for (var i = 0; i < route.legs.length; i++) {
+                    var routeSegment = i + 1;
+                    // Summarize duration & distance
+                    duration += route.legs[i].duration.value;
+                    distance += route.legs[i].distance.value;
+
+
+                    summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment + '</b><br>';
+                    summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+                    summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+                    summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+                }
+                // Set total duration and distance fields
+                var totalDur = document.getElementById('totalDuration');
+                totalDur.innerHTML = '<b>Total duration: ' + duration / 60 + ' minutes</b>';
+                var totalDist = document.getElementById('totalDistance');
+                totalDist.innerHTML = '<b>Total distance: ' + distance / 1000 + ' km</b>';
+            }
+
+        });
+    }
+</script>
+
+<!--Google Maps route calculation-->
+@*var addresses = [
+    ['FONA Trianglen, Østerbrogade 62, 2100 København Ø, Denmark'],
+    ['FONA, Nørre Voldgade 17, 1358 København K, Denmark'],
+    ['FONA Strøget, Østergade 47, 1100 København K, Denmark'],
+    ['FONA, Nørrebro Bycenter, Lygten 2, 2400 København NV'],
+    ['FONA Amager Centret, Amager Centret 136, 2300 København S, Denmark'],
+    ['FONA, Nørrebro Bycenter, Lygten 2, 2400 København NV']
+    ];*@

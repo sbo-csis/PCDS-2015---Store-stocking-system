@@ -157,10 +157,12 @@ namespace PCDSWebsite.Controllers
             Refill(new List<RefillEntry>());
         }
 
-        [HttpPost]
         public ActionResult Refill(List<RefillEntry> stocksToRefill)
         {
             var stocks = StockService.GetStocksNeedingRefilling();
+
+            var random = new Random();
+            stocks = stocks.OrderBy(item => random.Next()).ToList();
 
             while (stocks.Count > 3)
             {
@@ -185,7 +187,7 @@ namespace PCDSWebsite.Controllers
                         {
                             DisplayType = stock.DisplayType,
                             Product = ps.Product,
-                            RefillCount = ps.Capacity - ps.CurrentAmount
+                            RefillCount = ps.Capacity - ps.CurrentAmount,
                         };
                     }
                 }
