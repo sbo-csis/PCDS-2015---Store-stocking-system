@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
 using PCDSWebsite.Models;
 using StoreStockingSystem.Services;
 using Stock = StoreStockingSystem.Models.Stock;
@@ -34,9 +35,37 @@ namespace PCDSWebsite.Controllers
             return View(model);
         }
 
-        public ActionResult ChainPerformance()
+        public ActionResult ChainDetails(DateTime startTime, DateTime endTime, int id = 0)
         {
-            return View();
+            var chain = ChainService.GetChain(id);
+            var stores = ChainService.GetChainStores(id);
+            var performance = ChainPerformance(startTime, endTime, id);
+            
+
+            var model = new ChainViewModel
+            {
+                Chain = chain,
+                Stores = stores,
+                Performance = performance
+            };
+
+            return View(model);
+        }
+
+        public ChainPerformanceModel ChainPerformance(DateTime startTime, DateTime endTime, int id = 0)
+        {
+         
+            var values = SalesService.GetMonthlyChainPerformance(id, startTime, endTime, null);
+            var chainPerformance = new ChainPerformanceModel
+            {
+                StartTime = startTime,
+                EndTime = endTime,
+                Values = values
+
+            };
+            
+            
+            return chainPerformance;
         }
 
         public ActionResult ChainsOverview()

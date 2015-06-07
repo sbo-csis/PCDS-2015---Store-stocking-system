@@ -168,6 +168,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ChainPerformanceModel.cs" />
+    <Compile Include="Models\ChainViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RefillEntry.cs" />
@@ -567,7 +569,7 @@
     <Content Include="Views\Stores\StockList.cshtml" />
     <Content Include="Views\Stores\Alerts.cshtml" />
     <Content Include="Views\Stores\StorePerformanceDetails.cshtml" />
-    <Content Include="Views\Stores\ChainPerformance.cshtml" />
+    <Content Include="Views\Stores\ChainDetails.cshtml" />
     <Content Include="Views\Stores\StockUpdate.cshtml" />
     <Content Include="Views\Stores\StoreDetails.cshtml" />
     <Content Include="Views\Stores\Refill.cshtml" />

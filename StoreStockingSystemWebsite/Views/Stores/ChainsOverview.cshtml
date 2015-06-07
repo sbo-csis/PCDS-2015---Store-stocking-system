@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Chain>
 
+@using PCDSWebsite.Models
 @using Chain = StoreStockingSystem.Models.Chain
 
 @{
@@ -56,7 +57,7 @@
                     <td>@chain.Name</td>
 
                     <td>
-                        @Html.ActionLink("Details", "ChainPerformance", new { chain.Id })
+                        @Html.ActionLink("Details", "ChainDetails", new { chain.Id, startTime=new DateTime(DateTime.Now.Year, 1, 1), endTime=new DateTime(DateTime.Now.Year, 12, 31)})
                     </td>
 
                 </tr>

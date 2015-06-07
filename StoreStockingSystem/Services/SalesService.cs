@@ -648,7 +648,7 @@ namespace StoreStockingSystem.Services
             return monthlyPerformance;
         }
 
-        // Get performance for a chain
+        // Get performance for a chain, ie. total sale value, for a time period
         public static int GetChainPerformance(int chainId, DateTime fromDate, DateTime toDate, StoreStockingContext context)
         {
             if (context == null)

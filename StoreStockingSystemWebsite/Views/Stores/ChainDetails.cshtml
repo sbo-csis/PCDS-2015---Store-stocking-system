@@ -1,15 +1,44 @@
-﻿@model StoreStockingSystem.Models.Chain
+﻿@using System.Data.Entity.Core.Metadata.Edm
+@using Microsoft.Ajax.Utilities
+@model PCDSWebsite.Models.ChainViewModel
 
 @{
-    ViewBag.Title = "Chain Details";
+    ViewBag.Title = "Chain Performance";
 }
-
 @section scripts
 {
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#performance-table').DataTable();
+            $('#chainstores-table').DataTable();
+        });
+
+    </script>
+
     <script type="text/javascript" charset="utf8" src="~/Scripts/highcharts.js"></script>
     <script>
         $(function () {
-            $('#container').highcharts({
+            var actualSales = [];
+            //var predictedSales = [];
+            @foreach (double actualSale in Model.Performance.Values)
+            {
+                @:actualSales.push(@actualSale);
+                                                                                    }
+
+            @*@foreach (double predictedSale in Model.Performance.predictedSales)
+        {
+        @:predictedSales.push(@predictedSale);
+                        }*@
+            $('#performancegraph').highcharts({
                 title: {
                     text: 'Monthly sales',
                     x: -20 //center
@@ -43,26 +72,107 @@
                 },
                 series: [
                     {
-                        name: 'Salg 2012',
-                        data: [1578, 1035, 1950, 2530, 3400, 3399, 4585, 4500, 3800, 6500, 15300, 35000]
-                    }, {
-                        name: 'Salg 2013',
-                        data: [4050, 4535, 3750, 6530, 6400, 4399, 0, 5500, 6800, 8500, 19300, 45000]
-                    }, {
-                        name: 'Salg 2014',
-                        data: [5700, 6535, 6750, 3530, 8400, 2399, 4585, 9500, 2800, 9500, 24300, 85000]
-                    }, {
-                        name: 'Salg 2015',
-                        data: [8700, 15535, 12750]
+                        name: 'Actual sales',
+                        data: actualSales
                     }
                 ]
+                //,
+                //    {
+                //        name: 'Predicted sales',
+                //        data: predictedSales
+                //    }]
             });
         });
     </script>
 
+    <script type="text/javascript">
+        $(function () {
+            $('#startTime').datepicker({ dateFormat: "dd-mm-yy" });
+            $('#endTime').datepicker({ dateFormat: "dd-mm-yy" });
+        });
+    </script>
+
 }
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>ViewBag.Title</title>
+
+</head>
+<body>
+    <h3>@Model.Chain.Name</h3>
+    <b>Number of Chain stores: @Model.Stores.Count</b>
+    <br />
+
+    <hr />
+    <table>
+        <tr>
+            <td style="text-align: left; vertical-align: top; padding: 0">
+
+                @using (Html.BeginForm("ChainDetails", "Stores", FormMethod.Post))
+                {
+
+                    <h4>Dates</h4>
+                    <input type="text" id="startTime" name="startTime" value="01-01-2015">
+                    <br />
+                    <br />
+                    <input type="text" id="endTime" name="endTime" value="31-12-2015">
+
+                    <input type="submit" value="Get Performance" />
+
+                    <hr />
+                }
+
+                <hr />
+                <h4>Include Expected Sales Numbers</h4>
+                <input type="radio" name="sex" value="male">Yes <input type="radio" name="sex" value="female">No
+                <hr />
+                <h4>Include Historic Sales Numbers</h4>
+                <input type="radio" name="sex" value="male">Yes <input type="radio" name="sex" value="female">No
+            </td>
+
+            <td width="100%">
+                <div id="performancegraph"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h4>Chain Stores</h4>
+                <table id="chainstores-table" class="display" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Store Id</th>
+                            <th>Store Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var store in Model.Stores)
+                        {
+                            <tr>
+                                <td>@store.Id</td>
+
+                                <td>@store.Name</td>
+
+                                <td>
+                                    @Html.ActionLink("Details", "StoreDetails", new { store.Id })
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </td>
 
 
-<h2>Chain Performance</h2>
+        </tr>
+    </table>
+    <hr />
+</body>
+</html>
 
-<div id="container"></div>
+
+
