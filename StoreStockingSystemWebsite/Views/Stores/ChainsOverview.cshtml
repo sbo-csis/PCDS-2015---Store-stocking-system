@@ -7,27 +7,6 @@
     ViewBag.Title = "Chains";
 }
 
-@section scripts
-{
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
-
-    <!-- jQuery -->
-    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
-
-    <!-- DataTables -->
-    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            $("#chains-table").DataTable();
-        });
-
-    </script>
-}
-
-<h2>Chains Overview</h2>
-
 <!DOCTYPE html>
 
 <html>
@@ -57,7 +36,7 @@
                     <td>@chain.Name</td>
 
                     <td>
-                        @Html.ActionLink("Details", "ChainDetails", new { chain.Id, startTime=new DateTime(DateTime.Now.Year, 1, 1), endTime=new DateTime(DateTime.Now.Year, 12, 31)})
+                        @Html.ActionLink("Details", "ChainDetails", new { chain.Id, startTime = new DateTime(DateTime.Now.Year, 1, 1), endTime = new DateTime(DateTime.Now.Year, 12, 31) })
                     </td>
 
                 </tr>
@@ -66,3 +45,22 @@
     </table>
 </body>
 </html>
+
+@section scripts
+{
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables-1.10.5/media/css/jquery.dataTables.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables-1.10.5/media/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#chains-table").DataTable();
+        });
+
+    </script>
+}

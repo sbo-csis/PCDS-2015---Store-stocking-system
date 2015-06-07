@@ -10,6 +10,7 @@ namespace PCDSWebsite.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public List<int> Values { get; set; }
+        public int TotalSales { get; set; }
     }
 
 }

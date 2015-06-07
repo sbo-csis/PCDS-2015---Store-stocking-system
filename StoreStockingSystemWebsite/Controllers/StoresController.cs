@@ -56,11 +56,13 @@ namespace PCDSWebsite.Controllers
         {
          
             var values = SalesService.GetMonthlyChainPerformance(id, startTime, endTime, null);
+            var total = SalesService.GetChainPerformance(id, startTime, endTime, null);
             var chainPerformance = new ChainPerformanceModel
             {
                 StartTime = startTime,
                 EndTime = endTime,
-                Values = values
+                Values = values,
+                TotalSales = total
 
             };
             

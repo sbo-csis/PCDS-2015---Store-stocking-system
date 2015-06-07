@@ -5,6 +5,84 @@
 @{
     ViewBag.Title = "Chain Performance";
 }
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>ViewBag.Title</title>
+
+</head>
+<body>
+    <h3>@Model.Chain.Name</h3>
+    <b>Number of Chain stores: @Model.Stores.Count</b>
+    <br />
+
+    <hr />
+    <table>
+        <tr>
+            <td style="text-align: left; vertical-align: top; padding: 0">
+
+                @using (Html.BeginForm("ChainDetails", "Stores", FormMethod.Post))
+                {
+
+                    <h4>Period</h4>
+                    <input type="text" id="startTime" name="startTime" value="01-01-2015">
+                    <br />
+                    <br />
+                    <input type="text" id="endTime" name="endTime" value="31-12-2015">
+
+                    <input type="submit" value="Get Performance" />
+                }
+
+                <hr/>
+                <h4>Totel period sales</h4>
+                <b>@Model.Performance.TotalSales</b>
+                @*<h4>Include Expected Sales Numbers</h4>
+                    <input type="radio" name="sex" value="male">Yes <input type="radio" name="sex" value="female">No*@
+                <hr />
+                @*<h4>Include Historic Sales Numbers</h4>
+                    <input type="radio" name="sex" value="male">Yes <input type="radio" name="sex" value="female">No*@
+            </td>
+
+            <td width="100%">
+                <div id="performancegraph"></div>
+            </td>
+
+        </tr>
+    </table>
+<hr/>
+
+    <h4>Chain Stores</h4>
+    <table id="chainstores-table" class="display" width="100%">
+        <thead>
+            <tr>
+                <th>Store Id</th>
+                <th>Store Name</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var store in Model.Stores)
+            {
+                <tr>
+                    <td>@store.Id</td>
+
+                    <td>@store.Name</td>
+
+                    <td>
+                        @Html.ActionLink("Details", "StoreDetails", new { store.Id })
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    <hr />
+</body>
+</html>
+
 @section scripts
 {
     <!-- DataTables CSS -->
@@ -32,7 +110,7 @@
             @foreach (double actualSale in Model.Performance.Values)
             {
                 @:actualSales.push(@actualSale);
-                                                                                    }
+                                                                                                                                    }
 
             @*@foreach (double predictedSale in Model.Performance.predictedSales)
         {
@@ -93,86 +171,5 @@
     </script>
 
 }
-<!DOCTYPE html>
-
-<html>
-
-<head>
-    <title>ViewBag.Title</title>
-
-</head>
-<body>
-    <h3>@Model.Chain.Name</h3>
-    <b>Number of Chain stores: @Model.Stores.Count</b>
-    <br />
-
-    <hr />
-    <table>
-        <tr>
-            <td style="text-align: left; vertical-align: top; padding: 0">
-
-                @using (Html.BeginForm("ChainDetails", "Stores", FormMethod.Post))
-                {
-
-                    <h4>Dates</h4>
-                    <input type="text" id="startTime" name="startTime" value="01-01-2015">
-                    <br />
-                    <br />
-                    <input type="text" id="endTime" name="endTime" value="31-12-2015">
-
-                    <input type="submit" value="Get Performance" />
-
-                    <hr />
-                }
-
-                <hr />
-                <h4>Include Expected Sales Numbers</h4>
-                <input type="radio" name="sex" value="male">Yes <input type="radio" name="sex" value="female">No
-                <hr />
-                <h4>Include Historic Sales Numbers</h4>
-                <input type="radio" name="sex" value="male">Yes <input type="radio" name="sex" value="female">No
-            </td>
-
-            <td width="100%">
-                <div id="performancegraph"></div>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <h4>Chain Stores</h4>
-                <table id="chainstores-table" class="display" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Store Id</th>
-                            <th>Store Name</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var store in Model.Stores)
-                        {
-                            <tr>
-                                <td>@store.Id</td>
-
-                                <td>@store.Name</td>
-
-                                <td>
-                                    @Html.ActionLink("Details", "StoreDetails", new { store.Id })
-                                </td>
-
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </td>
-
-
-        </tr>
-    </table>
-    <hr />
-</body>
-</html>
-
 
 
