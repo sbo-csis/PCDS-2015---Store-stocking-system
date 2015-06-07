@@ -106,15 +106,31 @@
         $(function () {
             var actualSales = [];
             var accSales = [];
+
             @foreach (decimal actualSale in Model.Performance.Values)
             {
                 @:actualSales.push(@actualSale);
-                                                        }
+            }
 
-            @foreach (decimal accSale in Model.Performance.AccPerValues)
+            for (var i = 0; i < actualSales.length; i++) {
+                if (actualSales[i] === 0) {
+                    actualSales.splice(i, 1);
+                }
+            }
+
+            @foreach (var accSale in Model.Performance.AccPerValues)
             {
+                @:console.log("Adding")
+                @:console.log(@decimal.ToInt32(accSale))
                 @:accSales.push(@accSale);
-                                            }
+                        }
+
+            for (var i = 0; i < accSales.length; i++) {
+                if (accSales[i] === 0) {
+                    accSales.splice(i, 1);
+                }
+            }
+
             $('#performancegraph').highcharts({
                 title: {
                     text: 'Chain Performance',
