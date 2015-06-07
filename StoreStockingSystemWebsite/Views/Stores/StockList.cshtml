@@ -1,8 +1,7 @@
-﻿@using StoreStockingSystem.Models
-@model List<StoreStockingSystem.Models.Stock>
+﻿@model List<PCDSWebsite.Models.StockRefillWebModel>
 
 @{
-    ViewBag.Title = "Critial Stores";
+    ViewBag.Title = "Stores refilling";
 }
 
 <!DOCTYPE html>
@@ -26,16 +25,15 @@
         }
     </style>
 
-    <h1>Store Stock</h1>
+    <h1>Store Refilling</h1>
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Refill", "Stores"))
     {
         <table id="selectedRefills" class="display" style="width: 100%;">
             <thead>
                 <tr>
                     <th>Store id</th>
                     <th>Store name</th>
-                    <th>Stock type</th>
                     <th>Missing product count</th>
                     <th>Refill</th>
                 </tr>
@@ -44,41 +42,20 @@
 
                 @foreach (var stock in Model)
                 {
-                    Html.HiddenFor(m => stock.DisplayType.Name);
-
-                    //if (stock.SelectedForRefilling)
-                    //{
-                    //    continue;
-                    //}
-
-                    var productsMissing = 0;
-
-                    foreach (var productStock in stock.ProductStocks)
-                    {
-                        Html.HiddenFor(m => productStock.Product.Name);
-                        Html.HiddenFor(m => productStock.CurrentAmount);
-                        Html.HiddenFor(m => productStock.Capacity);
-
-                        if (productStock.CurrentAmount <= productStock.Capacity)
+                    @Html.HiddenFor(m => stock.StockId);
+                
+                        var color = "";
+                        if (stock.RefillPriority == 1)
                         {
-                            if (productStock.CurrentAmount >= 0 && productStock.Capacity >= productStock.CurrentAmount)
-                            {
-                                productsMissing += productStock.Capacity - productStock.CurrentAmount;
-                            }
-                            else
-                            {
-                                productsMissing += productStock.Capacity + Math.Abs(productStock.CurrentAmount);
-                            }
+                            color = "orange";
                         }
-                    }
 
-                    <tr class="critical">
-                        <td>@Html.DisplayFor(m => stock.Store.Id)</td>
-                        <td>@Html.DisplayFor(m => stock.Store.Name)</td>
-                        <td>@Html.DisplayFor(m => stock.DisplayType.Name)</td>
-                        <td>@productsMissing</td>
-                        <td>@Html.CheckBoxFor(m => stock.SelectedForRefilling)</td>
-                    </tr>
+                        <tr class="critical" style="color:@color">
+                            <td>@Html.DisplayFor(m => stock.StockId)</td>
+                            <td>@Html.DisplayFor(m => stock.StoreName)</td>
+                            <td>@Html.DisplayFor(m => stock.StockMissing)</td>
+                            <td>@Html.CheckBoxFor(m => stock.SelectedForRefilling)</td>
+                        </tr>
                 }
 
             </tbody>
@@ -88,7 +65,7 @@
         </p>
     }
 
-    
+
     @*<h3>Waypoints</h3>
          <table id="waypoints2" class="display" style="width: 100%;">
              <thead>
@@ -307,12 +284,11 @@
     <script>
         $(document).ready(function () {
             var criticalCustomers = $('#criticalCustomers').DataTable({
-                "columnDefs": [
-                  { "visible": false, "targets": 0 }
-                ]
             });
-            //var selectedCustomers = $('#selectedCustomers').DataTable();
-            var selectedRefills = $('#selectedRefills').DataTable();
+
+            $('#selectedRefills').DataTable({
+                "order": [[2, "desc"]]
+            });
             var waypoints = $('#waypoints2').DataTable({
                 "paging": false,
                 "ordering": false,

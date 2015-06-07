@@ -40,7 +40,7 @@ namespace PCDSWebsite.Controllers
             var chain = ChainService.GetChain(id);
             var stores = ChainService.GetChainStores(id);
             var performance = ChainPerformance(startTime, endTime, id);
-            
+
 
             var model = new ChainViewModel
             {
@@ -54,7 +54,7 @@ namespace PCDSWebsite.Controllers
 
         public ChainPerformanceModel ChainPerformance(DateTime startTime, DateTime endTime, int id = 0)
         {
-         
+
             var values = SalesService.GetMonthlyChainPerformance(id, startTime, endTime, null);
             var accValues = SalesService.GetAccumMonthlyChainPerformance(id, startTime, endTime, null);
             var total = SalesService.GetChainPerformance(id, startTime, endTime, null);
@@ -67,8 +67,8 @@ namespace PCDSWebsite.Controllers
                 TotalSales = total
 
             };
-            
-            
+
+
             return chainPerformance;
         }
 
@@ -81,65 +81,117 @@ namespace PCDSWebsite.Controllers
 
         public ActionResult StockList()
         {
-            var model = StockService.GetStocksNeedingRefilling();
+            var model = new List<StockRefillWebModel>();
 
-            return View(model);
-        }
+            var stocks = StockService.GetStocksNeedingRefilling();
 
-        public ActionResult Stores()
-        {
-            var model = StoreService.GetStores();
+            foreach (var stock in stocks)
+            {
+                var stockMissing = 0;
+
+                foreach (var productStock in stock.ProductStocks)
+                {
+                    if (productStock.CurrentAmount >= 0 && productStock.Capacity >= productStock.CurrentAmount)
+                    {
+                        stockMissing += productStock.Capacity - productStock.CurrentAmount;
+                    }
+                    else
+                    {
+                        stockMissing += productStock.Capacity + Math.Abs(productStock.CurrentAmount);
+                    }
+                }
+
+                model.Add(new StockRefillWebModel
+                {
+                    StockId = stock.Id,
+                    StoreName = stock.Store.Name,
+                    StockMissing = stockMissing,
+                    SelectedForRefilling = false
+                });
+            }
 
             return View(model);
         }
 
         [HttpPost] //TODO: Refactor this method, was completed in a hurry before sprint end.
-        public void StockList(List<Stock> stocks)
+        public void StockList(List<StockRefillWebModel> stocks)
         {
-            var productsRefill = new List<RefillEntry>(); //TODO: Refactor into seperate class. Currently holds a tuple <product, displayType, amountToBringForRefill>
+            //var productsRefill = new List<RefillEntry>(); //TODO: Refactor into seperate class. Currently holds a tuple <product, displayType, amountToBringForRefill>
+
+            //foreach (var stock in stocks)
+            //{
+            //    foreach (var productStock in stock.ProductStocks)
+            //    {
+            //        if (productStock.CurrentAmount < productStock.Capacity)
+            //        {
+            //            var productMissing = 0;
+
+            //            if (productStock.CurrentAmount >= 0 && productStock.Capacity >= productStock.CurrentAmount)
+            //            {
+            //                productMissing = productStock.Capacity - productStock.CurrentAmount;
+            //            }
+            //            else
+            //            {
+            //                productMissing = productStock.Capacity + Math.Abs(productStock.CurrentAmount);
+            //            }
+
+            //            var refillEntry = productsRefill.FirstOrDefault(p => p.Product.Id == productStock.Product.Id && p.DisplayType.Id == stock.DisplayTypeId);
+
+            //            if (refillEntry == null)
+            //            {
+            //                productsRefill.Add(new RefillEntry
+            //                {
+            //                    Product = productStock.Product,
+            //                    DisplayType = stock.DisplayType,
+            //                    RefillCount = productMissing
+            //                });
+            //            }
+            //            else
+            //            {
+            //                refillEntry.RefillCount += productMissing;
+            //            }
+            //        }
+            //    }
+            //}
+
+            Refill(new List<RefillEntry>());
+        }
+
+        [HttpPost]
+        public ActionResult Refill(List<RefillEntry> stocksToRefill)
+        {
+            var stocks = StockService.GetStocksNeedingRefilling();
+
+            while (stocks.Count > 3)
+            {
+                var stock = stocks.First();
+
+                stocks.Remove(stock);
+            }
+
+            var productsDict = new Dictionary<string, RefillEntry>();
 
             foreach (var stock in stocks)
             {
-                foreach (var productStock in stock.ProductStocks)
+                foreach (var ps in stock.ProductStocks)
                 {
-                    if (productStock.CurrentAmount < productStock.Capacity)
+                    if (productsDict.ContainsKey(ps.Product.Name))
                     {
-                        var productMissing = 0;
-
-                        if (productStock.CurrentAmount >= 0 && productStock.Capacity >= productStock.CurrentAmount)
+                        productsDict[ps.Product.Name].RefillCount += ps.Capacity - ps.CurrentAmount;
+                    }
+                    else
+                    {
+                        productsDict[ps.Product.Name] = new RefillEntry
                         {
-                            productMissing = productStock.Capacity - productStock.CurrentAmount;
-                        }
-                        else
-                        {
-                            productMissing = productStock.Capacity + Math.Abs(productStock.CurrentAmount);
-                        }
-
-                        var refillEntry = productsRefill.FirstOrDefault(p => p.Product.Id == productStock.Product.Id && p.DisplayType.Id == stock.DisplayTypeId);
-
-                        if (refillEntry == null)
-                        {
-                            productsRefill.Add(new RefillEntry
-                            {
-                                Product = productStock.Product,
-                                DisplayType = stock.DisplayType,
-                                RefillCount = productMissing
-                            });
-                        }
-                        else
-                        {
-                            refillEntry.RefillCount += productMissing;
-                        }
+                            DisplayType = stock.DisplayType,
+                            Product = ps.Product,
+                            RefillCount = ps.Capacity - ps.CurrentAmount
+                        };
                     }
                 }
             }
 
-            Refill(productsRefill);
-        }
-
-        public ActionResult Refill(List<RefillEntry> StocksToRefill )
-        {
-            return View(StocksToRefill);
+            return View(productsDict.Values.ToList().OrderByDescending(l => l.RefillCount).ToList());
         }
 
         public ActionResult Alerts()
@@ -148,10 +200,6 @@ namespace PCDSWebsite.Controllers
         }
 
         public ActionResult StockUpdate()
-        {
-            return View();
-        }
-        public ActionResult SalesStockUpdate()
         {
             return View();
         }
