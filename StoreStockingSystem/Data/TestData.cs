@@ -228,10 +228,10 @@ namespace StoreStockingSystem.Data
             {
                 stock = new Stock
                 {
-                    Capacity = 500,
+                    Capacity = 70,
                     DisplayTypeId = displayTypeId,
                     StoreId = cacheResult.InternalId,
-                    WarningAmountLeft = 2
+                    WarningAmountLeft = 10
                 };
 
                 context.Stocks.Add(stock);
@@ -245,13 +245,15 @@ namespace StoreStockingSystem.Data
 
             if (productStock == null)
             {
+                var amount = new Random().Next(2, 10);
+
                 productStock = new ProductStock
                 {
-                    CurrentAmount = 25,
+                    CurrentAmount = amount,
                     Product = product,
                     StockId = stock.Id,
-                    Capacity = 40,
-                    WarningAmount = 15
+                    Capacity = amount + 2,
+                    WarningAmount = 5
                 };
 
                 context.ProductStocks.Add(productStock);
@@ -269,7 +271,7 @@ namespace StoreStockingSystem.Data
             {
                 product = new Product
                 {
-                    Name = RandomString(5),
+                    Name = RandomProductName(),
                     Price = (int)price
                 };
                 ProductService.NewProduct(product);
@@ -280,17 +282,23 @@ namespace StoreStockingSystem.Data
 
 
         private static readonly Random Rng = new Random();
-        private const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        private static string RandomString(int size)
+        private static readonly List<string> ProductNames = new List<string>
         {
-            var buffer = new char[size];
+            "Test a racecar",
+            "Spaceship flight",
+            "Horse racing",
+            "Eat a great lunch",
+            "Bungee jump",
+            "Parachuting",
+            "Pilot for a day",
+            "Fly a baloon",
+            "Sushin experience"
+        };
 
-            for (int i = 0; i < size; i++)
-            {
-                buffer[i] = Chars[Rng.Next(Chars.Length)];
-            }
-            return new string(buffer);
+        private static string RandomProductName()
+        {
+            return ProductNames[Rng.Next(ProductNames.Count)];
         }
     }
 }
