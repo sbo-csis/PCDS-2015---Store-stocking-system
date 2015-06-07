@@ -27,11 +27,10 @@
                 {
 
                     <h4>Period</h4>
-                    <input type="text" id="startTime" name="startTime" value="01-01-2015">
+                    <input type="text" id="startTime" name="startTime" value=@Model.Performance.StartTime>
                     <br />
+                    <input type="text" id="endTime" name="endTime" value=@Model.Performance.EndTime>
                     <br />
-                    <input type="text" id="endTime" name="endTime" value="31-12-2015">
-
                     <input type="submit" value="Get Performance" />
                 }
 
@@ -110,12 +109,12 @@
             @foreach (decimal actualSale in Model.Performance.Values)
             {
                 @:actualSales.push(@actualSale);
-                                }
+                                                        }
 
             @foreach (decimal accSale in Model.Performance.AccPerValues)
             {
                 @:accSales.push(@accSale);
-                    }
+                                            }
             $('#performancegraph').highcharts({
                 title: {
                     text: 'Chain Performance',
