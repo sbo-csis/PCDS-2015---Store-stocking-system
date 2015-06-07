@@ -185,7 +185,8 @@ namespace StoreStockingSystem.Services
             int oldestSaleYear = (from sale in context.Sales
                                   where sale.StoreId == storeId
                                   orderby sale.SalesDate ascending
-                                  select sale.SalesDate).First().Year;
+                                  select sale.SalesDate).FirstOrDefault().Year;
+
             int newestSaleYear = DateTime.UtcNow.Year - 1;
 
             for (int i = 1; i <= 12; i++)
